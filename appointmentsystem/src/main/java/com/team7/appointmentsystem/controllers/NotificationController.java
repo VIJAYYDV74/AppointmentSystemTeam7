@@ -30,4 +30,15 @@ public class NotificationController {
         return businessNotificationsService.getBusinessNotifications(businessId);
     }
 
+    @GetMapping("/user/notifications/notification/{notificationId}")
+    public UserNotifications getUserNotification(@PathVariable long notificationId){
+        UserNotifications userNotifications = userNotificationService.getNotification(notificationId);
+        return userNotifications;
+    }
+
+    @GetMapping("/business/notifications/notification/{notificationId}")
+    public BusinessNotifications getBusinessNotification(@PathVariable long notificationId){
+        BusinessNotifications businessNotifications  = businessNotificationsService.getNotification(notificationId);
+        return businessNotifications;
+    }
 }

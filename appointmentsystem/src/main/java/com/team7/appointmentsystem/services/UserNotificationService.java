@@ -36,7 +36,7 @@ public class UserNotificationService {
 
     public List<UserNotifications> getUserNotifications(long userId) {
         try{
-            List<UserNotifications> resultList =  usernotificationsRepository.findAll();
+            List<UserNotifications> resultList = usernotificationsRepository.findByUsersUserid(userId);
             return resultList;
         } catch (Exception e) {
             logger.error("Exception occur while fetch Notification by user", e);
@@ -119,4 +119,10 @@ public class UserNotificationService {
         sendNotification(userNotifications);
     }
 
+    public UserNotifications getNotification(long notificationId) {
+        UserNotifications userNotifications = usernotificationsRepository.findById(notificationId).orElse(null);
+        userNotifications.setState(true);
+        UserNotifications userNotifications1 = usernotificationsRepository.save(userNotifications);
+        return userNotifications1;
+    }
 }

@@ -92,7 +92,7 @@ public class BusinessController {
     }
 
     @GetMapping("/user/getBusinessByBusinessName/{businessId}")
-    public BusinessDetails getBusinessByName(@PathVariable long businessId){
-        return businessService.getBusinessByBusinessName(businessId);
+    public BusinessDetails getBusinessById(@PathVariable long businessId){
+        return businessService.getBusinessByBusinessId(businessId);
     }
 }

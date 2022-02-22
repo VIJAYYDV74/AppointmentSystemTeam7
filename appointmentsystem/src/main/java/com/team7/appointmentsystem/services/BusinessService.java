@@ -41,6 +41,9 @@ public class BusinessService {
     @Autowired
     private LikesRepository likesRepository;
 
+    @Autowired
+    private BusinessNotificationsService businessNotificationsService;
+
     public static final Logger logger = LoggerFactory.getLogger(BusinessService.class);
 
     private final EntityManager entityManager;
@@ -181,23 +184,13 @@ public class BusinessService {
         return business;
     }
 
-    public BusinessDetails getBusinessByBusinessName(long businessid){
-        return businessRepository.findByBusinessid(businessid);
+    public BusinessDetails getBusinessByBusinessId(long businessid){
+        BusinessDetails businessDetails = businessRepository.findByBusinessid(businessid);
+        if (businessDetails!=null){
+            businessNotificationsService.
+                    sendBusinessNotificationOnBusinessSearched(businessDetails.getBusinessid(), 1);
+        }
+        return businessDetails;
     }
-
-
-//    public String mostLikedBusinesses(){
-//        Map<Business, Long> businesses = new HashMap<>();
-//        List<Long> businessIds = likesRepository.findDistinctBusiness();
-//        for(Long i: businessIds){
-//            Business business = businessRepository.getById(i);
-//            long count = likesRepository.countTotalLikesByBusinessBusinessid(i);
-//            businesses.put(business, count);
-//        }
-//
-//        return "Result";
-//    }
-
-
 
 }

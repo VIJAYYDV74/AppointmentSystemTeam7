@@ -21,4 +21,8 @@ public interface BusinessDetails {
     interface BusinessAddress{
         String getPostalCode();
     }
+    Users getUsers();
+    interface Users{
+        long getUserid();
+    }
 }

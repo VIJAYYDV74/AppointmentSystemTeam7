@@ -1,7 +1,5 @@
 package com.team7.appointmentsystem.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -10,7 +8,6 @@ import java.time.LocalDateTime;
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private long userid;
 
     @Column(columnDefinition = "varchar(50)", name = "firstname", nullable = false)
