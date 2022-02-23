@@ -36,7 +36,7 @@ public class PaymentsService {
 
     private static final Logger logger = LoggerFactory.getLogger(PaymentsService.class);
 
-    public Object paymentDetails(long appointmentId) {
+    public Payments paymentDetails(long appointmentId) {
         try {
             Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
             if (appointment==null){

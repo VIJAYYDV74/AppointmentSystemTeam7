@@ -5,6 +5,7 @@ import com.team7.appointmentsystem.services.BusinessNotificationsService;
 import com.team7.appointmentsystem.services.PaymentsService;
 import com.team7.appointmentsystem.services.UserNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -22,23 +23,26 @@ public class PaymentsController {
     private BusinessNotificationsService businessNotificationsService;
 
     @GetMapping("user/getPaymentDetails/{appointmentId}/")
-    public Object getPaymentDetailsForUser(@PathVariable long appointmentId){
-        return paymentsService.paymentDetails(appointmentId);
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<Payments> getPaymentDetailsForUser(@PathVariable long appointmentId){
+        return ResponseEntity.ok(paymentsService.paymentDetails(appointmentId));
     }
 
     @GetMapping("business/getPaymentDetails/{appointmentId}/")
-    public Object getPaymentDetailsForBusiness(@PathVariable long appointmentId){
-        return paymentsService.paymentDetails(appointmentId);
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<Payments> getPaymentDetailsForBusiness(@PathVariable long appointmentId){
+        return ResponseEntity.ok(paymentsService.paymentDetails(appointmentId));
     }
 
     @Transactional
     @PostMapping("/user/makePayment/{appointmentId}")
-    public String makePayment(@PathVariable long appointmentId, @RequestBody Payments payments){
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<String> makePayment(@PathVariable long appointmentId, @RequestBody Payments payments){
         String paymentDone =  paymentsService.makePayment(appointmentId, payments);
         if (paymentDone!=null){
 
         }
-        return paymentDone;
+        return ResponseEntity.ok(paymentDone);
     }
 
 }

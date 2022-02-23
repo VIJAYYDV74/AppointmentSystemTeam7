@@ -35,14 +35,16 @@ public class NotificationController {
     }
 
     @GetMapping("/user/notifications/notification/{notificationId}")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<UserNotifications> getUserNotification(@PathVariable long notificationId){
         UserNotifications userNotifications = userNotificationService.getNotification(notificationId);
         return ResponseEntity.ok(userNotifications);
     }
 
     @GetMapping("/business/notifications/notification/{notificationId}")
-    public BusinessNotifications getBusinessNotification(@PathVariable long notificationId){
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<BusinessNotifications> getBusinessNotification(@PathVariable long notificationId){
         BusinessNotifications businessNotifications  = businessNotificationsService.getNotification(notificationId);
-        return businessNotifications;
+        return ResponseEntity.ok(businessNotifications);
     }
 }
