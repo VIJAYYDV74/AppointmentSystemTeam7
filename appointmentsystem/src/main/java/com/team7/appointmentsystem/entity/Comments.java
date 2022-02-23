@@ -7,15 +7,17 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "comments")
 public class Comments {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long commentid;
 
-    @OneToOne
-    @JoinColumn(name = "appointmentid")
-    private Appointment appointment;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "commentedto")
+    private Business business;
 
     @JsonIgnore
     @ManyToOne
@@ -34,8 +36,8 @@ public class Comments {
     public Comments() {
     }
 
-    public Comments(Appointment appointment, Users users, String feedback, int rating) {
-        this.appointment = appointment;
+    public Comments(Business business, Users users, String feedback, int rating) {
+        this.business = business;
         this.users = users;
         this.feedback = feedback;
         this.rating = rating;
@@ -50,12 +52,12 @@ public class Comments {
         this.commentid = commentid;
     }
 
-    public Appointment getAppointment() {
-        return appointment;
+    public Business getBusiness() {
+        return business;
     }
 
-    public void setAppointment(Appointment appointment) {
-        this.appointment = appointment;
+    public void setBusiness(Business business) {
+        this.business = business;
     }
 
     public Users getUsers() {
@@ -94,7 +96,7 @@ public class Comments {
     public String toString() {
         return "Comments{" +
                 "commentid=" + commentid +
-                ", appointment=" + appointment +
+                ", appointment=" + business +
                 ", users=" + users +
                 ", feedback='" + feedback + '\'' +
                 ", rating=" + rating +

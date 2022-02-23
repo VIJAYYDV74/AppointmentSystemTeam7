@@ -1,16 +1,14 @@
 package com.team7.appointmentsystem.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private long userid;
 
     @Column(columnDefinition = "varchar(50)", name = "firstname", nullable = false)
@@ -40,6 +38,8 @@ public class Users {
     @Column(columnDefinition = "boolean default false", name = "emailverified")
     private boolean emailVerified;
 
+    @OneToMany(mappedBy = "users", targetEntity = Comments.class)
+    private List<Comments> comments;
 
     public Users(){
 
@@ -57,7 +57,8 @@ public class Users {
 
     public Users(String firstname, String lastname, String email,
                  String userPassword, String mobileNumber, LocalDateTime createdTime,
-                 boolean isBlocked, String profileImage, boolean emailVerified) {
+                 boolean isBlocked, String profileImage, boolean emailVerified,
+                 List<Comments> comments) {
         this.firstName = firstname;
         this.lastName = lastname;
         this.email = email;
@@ -67,21 +68,7 @@ public class Users {
         this.isBlocked = isBlocked;
         this.profileImage = profileImage;
         this.emailVerified = emailVerified;
-    }
-
-    @Override
-    public String toString() {
-        return "Users{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", userPassword='" + userPassword + '\'' +
-                ", mobileNumber='" + mobileNumber + '\'' +
-                ", createdTime=" + createdTime +
-                ", isBlocked=" + isBlocked +
-                ", profileImage='" + profileImage + '\'' +
-                ", emailVerified=" + emailVerified +
-                '}';
+        this.comments = comments;
     }
 
     public long getUserid() {
@@ -164,4 +151,28 @@ public class Users {
         this.emailVerified = emailVerified;
     }
 
+    public List<Comments> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comments> comments) {
+        this.comments = comments;
+    }
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "userid=" + userid +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", mobileNumber='" + mobileNumber + '\'' +
+                ", createdTime=" + createdTime +
+                ", isBlocked=" + isBlocked +
+                ", profileImage='" + profileImage + '\'' +
+                ", emailVerified=" + emailVerified +
+                ", comments=" + comments +
+                '}';
+    }
 }

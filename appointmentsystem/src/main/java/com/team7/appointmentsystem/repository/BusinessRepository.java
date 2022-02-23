@@ -25,4 +25,5 @@ public interface BusinessRepository extends JpaRepository<Business, Long> {
     List<Business> businessServiceJoin();
 
     BusinessDetails findByBusinessid(long businessName);
+
 }

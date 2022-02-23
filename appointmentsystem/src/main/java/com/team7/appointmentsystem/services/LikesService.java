@@ -18,5 +18,4 @@ public class LikesService {
     @Autowired
     private UserRepository userRepository;
 
-
 }

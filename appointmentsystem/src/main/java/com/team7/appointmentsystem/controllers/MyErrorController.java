@@ -2,6 +2,7 @@ package com.team7.appointmentsystem.controllers;
 
 
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,6 +12,7 @@ public class MyErrorController implements ErrorController {
     private static final String PATH = "/error";
 
     @RequestMapping(value = PATH )
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public String myError() {
         return "<center>" +
                 "<h1>Something went wrong</h1>" +

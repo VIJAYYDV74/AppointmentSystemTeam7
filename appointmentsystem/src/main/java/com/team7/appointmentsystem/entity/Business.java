@@ -67,6 +67,9 @@ public class Business {
     @OneToMany(mappedBy = "business", targetEntity = Services.class)
     private List<Services> services;
 
+    @OneToMany(mappedBy = "business", targetEntity = Comments.class)
+    private List<Comments> comments;
+
     public Business(){
 
     }
@@ -77,7 +80,8 @@ public class Business {
                     int slotDuration, GenderCategories genderCategory,
                     String businessImages, Categories category, Users users,
                     List<BusinessWorkingHours> workingHours,
-                    BusinessAddress businessAddress, List<Services> services) {
+                    BusinessAddress businessAddress, List<Services> services,
+                    List<Comments> comments) {
         this.businessName = businessName;
         this.businessDescription = businessDescription;
         this.businessTitle = businessTitle;
@@ -92,6 +96,7 @@ public class Business {
         this.workingHours = workingHours;
         this.businessAddress = businessAddress;
         this.services = services;
+        this.comments = comments;
     }
 
     public long getBusinessid() {
@@ -226,6 +231,14 @@ public class Business {
         this.services = services;
     }
 
+    public List<Comments> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comments> comments) {
+        this.comments = comments;
+    }
+
     @Override
     public String toString() {
         return "Business{" +
@@ -246,6 +259,7 @@ public class Business {
                 ", workingHours=" + workingHours +
                 ", businessAddress=" + businessAddress +
                 ", services=" + services +
+                ", comments=" + comments +
                 '}';
     }
 }

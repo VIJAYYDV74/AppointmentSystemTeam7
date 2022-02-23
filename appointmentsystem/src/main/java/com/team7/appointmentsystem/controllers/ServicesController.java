@@ -4,6 +4,7 @@ package com.team7.appointmentsystem.controllers;
 import com.team7.appointmentsystem.entity.Services;
 import com.team7.appointmentsystem.services.ServicesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -17,14 +18,15 @@ public class ServicesController {
 
     @Transactional
     @PostMapping("business/{businessId}/createService/")
-    public void createService(@RequestBody Services services, @PathVariable long businessId){
-        System.out.println("Request Arrived");
-        servicesService.createService(businessId, services);
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<Services> createService(@RequestBody Services services, @PathVariable long businessId){
+        Services services1 = servicesService.createService(businessId, services);
+        return ResponseEntity.ok(services1);
     }
 
     @GetMapping("business/{businessId}/getServices")
-    public List<Services> getBusinessServices(long businessId){
-        return servicesService.getBusinessServices(businessId);
+    public ResponseEntity<List<Services>> getBusinessServices(long businessId){
+        return ResponseEntity.ok(servicesService.getBusinessServices(businessId));
     }
 
 }
