@@ -28,9 +28,15 @@ public class PaymentsService {
     @Autowired
     private ServicesRepository servicesRepository;
 
+    @Autowired
+    private UserNotificationService userNotificationService;
+
+    @Autowired
+    private BusinessNotificationsService businessNotificationsService;
+
     private static final Logger logger = LoggerFactory.getLogger(PaymentsService.class);
 
-    public Object paymentDetails(long appointmentId) {
+    public Payments paymentDetails(long appointmentId) {
         try {
             Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
             if (appointment==null){
@@ -48,7 +54,7 @@ public class PaymentsService {
         }
     }
 
-    public String completeAppointmentBooking(Appointment appointment, Payments payments){
+    public String completePayment(Appointment appointment, Payments payments){
         try {
             if (appointment==null){
                 throw new AppointmentNotFoundException("AppointmentNotFoundException");
@@ -62,7 +68,7 @@ public class PaymentsService {
             if (appointment1==null){
                 throw new InternalServerException("InternalServerException");
             }
-            return "Appointment Booked Successfully";
+            return "Payment Done";
         }
         catch (Exception e){
             logger.error(e.getMessage());
@@ -74,7 +80,7 @@ public class PaymentsService {
         try{
             Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
             if(appointment==null){
-                throw new AppointmentNotFoundException("AppointmentNotFound");
+                throw new AppointmentNotFoundException("AppointmentNotFoundException");
             }
             Services services = servicesRepository.getById(appointment.getServices().getServiceid());
             if(services==null){
@@ -82,12 +88,13 @@ public class PaymentsService {
             }
             payments.setAmount(services.getServicePrice());
 
-            //Write code to send notification
-
             Payments payments1 = paymentsRepository.save(payments);
             if (payments1==null){
                 throw new InternalServerException("InternalServerException");
             }
+
+            userNotificationService.sendUserNotificationOnPaymentDone(appointment);
+            businessNotificationsService.sendBusinessNotificationOnPaymentDone(appointment);
 
             appointment.setPayments(payments);
             Appointment appointment1 = appointmentRepository.save(appointment);
