@@ -10,11 +10,13 @@ import com.team7.appointmentsystem.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RegisterService {
@@ -26,28 +28,31 @@ public class RegisterService {
     private BusinessRepository businessRepository;
 
     @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
     private CategoriesRepository categoriesRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
 
-    public String registerUser(Users user) {
+    public String registerUser(Users user) throws UserAlreadyExistsException {
         System.out.println("Register Request arrived");
-        try{
-            Users flag = userRepository.findByEmail(user.getEmail());
-            if(flag == null){
-                System.out.println("User with the email id does not exists");
-                user.setCreatedTime(LocalDateTime.now());
-                Users user1 = userRepository.save(user);
-                if (user1==null){
-                    throw new InternalServerException("internalServerException");
+
+            Users tempUser = userRepository.findByEmail(user.getEmail());
+            try{
+                if(tempUser != null) {
+                    throw new UserAlreadyExistsException("Email Id Already Exists. Please use different Email Id.");
+                }else{
+                    user.setCreatedTime(LocalDateTime.now());
+                    user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
+                    Users savedUser = userRepository.save(user);
+                    Users user1 = userRepository.save(user);
+                    if (user1==null){
+                        throw new InternalServerException("internalServerException");
+                    }
+                    return "User Registered";
                 }
-                return "User Registered";
-            }
-            else{
-                throw new UserAlreadyExistsException("Email Id Exists. Please use a different email id or login!!!");
-            }
-        }
-        catch(Exception e){
+            } catch(Exception e){
             logger.error(e.getMessage());
             return "User not created";
         }
