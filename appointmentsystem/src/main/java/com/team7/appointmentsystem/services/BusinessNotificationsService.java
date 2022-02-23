@@ -34,7 +34,7 @@ public class BusinessNotificationsService {
 
     public List<BusinessNotifications> getBusinessNotifications(long businessId) {
         try{
-            return businessNotificationsRepository.findAll();
+            return businessNotificationsRepository.findByBusinessBusinessid(businessId);
         } catch (Exception e) {
             logger.error("Exception occur while fetch Notification by user", e);
             return null;
@@ -118,6 +118,22 @@ public class BusinessNotificationsService {
         sendNotification(businessNotifications);
     }
 
+    public void sendBusinessNotificationOnAppointmentCompleted(Appointment appointment){
+        NotificationTypes notificationTypes = notificationTypeRepository.getById(1);
+        BusinessNotifications businessNotifications = new BusinessNotifications(
+                appointment.getUsers(),
+                appointment.getBusiness(),
+                "Appointment completed",
+                "Your have completed an Appointment with " + appointment.getUsers().getFirstName() +
+                        " for service "+ appointment.getServices().getServiceName() +" has been completed.",
+                appointment,
+                LocalDateTime.now(),
+                false,
+                notificationTypes
+        );
+        sendNotification(businessNotifications);
+    }
+
     public void sendBusinessNotificationOnBusinessSearched(long businessId, long userId){
         Business business = businessRepository.findById(businessId).orElse(null);
         try {
@@ -128,7 +144,7 @@ public class BusinessNotificationsService {
             logger.error(e.getMessage());
         }
         Users users = userRepository.findById(userId).orElse(null);
-        NotificationTypes notificationTypes = notificationTypeRepository.getById(2);
+        NotificationTypes notificationTypes = notificationTypeRepository.getById(3);
         BusinessNotifications businessNotifications = new BusinessNotifications(
                 users,
                 business,
@@ -140,6 +156,13 @@ public class BusinessNotificationsService {
                 notificationTypes
         );
         sendNotification(businessNotifications);
+    }
+
+    public BusinessNotifications getNotification(long notificationId) {
+        BusinessNotifications businessNotifications = businessNotificationsRepository.findById(notificationId).orElse(null);
+        businessNotifications.setState(true);
+        BusinessNotifications businessNotifications1 = businessNotificationsRepository.save(businessNotifications);
+        return businessNotifications1;
     }
 
 }

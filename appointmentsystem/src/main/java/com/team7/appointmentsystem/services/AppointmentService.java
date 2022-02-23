@@ -34,6 +34,12 @@ public class AppointmentService {
 
     @Autowired
     private UserNotificationService notificationService;
+  
+    @Autowired
+    private UserNotificationService userNotificationService;
+  
+    @Autowired
+    private BusinessNotificationsService businessNotificationsService;
 
     private static final Logger logger = LoggerFactory.getLogger(AppointmentService.class);
 
@@ -41,13 +47,12 @@ public class AppointmentService {
     public String bookAppointment(Appointment appointment, Long businessId) {
         try{
             Payments payments = appointment.getPayments();
-            payments.setPaymentDate(LocalDateTime.now());
             Services services = servicesRepository.findById(appointment.getServices().
                     getServiceid()).orElse(null);
+
             if (services==null){
                 throw new ServiceNotFoundException("ServiceNotFoundException");
             }
-            payments.setAmount(services.getServicePrice());
 
             appointment.setBookedDate(LocalDateTime.now());
             //get the user id value from session object.
@@ -61,16 +66,24 @@ public class AppointmentService {
             appointment.setBusiness(business);
             appointment.setServices(services);
 
-            Payments payments1 = paymentsRepository.save(payments);
-            if (payments1==null){
-                throw new InternalServerException("InternalServerException");
+            if (payments!=null){
+                payments.setPaymentDate(LocalDateTime.now());
+                payments.setAmount(services.getServicePrice());
+                Payments payments1 = paymentsRepository.save(payments);
+                appointment.setPayments(payments1);
+                userNotificationService.sendUserNotificationOnPaymentDone(appointment);
+                if (payments1 == null) {
+                    throw new InternalServerException("InternalServerException");
+                }
             }
-
-            appointment.setPayments(payments1);
+            businessNotificationsService.sendBusinessNotificationOnPaymentDone(appointment);
             Appointment appointment1 = appointmentRepository.save(appointment);
             if (appointment1==null){
                 throw new InternalServerException("InternalServerException");
             }
+
+            userNotificationService.sendUserNotificationOnAppointmentBooking(appointment);
+            businessNotificationsService.sendBusinessNotificationOnAppointmentBooking(appointment);
 
             return "Appointment Booked Successfully";
         }catch (Exception e){
