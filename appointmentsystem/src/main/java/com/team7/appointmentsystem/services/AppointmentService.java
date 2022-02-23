@@ -33,7 +33,7 @@ public class AppointmentService {
     private ServicesRepository servicesRepository;
 
     @Autowired
-    private UserNotificationService notificationService;
+    private UserNotificationService userNotificationService;
 
     private static final Logger logger = LoggerFactory.getLogger(AppointmentService.class);
 
