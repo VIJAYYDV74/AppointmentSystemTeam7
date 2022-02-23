@@ -12,6 +12,7 @@ import com.team7.appointmentsystem.services.CommentsService;
 import com.team7.appointmentsystem.services.RegisterService;
 import com.team7.appointmentsystem.services.VisitingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -49,17 +50,17 @@ public class BusinessController {
 
     @GetMapping("/homepage/api1")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public List<HomepageAPI1> getAPI1(){
+    public ResponseEntity<List<HomepageAPI1>> getAPI1(){
         List<HomepageAPI1> api1 = businessService.getBusinessesCount();
-        return api1;
+        return ResponseEntity.ok(api1);
     }
 
 
     @GetMapping("/homepage/api2")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public List<List<BusinessDetails>> getAPI2(){
+    public ResponseEntity<List<List<BusinessDetails>>> getAPI2(){
         List<List<BusinessDetails>> api2 = businessService.getTop3BusinessesInEachCategory();
-        return api2;
+        return ResponseEntity.ok(api2);
     }
 
     @GetMapping("/homepage/api3")
@@ -69,37 +70,35 @@ public class BusinessController {
         return api3;
     }
 
-
     //get the userid value from the session variable (if logged in only this function gets called)
     @GetMapping("/getBusinessesOfUser/{userid}")
-    public Object getBusinesses(@PathVariable long userid) throws UserNotFoundException {
-        return businessService.getUserBusinesses(userid);
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<Object> getBusinesses(@PathVariable long userid) throws UserNotFoundException {
+        return ResponseEntity.ok(businessService.getUserBusinesses(userid));
     }
 
     @GetMapping("/getBusinessesByCategory/{categoryName}")
-    public List<Business> getBusinessesByCategoryName(@PathVariable String categoryName){
-        return businessService.getBusinessesByCategoryName(categoryName);
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<List<Business>> getBusinessesByCategoryName(@PathVariable String categoryName){
+        return ResponseEntity.ok(businessService.getBusinessesByCategoryName(categoryName));
     }
 
     @GetMapping("/getAllBusinesses")
-    public List<Business> getAllBusinesses(){
-        // businessService.getServicesBusinessJoin();
-        return businessService.getBusinesses();
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<List<Business>> getAllBusinesses(){
+        return ResponseEntity.ok(businessService.getBusinesses());
     }
 
     @Transactional
     @PostMapping("/registerBusiness/{userid}")
-    public String registerBusiness(@PathVariable Long userid, @RequestBody Business business){
-        return businessService.registerBusiness(userid, business);
-    }
-
-    @GetMapping("/getBusinessesCount")
-    public List<HomepageAPI1> getBusinessesCount(){
-        return businessService.getBusinessesCount();
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<String> registerBusiness(@PathVariable Long userid, @RequestBody Business business){
+        return ResponseEntity.ok(businessService.registerBusiness(userid, business));
     }
 
     @GetMapping("/user/getBusiness/{businessId}")
-    public Business getBusiness(@PathVariable long businessId){
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<Business> getBusiness(@PathVariable long businessId){
         Business business = businessService.getBusiness(businessId);
         Users users = null;
         if (users==null){
@@ -110,12 +109,13 @@ public class BusinessController {
             Visiting visiting = new Visiting(users, business);
             visitingService.businessVisited(new Visiting(users, business));
         }
-        return business;
+        return ResponseEntity.ok(business);
     }
 
     @GetMapping("/user/getBusinessByBusinessName/{businessId}")
-    public BusinessDetails getBusinessById(@PathVariable long businessId){
-        return businessService.getBusinessByBusinessId(businessId);
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<Business> getBusinessById(@PathVariable long businessId){
+        return ResponseEntity.ok(businessService.getBusiness(businessId));
     }
 
 }
