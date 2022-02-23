@@ -48,6 +48,7 @@ public class RegisterService {
                     Users savedUser = userRepository.save(user);
                     Users user1 = userRepository.save(user);
                     if (user1==null){
+
                         throw new InternalServerException("InternalServerException");
                     }
                     return "User Registered";
