@@ -159,6 +159,13 @@ public class Users {
         this.comments = comments;
     }
 
+    @Transient
+    public String getProfileImgPath() {
+        if(profileImage == null || userid == 0) return null;
+
+        return "/profile-image/" + userid + "/" + profileImage;
+    }
+
     @Override
     public String toString() {
         return "Users{" +

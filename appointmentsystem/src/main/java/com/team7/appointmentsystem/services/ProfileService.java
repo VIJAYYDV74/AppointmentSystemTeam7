@@ -5,6 +5,7 @@ import com.team7.appointmentsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 public class ProfileService {
@@ -35,4 +36,11 @@ public class ProfileService {
         }
         return "Changed Password Successfully";
     }
+
+    public Users getUser(long UserId) {
+        Users user = userRepo.findByUserid(UserId);
+        return user;
+    }
+
+
 }
