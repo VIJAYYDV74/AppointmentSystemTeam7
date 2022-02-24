@@ -26,4 +26,5 @@ public interface BusinessDetails {
     List<Comments> getComments();
     String getBusinessRating();
     List<BusinessImages> getBusinessImages();
+    boolean isBlocked();
 }

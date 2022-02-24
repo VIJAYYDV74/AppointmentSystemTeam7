@@ -16,6 +16,9 @@ public class BusinessImages {
     @Column(name = "imagepath")
     private String imagePath;
 
+    @Column(name = "isblocked", columnDefinition = "boolean default false")
+    private boolean isBlocked;
+
     public BusinessImages() {
     }
 
@@ -48,12 +51,21 @@ public class BusinessImages {
         this.imagePath = imagePath;
     }
 
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
+    }
+
     @Override
     public String toString() {
         return "BusinessImages{" +
                 "id=" + id +
                 ", business=" + business +
-                ", imagePath='" + imagePath + '\'' +
+                ", imagePath='" + imagePath +
+                ", isBlocked='" + isBlocked + '\'' +
                 '}';
     }
 }

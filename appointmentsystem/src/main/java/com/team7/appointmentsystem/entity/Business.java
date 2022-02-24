@@ -72,6 +72,9 @@ public class Business {
     @OneToMany(mappedBy = "business", targetEntity = BusinessImages.class)
     private List<BusinessImages> businessImages;
 
+    @Column(name = "isblocked")
+    private boolean isBlocked;
+
     public Business(){
 
     }
@@ -241,6 +244,14 @@ public class Business {
         this.businessImages = businessImages;
     }
 
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
+    }
+
     @Override
     public String toString() {
         return "Business{" +
@@ -262,7 +273,8 @@ public class Business {
                 ", businessAddress=" + businessAddress +
                 ", services=" + services +
                 ", comments=" + comments +
-                ", comments=" + businessImages +
+                ", businessImages=" + businessImages +
+                ", isBlocked=" + isBlocked +
                 '}';
     }
 
