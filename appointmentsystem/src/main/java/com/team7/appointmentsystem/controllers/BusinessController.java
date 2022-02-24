@@ -114,8 +114,8 @@ public class BusinessController {
 
     @GetMapping("/user/getBusinessByBusinessName/{businessId}")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public ResponseEntity<Business> getBusinessById(@PathVariable long businessId){
-        return ResponseEntity.ok(businessService.getBusiness(businessId));
+    public ResponseEntity<BusinessDetails> getBusinessById(@PathVariable long businessId){
+        return ResponseEntity.ok(businessService.getBusinessByBusinessId(businessId));
     }
 
 }

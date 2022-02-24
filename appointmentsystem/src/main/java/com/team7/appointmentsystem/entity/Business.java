@@ -3,8 +3,10 @@ package com.team7.appointmentsystem.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Entity
 @Table(name = "business")
@@ -42,9 +44,6 @@ public class Business {
     @Column(columnDefinition = "timestamp default current_timestamp", name = "createdtime")
     private LocalDateTime createdTime;
 
-    @Column(name = "businessimages")
-    private String businessImages;
-
     @ManyToOne
     @JoinColumn(name = "businesscategory")
     private Categories categories;
@@ -70,6 +69,9 @@ public class Business {
     @OneToMany(mappedBy = "business", targetEntity = Comments.class)
     private List<Comments> comments;
 
+    @OneToMany(mappedBy = "business", targetEntity = BusinessImages.class)
+    private List<BusinessImages> businessImages;
+
     public Business(){
 
     }
@@ -78,10 +80,10 @@ public class Business {
                     String businessTitle, String businessMobileNumber,
                     String businessEmail, boolean cancellationAvailable,
                     int slotDuration, GenderCategories genderCategory,
-                    String businessImages, Categories category, Users users,
+                    Categories category, Users users,
                     List<BusinessWorkingHours> workingHours,
                     BusinessAddress businessAddress, List<Services> services,
-                    List<Comments> comments) {
+                    List<Comments> comments, List<BusinessImages> businessImages) {
         this.businessName = businessName;
         this.businessDescription = businessDescription;
         this.businessTitle = businessTitle;
@@ -90,13 +92,13 @@ public class Business {
         this.cancellationAvailable = cancellationAvailable;
         this.slotDuration = slotDuration;
         this.genderCategory = genderCategory;
-        this.businessImages = businessImages;
         this.categories = category;
         this.users = users;
         this.workingHours = workingHours;
         this.businessAddress = businessAddress;
         this.services = services;
         this.comments = comments;
+        this.businessImages = businessImages;
     }
 
     public long getBusinessid() {
@@ -183,14 +185,6 @@ public class Business {
         this.createdTime = createdTime;
     }
 
-    public String getBusinessImages() {
-        return businessImages;
-    }
-
-    public void setBusinessImages(String businessImages) {
-        this.businessImages = businessImages;
-    }
-
     public Categories getCategories() {
         return categories;
     }
@@ -239,6 +233,14 @@ public class Business {
         this.comments = comments;
     }
 
+    public List<BusinessImages> getBusinessImages() {
+        return businessImages;
+    }
+
+    public void setBusinessImages(List<BusinessImages> businessImages) {
+        this.businessImages = businessImages;
+    }
+
     @Override
     public String toString() {
         return "Business{" +
@@ -260,6 +262,22 @@ public class Business {
                 ", businessAddress=" + businessAddress +
                 ", services=" + services +
                 ", comments=" + comments +
+                ", comments=" + businessImages +
                 '}';
     }
+
+    public String getBusinessRating(){
+        DecimalFormat df = new DecimalFormat("0.0");
+        double rating;
+        long temp = 0;
+        if (comments.size()==0){
+            return String.valueOf((double) 0.0);
+        }
+        for(Comments comments1: comments){
+            temp = temp + comments1.getRating();
+        }
+        rating = (double) temp/comments.size();
+        return df.format(rating);
+    }
+
 }
