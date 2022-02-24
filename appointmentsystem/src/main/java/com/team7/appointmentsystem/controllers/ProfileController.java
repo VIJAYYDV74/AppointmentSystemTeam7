@@ -56,7 +56,6 @@ public class ProfileController {
         }
         return ResponseEntity.ok("File uploaded Successfully");
     }
-
     @GetMapping("/profile/{userId}")
     public ResponseEntity<Users>  getProfileData(@PathVariable long userId) throws UserNotFoundException {
         Users user = userRepo.findByUserid(userId);
@@ -66,6 +65,4 @@ public class ProfileController {
             return ResponseEntity.ok(user);
         }
     }
-
-
 }
