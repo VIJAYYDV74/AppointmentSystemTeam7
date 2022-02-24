@@ -33,9 +33,9 @@ public class AppointmentService {
     private ServicesRepository servicesRepository;
 
     @Autowired
+    private UserNotificationService userNotificationService;
 
     @Autowired
-    private UserNotificationService userNotificationService;
     private UserNotificationService notificationService;
   
   
