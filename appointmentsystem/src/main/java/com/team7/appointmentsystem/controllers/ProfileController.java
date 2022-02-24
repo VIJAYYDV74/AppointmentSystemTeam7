@@ -34,8 +34,6 @@ public class ProfileController {
         String result = profileService.changePassword(object.getOldPassword(), object.getNewPassword(), object.getEmailID());
         return ResponseEntity.ok(result);
     }
-<<<<<<< Updated upstream
-=======
 
     @RequestMapping("/profile/save/{userId}")
     public ResponseEntity<Users> saveProfile(@RequestParam("profileImg") MultipartFile multipartFile,
@@ -59,5 +57,4 @@ public class ProfileController {
         }
         return ResponseEntity.ok(savedUser);
     }
->>>>>>> Stashed changes
 }
