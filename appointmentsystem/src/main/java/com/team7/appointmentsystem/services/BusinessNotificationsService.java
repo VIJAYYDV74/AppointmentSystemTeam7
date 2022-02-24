@@ -41,18 +41,20 @@ public class BusinessNotificationsService {
         }
     }
 
-    public void sendNotification(BusinessNotifications businessNotifications){
+    public boolean sendNotification(BusinessNotifications businessNotifications){
         try {
             BusinessNotifications businessNotifications1 = businessNotificationsRepository.save(businessNotifications);
             if (businessNotifications1==null){
                 throw new InternalServerException("InternalServerException");
             }
+            return true;
         } catch (Exception e){
             logger.error(e.getMessage());
         }
+        return false;
     }
 
-    public void sendBusinessNotificationOnAppointmentBooking(Appointment appointment) {
+    public boolean sendBusinessNotificationOnAppointmentBooking(Appointment appointment) {
         NotificationTypes notificationTypes = notificationTypeRepository.getById(1);
         BusinessNotifications businessNotifications = new BusinessNotifications(
                 appointment.getUsers(),
@@ -66,10 +68,11 @@ public class BusinessNotificationsService {
                 false,
                 notificationTypes
         );
-        sendNotification(businessNotifications);
+        return sendNotification(businessNotifications);
+
     }
 
-    public void sendBusinessNotificationOnAppointmentCancelling(Appointment appointment){
+    public boolean sendBusinessNotificationOnAppointmentCancelling(Appointment appointment){
         NotificationTypes notificationTypes = notificationTypeRepository.getById(1);
         BusinessNotifications businessNotifications = new BusinessNotifications(
                 appointment.getUsers(),
@@ -82,10 +85,10 @@ public class BusinessNotificationsService {
                 false,
                 notificationTypes
         );
-        sendNotification(businessNotifications);
+        return sendNotification(businessNotifications);
     }
 
-    public void sendBusinessNotificationOnAppointmentRescheduling(Appointment appointment){
+    public boolean sendBusinessNotificationOnAppointmentRescheduling(Appointment appointment){
         NotificationTypes notificationTypes = notificationTypeRepository.getById(1);
         BusinessNotifications businessNotifications = new BusinessNotifications(
                 appointment.getUsers(),
@@ -98,10 +101,10 @@ public class BusinessNotificationsService {
                 false,
                 notificationTypes
         );
-        sendNotification(businessNotifications);
+        return sendNotification(businessNotifications);
     }
 
-    public void sendBusinessNotificationOnPaymentDone(Appointment appointment){
+    public boolean sendBusinessNotificationOnPaymentDone(Appointment appointment){
         NotificationTypes notificationTypes = notificationTypeRepository.getById(2);
         BusinessNotifications businessNotifications = new BusinessNotifications(
                 appointment.getUsers(),
@@ -115,10 +118,10 @@ public class BusinessNotificationsService {
                 false,
                 notificationTypes
         );
-        sendNotification(businessNotifications);
+        return sendNotification(businessNotifications);
     }
 
-    public void sendBusinessNotificationOnAppointmentCompleted(Appointment appointment){
+    public boolean sendBusinessNotificationOnAppointmentCompleted(Appointment appointment){
         NotificationTypes notificationTypes = notificationTypeRepository.getById(1);
         BusinessNotifications businessNotifications = new BusinessNotifications(
                 appointment.getUsers(),
@@ -131,10 +134,10 @@ public class BusinessNotificationsService {
                 false,
                 notificationTypes
         );
-        sendNotification(businessNotifications);
+        return sendNotification(businessNotifications);
     }
 
-    public void sendBusinessNotificationOnBusinessSearched(long businessId, long userId){
+    public boolean sendBusinessNotificationOnBusinessSearched(long businessId, long userId){
         Business business = businessRepository.findById(businessId).orElse(null);
         try {
             if (business == null) {
@@ -155,7 +158,7 @@ public class BusinessNotificationsService {
                 false,
                 notificationTypes
         );
-        sendNotification(businessNotifications);
+        return sendNotification(businessNotifications);
     }
 
     public BusinessNotifications getNotification(long notificationId) {

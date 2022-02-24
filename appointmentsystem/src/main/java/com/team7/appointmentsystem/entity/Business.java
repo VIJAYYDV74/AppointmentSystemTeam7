@@ -48,6 +48,7 @@ public class Business {
     @JoinColumn(name = "businesscategory")
     private Categories categories;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
     private Users users;

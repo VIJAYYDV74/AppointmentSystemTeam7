@@ -22,9 +22,10 @@ public class AppointmentController {
 
     @Transactional
     @PostMapping("/user/bookAppointment/{businessId}")
-    public String bookAppointment(@RequestBody Appointment appointment, @PathVariable Long businessId){
-        String s =  appointmentService.bookAppointment(appointment, businessId);
-        return s;
+    public ResponseEntity<Appointment> bookAppointment(@RequestBody Appointment appointment,
+                                                       @PathVariable Long businessId){
+        Appointment appointment1 =  appointmentService.bookAppointment(appointment, businessId);
+        return ResponseEntity.ok(appointment1);
     }
 
     @Transactional

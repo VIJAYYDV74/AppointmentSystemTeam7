@@ -44,18 +44,20 @@ public class UserNotificationService {
         }
     }
 
-    public void sendNotification(UserNotifications userNotifications){
+    public boolean sendNotification(UserNotifications userNotifications){
         try {
             UserNotifications userNotifications1 = usernotificationsRepository.save(userNotifications);
             if (userNotifications1==null){
                 throw new InternalServerException("InternalServerException");
             }
+            return true;
         } catch (Exception e){
             logger.error(e.getMessage());
+            return false;
         }
     }
 
-    public void sendUserNotificationOnAppointmentBooking(Appointment appointment) {
+    public boolean sendUserNotificationOnAppointmentBooking(Appointment appointment) {
         NotificationTypes notificationTypes = notificationTypeRepository.getById(1);
         UserNotifications userNotifications = new UserNotifications(
                 appointment.getUsers(),
@@ -68,7 +70,7 @@ public class UserNotificationService {
                 false,
                 notificationTypes
         );
-        sendNotification(userNotifications);
+        return sendNotification(userNotifications);
     }
 
     public void sendUserNotificationOnAppointmentCancelling(Appointment appointment){

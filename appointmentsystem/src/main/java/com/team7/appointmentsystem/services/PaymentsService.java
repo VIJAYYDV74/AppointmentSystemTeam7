@@ -9,6 +9,7 @@ import com.team7.appointmentsystem.exceptions.InternalServerException;
 import com.team7.appointmentsystem.exceptions.PaymentNotFoundException;
 import com.team7.appointmentsystem.exceptions.ServiceNotFoundException;
 import com.team7.appointmentsystem.repository.AppointmentRepository;
+import com.team7.appointmentsystem.repository.BillingDetailsRepository;
 import com.team7.appointmentsystem.repository.PaymentsRepository;
 import com.team7.appointmentsystem.repository.ServicesRepository;
 import org.slf4j.Logger;
@@ -33,6 +34,9 @@ public class PaymentsService {
 
     @Autowired
     private BusinessNotificationsService businessNotificationsService;
+
+    @Autowired
+    private BillingDetailsRepository billingDetailsRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(PaymentsService.class);
 
