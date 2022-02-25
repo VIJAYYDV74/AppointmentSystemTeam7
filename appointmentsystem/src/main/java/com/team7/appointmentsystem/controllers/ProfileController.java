@@ -1,6 +1,7 @@
 package com.team7.appointmentsystem.controllers;
 
 import com.team7.appointmentsystem.entity.Users;
+import com.team7.appointmentsystem.exceptions.UserNotFoundException;
 import com.team7.appointmentsystem.models.PasswordObject;
 import com.team7.appointmentsystem.repository.UserRepository;
 import com.team7.appointmentsystem.services.ProfileService;
@@ -16,11 +17,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Calendar;
-import java.util.Date;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user")
 public class ProfileController {
 
     @Autowired
@@ -36,7 +35,7 @@ public class ProfileController {
     }
 
     @RequestMapping("/profile/save/{userId}")
-    public ResponseEntity<Users> saveProfile(@RequestParam("profileImg") MultipartFile multipartFile,
+    public ResponseEntity<String> saveProfile(@RequestParam("profileImg") MultipartFile multipartFile,
                                              @PathVariable long userId) throws IOException
     {
         String profileImg = StringUtils.cleanPath(multipartFile.getOriginalFilename());
@@ -55,6 +54,15 @@ public class ProfileController {
         }catch (IOException e) {
             throw  new IOException("Could not save uploaded file:" + profileImg);
         }
-        return ResponseEntity.ok(savedUser);
+        return ResponseEntity.ok("File uploaded Successfully");
+    }
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<Users>  getProfileData(@PathVariable long userId) throws UserNotFoundException {
+        Users user = userRepo.findByUserid(userId);
+        if(user == null) {
+            throw new UserNotFoundException("User does not Exists");
+        }else{
+            return ResponseEntity.ok(user);
+        }
     }
 }
