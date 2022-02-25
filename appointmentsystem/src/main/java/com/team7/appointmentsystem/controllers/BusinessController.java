@@ -33,20 +33,6 @@ public class BusinessController {
     @Autowired
     private RegisterService registerService;
 
-//    @GetMapping("/homepage")
-//    @CrossOrigin(origins = "*", allowedHeaders = "*")
-//    public ModelAndView viewHomePage(){
-//        ModelAndView modelAndView = new ModelAndView("index.html");
-//        List<HomepageAPI1> api1 = businessService.getBusinessesCount();
-//        List<List<BusinessDetails>> api2 = businessService.getTop3BusinessesInEachCategory();
-//        List<Comments> api3 = commentsService.getLatestComments();
-//        List<Business> api4 = businessService.getJoins();
-//        //System.out.println(api4.get(0));
-//        modelAndView.addObject("api1", api1);
-//        modelAndView.addObject("api2", api2);
-//        modelAndView.addObject("api3", api3);
-//        return modelAndView;
-//    }
 
     @GetMapping("/homepage/api1")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -54,7 +40,6 @@ public class BusinessController {
         List<HomepageAPI1> api1 = businessService.getBusinessesCount();
         return ResponseEntity.ok(api1);
     }
-
 
     @GetMapping("/homepage/api2")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -114,8 +99,8 @@ public class BusinessController {
 
     @GetMapping("/user/getBusinessByBusinessName/{businessId}")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public ResponseEntity<Business> getBusinessById(@PathVariable long businessId){
-        return ResponseEntity.ok(businessService.getBusiness(businessId));
+    public ResponseEntity<BusinessDetails> getBusinessById(@PathVariable long businessId){
+        return ResponseEntity.ok(businessService.getBusinessByBusinessId(businessId));
     }
 
 }

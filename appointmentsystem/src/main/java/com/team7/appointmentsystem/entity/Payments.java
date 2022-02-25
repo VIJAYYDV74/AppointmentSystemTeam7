@@ -21,13 +21,19 @@ public class Payments {
     @Column(name = "amount")
     private int amount;
 
+    @OneToOne
+    @JoinColumn(name = "billingid")
+    private BillingDetails billingDetails;
+
+
     public Payments() {
     }
 
-    public Payments(String paymentmethod, int amount) {
+    public Payments(String paymentmethod, int amount, BillingDetails billingDetails) {
         this.paymentmethod = paymentmethod;
         this.paymentDate = LocalDateTime.now();
         this.amount = amount;
+        this.billingDetails = billingDetails;
     }
 
     public long getPaymentid() {
@@ -62,6 +68,14 @@ public class Payments {
         this.amount = amount;
     }
 
+    public BillingDetails getBillingDetails() {
+        return billingDetails;
+    }
+
+    public void setBillingDetails(BillingDetails billingDetails) {
+        this.billingDetails = billingDetails;
+    }
+
     @Override
     public String toString() {
         return "Payments{" +
@@ -69,6 +83,7 @@ public class Payments {
                 ", paymentmethod='" + paymentmethod + '\'' +
                 ", paymentDate=" + paymentDate +
                 ", amount=" + amount +
+                ", billingDetails=" + billingDetails +
                 '}';
     }
 }

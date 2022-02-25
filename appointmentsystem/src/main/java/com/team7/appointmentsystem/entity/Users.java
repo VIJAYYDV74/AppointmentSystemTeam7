@@ -57,7 +57,7 @@ public class Users {
 
     public Users(String firstname, String lastname, String email,
                  String userPassword, String mobileNumber, LocalDateTime createdTime,
-                 boolean isBlocked, String profileImage, boolean emailVerified,
+                 String profileImage, boolean emailVerified,
                  List<Comments> comments) {
         this.firstName = firstname;
         this.lastName = lastname;
@@ -65,7 +65,7 @@ public class Users {
         this.userPassword = userPassword;
         this.mobileNumber = mobileNumber;
         this.createdTime = createdTime;
-        this.isBlocked = isBlocked;
+        this.isBlocked = false;
         this.profileImage = profileImage;
         this.emailVerified = emailVerified;
         this.comments = comments;
