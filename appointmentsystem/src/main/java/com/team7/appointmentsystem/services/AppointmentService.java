@@ -33,8 +33,6 @@ public class AppointmentService {
     private ServicesRepository servicesRepository;
 
     @Autowired
-
-    @Autowired
     private UserNotificationService userNotificationService;
     private UserNotificationService notificationService;
   
@@ -45,7 +43,7 @@ public class AppointmentService {
     private static final Logger logger = LoggerFactory.getLogger(AppointmentService.class);
 
     //get the userid from the session object and use it.
-    public String bookAppointment(Appointment appointment, Long businessId) {
+    public String bookAppointment(Appointment appointment, Long businessId, Long userId) {
         try{
             Payments payments = appointment.getPayments();
             Services services = servicesRepository.findById(appointment.getServices().

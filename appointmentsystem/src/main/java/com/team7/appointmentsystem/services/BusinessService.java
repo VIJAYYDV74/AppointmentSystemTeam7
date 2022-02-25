@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.team7.appointmentsystem.metamodels.Business_.businessAddress;
+
 
 @Service
 public class BusinessService {
@@ -101,11 +103,8 @@ public class BusinessService {
             business.setCreatedTime(LocalDateTime.now());
             business.setBusinessAddress(business.getBusinessAddress());
             business.setCategories(categories);
-            BusinessAddress businessAddress = businessAddressRepository.
-                    save(business.getBusinessAddress());
-            if (businessAddress==null){
-                throw new InternalServerException("InternalServerException");
-            }
+
+
             Business business2 = businessRepository.save(business);
             if (business2==null){
                 throw new InternalServerException("InternalServerException");
@@ -113,6 +112,11 @@ public class BusinessService {
             List<BusinessWorkingHours> l1 = business.getWorkingHours();
             if (l1.size()<7 || l1==null){
                 throw new WorkingHoursException("WorkingHoursException");
+            }
+            BusinessAddress businessAddress = businessAddressRepository.
+                    save(business.getBusinessAddress());
+            if (businessAddress==null){
+                throw new InternalServerException("InternalServerException");
             }
             for (BusinessWorkingHours businessWorkingHours: l1) {
                 businessWorkingHours.setBusinessHours(business);

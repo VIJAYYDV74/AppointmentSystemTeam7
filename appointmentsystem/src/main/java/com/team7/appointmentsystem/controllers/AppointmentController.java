@@ -22,8 +22,8 @@ public class AppointmentController {
 
     @Transactional
     @PostMapping("/user/bookAppointment/{businessId}")
-    public String bookAppointment(@RequestBody Appointment appointment, @PathVariable Long businessId){
-        String s =  appointmentService.bookAppointment(appointment, businessId);
+    public String bookAppointment(@RequestBody Appointment appointment, @PathVariable Long businessId, @RequestParam Long userId){
+        String s =  appointmentService.bookAppointment(appointment, businessId, userId);
         return s;
     }
 
