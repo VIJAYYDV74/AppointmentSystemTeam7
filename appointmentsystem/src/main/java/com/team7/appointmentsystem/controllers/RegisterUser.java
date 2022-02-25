@@ -3,6 +3,7 @@ package com.team7.appointmentsystem.controllers;
 
 import com.team7.appointmentsystem.entity.Users;
 import com.team7.appointmentsystem.exceptions.UserAlreadyExistsException;
+import com.team7.appointmentsystem.miscellinious.UserDetails;
 import com.team7.appointmentsystem.services.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class RegisterUser {
@@ -21,7 +23,7 @@ public class RegisterUser {
 
 
     @GetMapping("/showUsers")
-    public List<Users> showUsers(){
+    public List<Map<String, Object>> showUsers(){
         return registerService.showUsers();
     }
 
