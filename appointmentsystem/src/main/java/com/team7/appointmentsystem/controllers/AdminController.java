@@ -52,7 +52,24 @@ public class AdminController {
         // System.out.println(dates);
         Admin admin= new Admin();
        // admin.users= userRepository.getAllUser();
-        admin.topBusinesses = commentsRepository.topBusiness();
+        List<Comments> comments= commentsRepository.topBusiness();
+        for(Comments b:comments){
+            Map<String,Object> business=new HashMap<>();
+            business.put("businessname",b.getBusiness().getBusinessName());
+            List<Services> services=b.getBusiness().getServices();
+            Services service=new Services();
+            int price=0;
+            for(Services s:services){
+                if(s.getServicePrice()>price){
+                    service=s;
+                }
+            }
+            business.put("servicename",service.getServiceName());
+            business.put("serviceprice",service.getServicePrice());
+            business.put("category",b.getBusiness().getCategories().getCategoryName());
+            admin.topBusinesses.add(business);
+
+        }
         //admin.appointments= appointmentRepository.getAllAppointments();
         //admin.payments= paymentsRepository.getAllPayments();
         admin.totalUsers=userRepository.countTotalUser();

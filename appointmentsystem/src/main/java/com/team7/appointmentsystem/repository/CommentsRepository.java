@@ -23,26 +23,26 @@ public interface CommentsRepository extends JpaRepository<Comments, Long> {
     @Query(value = "select * from comments",nativeQuery = true)
     List<Comments> findAllratings();
 
-    @Query(value = "select count(*) from comments c where c.userid= ?1 and rating>3",nativeQuery = true)
-    int countFavourites(Long userid);
+    //@Query(value = "select count(*) from comments c where c.userid= ?1 and rating>3",nativeQuery = true)
+    //int countFavourites(Long userid);
 
     @Query(value = "select rating from comments c where c.commentedto= ?1",nativeQuery = true)
     Map<String, Object> getbusinessDetails(Long id);
     // admin dashboard
 
     //user_dashboard
-    @Query(value = "select * from comments c where c.userid= ?1",nativeQuery = true)
+    @Query(value = "select * from comments c where c.commentedby= ?1",nativeQuery = true)
     List<Map<String, Object>> getTotalReviews(Long userid);
 
 
-    @Query(value = "select * from comments c where c.userid= ?1 and rating>3",nativeQuery = true)
+    @Query(value = "select * from comments c where c.commentedby= ?1 and rating>3",nativeQuery = true)
     List<Map<String, Object>> getFavourites(Long userid);
 
-    @Query(value = "select commentedto,rating from  comments c where rating>3 ORDER BY rating",nativeQuery = true)
-    List<Map<String,Object>> topBusiness();
+    @Query(value = "select * from comments c where rating>3 ORDER BY rating",nativeQuery = true)
+    List<Comments> topBusiness();
 
     //business details
-    @Query(value = "select firstname,lastname,rating,businessname",nativeQuery = true)
+    @Query(value = "select rating",nativeQuery = true)
     List<Map<String,Object>> getReviews(Long businessid);
 
 
