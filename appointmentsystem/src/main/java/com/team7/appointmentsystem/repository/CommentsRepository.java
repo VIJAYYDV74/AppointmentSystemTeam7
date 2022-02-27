@@ -42,7 +42,7 @@ public interface CommentsRepository extends JpaRepository<Comments, Long> {
     List<Comments> topBusiness();
 
     //business details
-    @Query(value = "select rating",nativeQuery = true)
+    @Query(value = "select commentedby,feedback,rating from comments",nativeQuery = true)
     List<Map<String,Object>> getReviews(Long businessid);
 
 

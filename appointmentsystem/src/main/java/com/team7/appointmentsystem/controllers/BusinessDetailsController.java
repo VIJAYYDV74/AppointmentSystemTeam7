@@ -41,8 +41,8 @@ public class BusinessDetailsController {
     }
 
     @GetMapping("{businessid}/pricing")
-    public List<Services> pricing(@Param("businessid") Long businessid){
-        List<Services> services=new ArrayList<>();
+    public List<Map<String,Object>> pricing(@Param("businessid") Long businessid){
+        List<Map<String,Object>> services=new ArrayList<>();
         services=servicesRepository.getPricing(businessid);
         return services;
     }
