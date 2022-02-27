@@ -1,5 +1,7 @@
 package com.team7.appointmentsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
@@ -37,6 +39,7 @@ public class Appointment {
     @Column(name = "cancellationreason", columnDefinition = "text default null")
     private String cancellationReason;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "userid")
     private Users users;

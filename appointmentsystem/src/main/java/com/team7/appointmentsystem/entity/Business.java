@@ -49,6 +49,7 @@ public class Business {
     @JoinColumn(name = "businesscategory")
     private Categories categories;
 
+
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
     private Users users;

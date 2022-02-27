@@ -32,10 +32,11 @@ public class AppointmentService {
     @Autowired
     private ServicesRepository servicesRepository;
 
-    @Autowired
+
 
     @Autowired
     private UserNotificationService userNotificationService;
+    @Autowired
     private UserNotificationService notificationService;
   
   

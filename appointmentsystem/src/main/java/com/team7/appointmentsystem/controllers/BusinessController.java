@@ -118,4 +118,5 @@ public class BusinessController {
         return ResponseEntity.ok(businessService.getBusiness(businessId));
     }
 
+
 }
