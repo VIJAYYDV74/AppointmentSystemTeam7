@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
     Users findByUserid(long i);
 
     // admin dashboard
-    @Query(value = "select userid,firstname,lastname,useremail,createdtime from users",nativeQuery = true)
+    @Query(value = "select userid,firstname,lastname,email,createdtime from users",nativeQuery = true)
     List<Map<String,Object>> getAllUser();
     @Query(value = "select count(*) from users",nativeQuery = true)
     int countTotalUser();

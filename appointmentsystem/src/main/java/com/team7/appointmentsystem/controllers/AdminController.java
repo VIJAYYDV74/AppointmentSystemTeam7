@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,16 +72,51 @@ public class AdminController {
     }
     @GetMapping("/admin_dashboard/businesses")
     public List<Map<String,Object>> adminDashboard_businesses(){
-        List<Map<String,Object>> businesses=new ArrayList<>();
+        //List<Map<String,Object>> businesses=new ArrayList<>();
 
-        businesses=businessRepository.getAllbusinesses();
-        return businesses;
+        List<Map<String,Object>> allBusinesses=new ArrayList<>();
+        List<Business> businesses=businessRepository.getAllbusinesses();
+        for(Business business:businesses){
+            //Object id=  business.get("businessid");
+            Map<String,Object> businessDetails=new HashMap<>();
+            Long id = business.getBusinessid();
+            //Map<String,Object> services=servicesRepository.getbusinessDetails(id);
+            //Map<String,Object> comments=commentsRepository.getbusinessDetails(id);
+            businessDetails.put("businessname",business.getBusinessName());
+            businessDetails.put("category",business.getCategories().getCategoryName());
+            List<Services> services= servicesRepository.findByBusinessBusinessid(id);
+            Services service=new Services();
+            int p=0;
+            for (Services s:services){
+                if(s.getServicePrice()>p){
+                    service=s;
+                }
+            }
+            businessDetails.put("servicesname",service.getServiceName());
+            businessDetails.put("servicesprice",service.getServicePrice());
+            Comments comments=commentsRepository.findByBusinessBusinessid(id);
+            businessDetails.put("ratings",comments.getRating());
+            allBusinesses.add(businessDetails);
+
+        }
+        return allBusinesses;
     }
     @GetMapping("/admin_dashboard/bookings")
     public List<Map<String,Object>> adminDashboard_bookings(){
-        List<Map<String,Object>> appointments=new ArrayList<>();
-        appointments=appointmentRepository.getAllAppointments();
-        return appointments;
+        List<Map<String,Object>> totalBookings=new ArrayList<>();
+        List<Appointment> Appointments=appointmentRepository.getAllAppointments();
+
+        for (Appointment appointment:Appointments){
+            Map<String,Object> booking =new HashMap<>();
+            booking.put("bookeddate",appointment.getBookedDate());
+            booking.put("name",appointment.getUsers().getFirstName()+appointment.getUsers().getLastName());
+            booking.put("businessname",appointment.getBusiness().getBusinessName());
+            booking.put("serviceprice",appointment.getServices().getServicePrice());
+            booking.put("servicename",appointment.getServices().getServiceName());
+            totalBookings.add(booking);
+
+        }
+        return totalBookings;
     }
 
 }

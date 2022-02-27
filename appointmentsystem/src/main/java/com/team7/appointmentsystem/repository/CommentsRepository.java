@@ -26,6 +26,8 @@ public interface CommentsRepository extends JpaRepository<Comments, Long> {
     @Query(value = "select count(*) from comments c where c.userid= ?1 and rating>3",nativeQuery = true)
     int countFavourites(Long userid);
 
+    @Query(value = "select rating from comments c where c.commentedto= ?1",nativeQuery = true)
+    Map<String, Object> getbusinessDetails(Long id);
     // admin dashboard
 
     //user_dashboard
@@ -42,4 +44,7 @@ public interface CommentsRepository extends JpaRepository<Comments, Long> {
     //business details
     @Query(value = "select firstname,lastname,rating,businessname",nativeQuery = true)
     List<Map<String,Object>> getReviews(Long businessid);
+
+
+    Comments findByBusinessBusinessid(Long id);
 }
