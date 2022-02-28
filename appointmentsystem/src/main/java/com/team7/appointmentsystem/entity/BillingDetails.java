@@ -18,7 +18,7 @@ public class BillingDetails {
     @Column(name = "lastname", columnDefinition = "varchar(100)")
     private String lastName;
 
-    @Column(name = "text", columnDefinition = "text")
+    @Column(name = "address", columnDefinition = "text")
     private String address;
 
     @Column(name = "city", columnDefinition = "varchar(128)")
@@ -33,7 +33,7 @@ public class BillingDetails {
     @Column(name = "billingemailid", columnDefinition = "varchar(100)")
     private String billingEmailId;
 
-    @Column(name = "businessmobilenumber")
+    @Column(name = "billingmobilenumber")
     private String billingMobileNumber;
 
     public BillingDetails() {
