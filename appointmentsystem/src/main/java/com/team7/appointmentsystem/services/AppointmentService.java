@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +53,7 @@ public class AppointmentService {
             Payments payments = appointment.getPayments();
             Services services = servicesRepository.findById(appointment.getServices().
                     getServiceid()).orElse(null);
+            System.out.println(services);
 
             if (services==null){
                 throw new ServiceNotFoundException("ServiceNotFoundException");
@@ -103,7 +103,8 @@ public class AppointmentService {
 
             return appointment1;
         }catch (Exception e){
-            logger.error(e.getMessage());
+            e.printStackTrace();
+//            logger.error(e.getMessage());
             return null;
         }
     }

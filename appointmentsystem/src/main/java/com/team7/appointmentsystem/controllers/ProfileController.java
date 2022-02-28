@@ -3,6 +3,7 @@ package com.team7.appointmentsystem.controllers;
 import com.team7.appointmentsystem.entity.Users;
 import com.team7.appointmentsystem.exceptions.UserNotFoundException;
 import com.team7.appointmentsystem.models.PasswordObject;
+import com.team7.appointmentsystem.models.ProfileModel;
 import com.team7.appointmentsystem.repository.UserRepository;
 import com.team7.appointmentsystem.services.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class ProfileController {
     @Autowired
     private UserRepository userRepo;
 
+
     @Autowired
     private ProfileService profileService;
 
@@ -34,7 +36,7 @@ public class ProfileController {
         return ResponseEntity.ok(result);
     }
 
-    @RequestMapping("/profile/save/{userId}")
+    @RequestMapping("/profile/uploadPhoto/{userId}")
     public ResponseEntity<String> saveProfile(@RequestParam("profileImg") MultipartFile multipartFile,
                                              @PathVariable long userId) throws IOException
     {
@@ -63,6 +65,21 @@ public class ProfileController {
             throw new UserNotFoundException("User does not Exists");
         }else{
             return ResponseEntity.ok(user);
+        }
+    }
+
+    @PostMapping("/profile/save/{userId}")
+    public ResponseEntity<String> saveProfile(@RequestBody ProfileModel profile, @PathVariable Long userId )
+            throws UserNotFoundException{
+        Users user = userRepo.findByUserid(userId);
+        if(user == null) {
+            throw new UserNotFoundException("User does not Exist");
+        }else{
+            user.setFirstName(profile.getFirstName());
+            user.setEmail(profile.getEmail());
+            user.setLastName(profile.getLastName());
+            userRepo.save(user);
+            return ResponseEntity.ok("Saved Changes");
         }
     }
 }
