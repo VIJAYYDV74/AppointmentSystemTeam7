@@ -4,6 +4,7 @@ import com.team7.appointmentsystem.entity.*;
 import com.team7.appointmentsystem.exceptions.AppointmentNotFoundException;
 import com.team7.appointmentsystem.exceptions.InternalServerException;
 import com.team7.appointmentsystem.exceptions.ServiceNotFoundException;
+import com.team7.appointmentsystem.models.StrObject;
 import com.team7.appointmentsystem.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,7 +129,7 @@ public class AppointmentService {
 //        return "Completed";
 //    }
 
-    public String cancelAppointment(long appointmentId, String cancellationReason){
+    public StrObject cancelAppointment(long appointmentId, String cancellationReason){
         try{
             Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
             if(appointment==null){
@@ -137,9 +138,9 @@ public class AppointmentService {
             appointment.setCancelled(true);
             appointment.setCancellationReason(cancellationReason);
             appointmentRepository.save(appointment);
-            return "Appointment cancelled!!!";
+            return new StrObject("Appointment Cancelled!");
         } catch (AppointmentNotFoundException e) {
-            return e.getMessage();
+            return new StrObject(e.getMessage().toString());
         }
     }
 }

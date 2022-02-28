@@ -2,6 +2,7 @@ package com.team7.appointmentsystem.controllers;
 
 
 import com.team7.appointmentsystem.entity.Appointment;
+import com.team7.appointmentsystem.models.StrObject;
 import com.team7.appointmentsystem.services.AppointmentService;
 import com.team7.appointmentsystem.services.UserNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +43,8 @@ public class AppointmentController {
 
     @Transactional
     @PostMapping("/user/cancelAppointment/{appointmentId}")
-    public ResponseEntity<String> cancelAppointment(@PathVariable long appointmentId, @RequestBody String cancellationReason) {
-        String msg = appointmentService.cancelAppointment(appointmentId, cancellationReason);
+    public ResponseEntity<StrObject> cancelAppointment(@PathVariable long appointmentId, @RequestBody String cancellationReason) {
+        StrObject msg = appointmentService.cancelAppointment(appointmentId, cancellationReason);
         return ResponseEntity.ok(msg);
     }
 
