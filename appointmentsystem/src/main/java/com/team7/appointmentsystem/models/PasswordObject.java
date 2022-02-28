@@ -5,10 +5,12 @@ public class PasswordObject {
     private String newPassword;
     private String emailID;
 
-    public PasswordObject(String oldPassword, String newPassword, String emailID) {
+    public PasswordObject(String oldPassword, String newPassword) {
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;
-        this.emailID = emailID;
+    }
+
+    public PasswordObject() {
     }
 
     public String getOldPassword() {
@@ -25,14 +27,6 @@ public class PasswordObject {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
-    }
-
-    public String getEmailID() {
-        return emailID;
-    }
-
-    public void setEmailID(String emailID) {
-        this.emailID = emailID;
     }
 
 //a new commit

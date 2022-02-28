@@ -30,9 +30,9 @@ public class ProfileController {
     @Autowired
     private ProfileService profileService;
 
-    @RequestMapping("/profile/changePassword")
-    public ResponseEntity<String> changePassword(@RequestBody PasswordObject object) {
-        String result = profileService.changePassword(object.getOldPassword(), object.getNewPassword(), object.getEmailID());
+    @RequestMapping("/profile/{userId}/changePassword")
+    public ResponseEntity<PasswordObject> changePassword(@RequestBody PasswordObject object, @PathVariable Long userId) {
+        PasswordObject result = profileService.changePassword(object.getOldPassword(), object.getNewPassword(), userId);
         return ResponseEntity.ok(result);
     }
 
