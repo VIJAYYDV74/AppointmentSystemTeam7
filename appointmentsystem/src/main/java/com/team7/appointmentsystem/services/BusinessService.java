@@ -115,7 +115,7 @@ public class BusinessService {
                 throw new WorkingHoursException("WorkingHoursException");
             }
             for (BusinessWorkingHours businessWorkingHours: l1) {
-                businessWorkingHours.setBusinessHours(business);
+                businessWorkingHours.setBusiness(business);
                 BusinessWorkingHours businessWorkingHours1 = businessWorkingHoursRepository.
                         save(businessWorkingHours);
                 if (businessWorkingHours1==null){

@@ -11,7 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,35 +58,7 @@ public class AppointmentService {
 
     String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
-    public List<AppointmentSlots> AppointmentsPage(long businessId, Date date){
-        List<Appointment> appointments = appointmentRepository.findByBusinessAndAppointmentDate(businessId, date);
-        Business business = businessRepository.getById(businessId);
-        int slotDuration = business.getSlotDuration();
-        BusinessWorkingHours businessWorkingHours =
-                businessWorkingHoursRepository.findByBusinessHoursAndNameOfDay(businessId, "Monday");
 
-        List<AppointmentSlots> appointmentSlots = new ArrayList<>();
-        Time begin = businessWorkingHours.getStartHour();
-        Time end = businessWorkingHours.getEndHour();
-
-        while (begin.before(end)){
-            Time temp = Time.valueOf(begin.toLocalTime().plusMinutes(slotDuration));
-            AppointmentSlots appointmentSlots1 =
-                    new AppointmentSlots(begin, temp);
-            appointmentSlots.add(appointmentSlots1);
-            begin = temp;
-        }
-
-        for (Appointment appointment:appointments) {
-            Time t1 = appointment.getBeginTime();
-            for (AppointmentSlots appointmentSlot:appointmentSlots) {
-                if (appointmentSlot.getBeginTime().equals(t1)){
-                    appointmentSlot.setAvailable(false);
-                }
-            }
-        }
-        return appointmentSlots;
-    }
 
     //get the userid from the session object and use it.
     public Appointment bookAppointment(Appointment appointment, Long businessId) {
@@ -177,7 +153,8 @@ public class AppointmentService {
             }
             else {
                 boolean b1 = userNotificationService.sendUserNotificationOnAppointmentCancelling(appointment1);
-                boolean b2 = businessNotificationsService.sendBusinessNotificationOnAppointmentCancelling(appointment1);
+                boolean b2 = businessNotificationsService.
+                        sendBusinessNotificationOnAppointmentCancelling(appointment1);
                 if (!b1){
                     logger.error("Unable to send notification to user");
                 }
@@ -190,5 +167,40 @@ public class AppointmentService {
             logger.error(e.getMessage());
             return null;
         }
+    }
+
+    public List<AppointmentSlots> AppointmentsPage(long businessId, String date) throws ParseException {
+        System.out.println(date);
+        Business business = businessRepository.getById(businessId);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = dateFormat.parse(date);
+        List<Appointment> appointments = appointmentRepository.
+                findByBusinessBusinessidAndAppointmentDate(businessId, date1);
+        int slotDuration = business.getSlotDuration();
+        BusinessWorkingHours businessWorkingHours =
+                businessWorkingHoursRepository.findByBusinessBusinessidAndNameOfDay(businessId, "Monday");
+
+        List<AppointmentSlots> appointmentSlots = new ArrayList<>();
+        Time begin = businessWorkingHours.getStartHour();
+        Time end = businessWorkingHours.getEndHour();
+
+        while (begin.before(end)){
+            Time temp = Time.valueOf(begin.toLocalTime().plusMinutes(slotDuration));
+            AppointmentSlots appointmentSlots1 =
+                    new AppointmentSlots(begin, temp);
+            appointmentSlots.add(appointmentSlots1);
+            begin = temp;
+        }
+
+        for (Appointment appointment:appointments) {
+            Time t1 = appointment.getBeginTime();
+            for (AppointmentSlots appointmentSlot:appointmentSlots) {
+                if (appointmentSlot.getBeginTime().equals(t1)){
+                    appointmentSlot.setAvailable(false);
+                }
+            }
+        }
+        return appointmentSlots;
+        //return null;
     }
 }

@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.sql.Date;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @RestController
@@ -45,15 +47,15 @@ public class AppointmentController {
 
     @Transactional
     @PostMapping("/user/cancelAppointment/{appointmentId}")
-    public ResponseEntity<Appointment> cancelAppointment(@PathVariable long appointmentId, @RequestBody String cancellationReason) {
+    public ResponseEntity<Appointment> cancelAppointment(@PathVariable long appointmentId,
+                                                         @RequestBody String cancellationReason) {
         Appointment msg = appointmentService.cancelAppointment(appointmentId, cancellationReason);
         return ResponseEntity.ok(msg);
     }
 
     @GetMapping(value = "user/bookAppointment/{businessId}", params = "date")
     public List<AppointmentSlots> appointmentPage(@PathVariable long businessId,
-                                                  @RequestBody @DateTimeFormat(pattern = "MMddyyyy") Date date){
-        System.out.println("hiowefh");
+                                                  @RequestParam String date) throws ParseException {
         return appointmentService.AppointmentsPage(businessId, date);
     }
 }
