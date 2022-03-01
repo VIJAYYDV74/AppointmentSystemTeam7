@@ -9,7 +9,10 @@ import com.team7.appointmentsystem.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.format.DateTimeFormatters;
 import org.springframework.stereotype.Service;
+
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,4 +146,15 @@ public class AppointmentService {
             return new StrObject(e.getMessage().toString());
         }
     }
+
+//    public String reschedule(String toDate, Long appointmentId) throws AppointmentNotFoundException{
+//        try{
+//            Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
+//            if(appointment == null) {
+//                throw new AppointmentNotFoundException("Appointment does not exists");
+//            }
+//            DateTimeFormatters formatters = new DateTimeFormatters("yyyy")
+//            appointment.setBookedDate(LocalDateTime.parse(toDate, new DateTimeFormatters()));
+//        }
+//    }
 }

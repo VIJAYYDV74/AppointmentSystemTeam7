@@ -2,6 +2,7 @@ package com.team7.appointmentsystem.controllers;
 
 
 import com.team7.appointmentsystem.entity.Appointment;
+import com.team7.appointmentsystem.exceptions.AppointmentNotFoundException;
 import com.team7.appointmentsystem.models.StrObject;
 import com.team7.appointmentsystem.services.AppointmentService;
 import com.team7.appointmentsystem.services.UserNotificationService;
@@ -47,5 +48,13 @@ public class AppointmentController {
         StrObject msg = appointmentService.cancelAppointment(appointmentId, cancellationReason);
         return ResponseEntity.ok(msg);
     }
+
+//    @Transactional
+//    @PostMapping("/user/bookAppointment/reschedule/{businessId}")
+//    public ResponseEntity<String> rescheduleAppointment(
+//            @RequestParam String toDate, @RequestParam Long appointmentId) throws AppointmentNotFoundException {
+//        String msg = appointmentService.reschedule(toDate, appointmentId);
+//        return ResponseEntity.ok(msg);
+//    }
 
 }
