@@ -47,6 +47,9 @@ public class BusinessService {
     private GenderCategoryRepository genderCategoryRepository;
 
     @Autowired
+    private BusinessImagesRepository businessImagesRepository;
+
+    @Autowired
     private BusinessNotificationsService businessNotificationsService;
 
     public static final Logger logger = LoggerFactory.getLogger(BusinessService.class);
@@ -119,7 +122,7 @@ public class BusinessService {
                 throw new InternalServerException("InternalServerException");
             }
             for (BusinessWorkingHours businessWorkingHours: l1) {
-                businessWorkingHours.setBusinessHours(business);
+                businessWorkingHours.setBusiness(business);
                 BusinessWorkingHours businessWorkingHours1 = businessWorkingHoursRepository.
                         save(businessWorkingHours);
                 if (businessWorkingHours1==null){
@@ -134,6 +137,17 @@ public class BusinessService {
                 services1.setBusiness(business);
                 Services services2 = servicesRepository.save(services1);
                 if (services2==null){
+                    throw new InternalServerException("InternalServerException");
+                }
+            }
+            List<BusinessImages> businessImages = business.getBusinessImages();
+            if (businessImages==null){
+                throw new ServiceNotFoundException("ServicesNotFound");
+            }
+            for(BusinessImages businessImages1: businessImages){
+                businessImages1.setBusiness(business);
+                BusinessImages businessImages2 = businessImagesRepository.save(businessImages1);
+                if (businessImages2==null){
                     throw new InternalServerException("InternalServerException");
                 }
             }

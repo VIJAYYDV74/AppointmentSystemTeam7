@@ -1,7 +1,7 @@
 package com.team7.appointmentsystem.entity;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.Time;
 import java.time.LocalDateTime;
 
