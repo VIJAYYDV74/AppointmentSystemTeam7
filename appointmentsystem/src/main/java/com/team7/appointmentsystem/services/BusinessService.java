@@ -137,6 +137,9 @@ public class BusinessService {
                 }
             }
             List<BusinessImages> businessImages = business.getBusinessImages();
+            if (businessImages==null){
+                throw new ServiceNotFoundException("ServicesNotFound");
+            }
             for(BusinessImages businessImages1: businessImages){
                 businessImages1.setBusiness(business);
                 BusinessImages businessImages2 = businessImagesRepository.save(businessImages1);
@@ -144,7 +147,7 @@ public class BusinessService {
                     throw new InternalServerException("InternalServerException");
                 }
             }
-            return "Image Saved";
+            return "Business Registered";
         }
         catch (ServiceNotFoundException serviceNotFoundException){
             logger.error(serviceNotFoundException.getMessage());
