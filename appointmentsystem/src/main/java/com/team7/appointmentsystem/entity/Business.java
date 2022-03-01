@@ -14,7 +14,6 @@ public class Business {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private long businessid;
 
     @Column(columnDefinition = "varchar(255)", nullable = false, name = "businessname")
