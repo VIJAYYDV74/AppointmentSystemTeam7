@@ -71,12 +71,13 @@ public class ProfileController {
     @PostMapping("/profile/save/{userId}")
     public ResponseEntity<String> saveProfile(@RequestBody ProfileModel profile, @PathVariable Long userId )
             throws UserNotFoundException{
-        Users user = userRepo.findByUserid(userId);
+        Users user = profileService.getUser(userId);
         if(user == null) {
             throw new UserNotFoundException("User does not Exist");
         }else{
             user.setFirstName(profile.getFirstName());
             user.setEmail(profile.getEmail());
+            user.setMobileNumber(profile.getContact());
             user.setLastName(profile.getLastName());
             userRepo.save(user);
             return ResponseEntity.ok("Saved Changes");

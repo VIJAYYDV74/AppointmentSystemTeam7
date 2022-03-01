@@ -4,6 +4,22 @@ public class ProfileModel {
     private String firstName;
     private String lastName;
     private String email;
+    private String contact;
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public ProfileModel(String firstName, String lastName, String email, String contact) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.contact = contact;
+    }
 
     public ProfileModel(String firstName, String lastName, String email) {
         this.firstName = firstName;
@@ -34,4 +50,6 @@ public class ProfileModel {
     public void setEmail(String email) {
         this.email = email;
     }
+
+
 }
