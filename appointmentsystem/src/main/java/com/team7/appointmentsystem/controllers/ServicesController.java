@@ -25,6 +25,7 @@ public class ServicesController {
     }
 
     @GetMapping("business/{businessId}/getServices")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<List<Services>> getBusinessServices(long businessId){
         return ResponseEntity.ok(servicesService.getBusinessServices(businessId));
     }

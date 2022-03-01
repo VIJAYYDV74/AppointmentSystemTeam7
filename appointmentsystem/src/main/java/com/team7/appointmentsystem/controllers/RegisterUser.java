@@ -7,10 +7,7 @@ import com.team7.appointmentsystem.miscellinious.UserDetails;
 import com.team7.appointmentsystem.services.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -23,16 +20,19 @@ public class RegisterUser {
 
 
     @GetMapping("/showUsers")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public List<Map<String, Object>> showUsers(){
         return registerService.showUsers();
     }
 
     @GetMapping("/register")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public String signUpForm() {
         return "SignupForm";
     }
 
     @PostMapping("/register")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<String> registerUser(@RequestBody Users user) throws UserAlreadyExistsException {
         System.out.println(user);
         String msg = registerService.registerUser(user);

@@ -27,6 +27,7 @@ public class AppointmentController {
 
     @Transactional
     @PostMapping("/user/bookAppointment/{businessId}")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<Appointment> bookAppointment(@RequestBody Appointment appointment,
                                                        @PathVariable Long businessId){
         Appointment appointment1 =  appointmentService.bookAppointment(appointment, businessId);
@@ -35,18 +36,21 @@ public class AppointmentController {
 
     @Transactional
     @GetMapping("/business/getAppointments/{businessId}")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public List<Appointment> getBusinessAppointments(@PathVariable long businessId){
         return appointmentService.getBusinessAppointments(businessId);
     }
 
     @Transactional
     @GetMapping("/user/getAppointments/{userId}")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public List<Appointment> getUserAppointments(@PathVariable long userId){
         return appointmentService.getUserAppointments(userId);
     }
 
     @Transactional
     @PostMapping("/user/cancelAppointment/{appointmentId}")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<Appointment> cancelAppointment(@PathVariable long appointmentId,
                                                          @RequestBody String cancellationReason) {
         Appointment msg = appointmentService.cancelAppointment(appointmentId, cancellationReason);
@@ -54,6 +58,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value = "user/bookAppointment/{businessId}", params = "date")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public List<AppointmentSlots> appointmentPage(@PathVariable long businessId,
                                                   @RequestParam String date) throws ParseException {
         return appointmentService.AppointmentsPage(businessId, date);
