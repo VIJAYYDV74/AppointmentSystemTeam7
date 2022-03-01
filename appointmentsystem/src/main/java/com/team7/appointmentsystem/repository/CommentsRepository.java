@@ -45,6 +45,6 @@ public interface CommentsRepository extends JpaRepository<Comments, Long> {
     @Query(value = "select commentedby,feedback,rating from comments",nativeQuery = true)
     List<Map<String,Object>> getReviews(Long businessid);
 
-
-    Comments findByBusinessBusinessid(Long id);
+    @Query(value = "select * from comments c where c.commentedto=:id",nativeQuery = true)
+    List<Comments> findByBusinessBusinessid(Long id);
 }

@@ -53,6 +53,7 @@ public class AdminController {
         Admin admin= new Admin();
        // admin.users= userRepository.getAllUser();
         List<Comments> comments= commentsRepository.topBusiness();
+            List<Map<String, Object>> topBusiness=new ArrayList<>();
         for(Comments b:comments){
             Map<String,Object> business=new HashMap<>();
             business.put("businessname",b.getBusiness().getBusinessName());
@@ -67,9 +68,10 @@ public class AdminController {
             business.put("servicename",service.getServiceName());
             business.put("serviceprice",service.getServicePrice());
             business.put("category",b.getBusiness().getCategories().getCategoryName());
-            admin.topBusinesses.add(business);
+            topBusiness.add(business);
 
         }
+        admin.setTopBusinesses(topBusiness);
         //admin.appointments= appointmentRepository.getAllAppointments();
         //admin.payments= paymentsRepository.getAllPayments();
         admin.totalUsers=userRepository.countTotalUser();
@@ -100,19 +102,24 @@ public class AdminController {
             //Map<String,Object> services=servicesRepository.getbusinessDetails(id);
             //Map<String,Object> comments=commentsRepository.getbusinessDetails(id);
             businessDetails.put("businessname",business.getBusinessName());
+            businessDetails.put("email",business.getBusinessEmail());
+            businessDetails.put("businessId",business.getBusinessid());
+            
             businessDetails.put("category",business.getCategories().getCategoryName());
             List<Services> services= servicesRepository.findByBusinessBusinessid(id);
             Services service=new Services();
             int p=0;
-            for (Services s:services){
-                if(s.getServicePrice()>p){
-                    service=s;
-                }
+            List<Appointment> appointments=appointmentRepository.findByBusinessBusinessid(business.getBusinessid());
+            for (Appointment a:appointments){
+                p+=a.getTotalPrice();
             }
-            businessDetails.put("servicesname",service.getServiceName());
-            businessDetails.put("servicesprice",service.getServicePrice());
-            Comments comments=commentsRepository.findByBusinessBusinessid(id);
-            businessDetails.put("ratings",comments.getRating());
+            //businessDetails.put("servicesname",service.getServiceName());
+            businessDetails.put("saleValue",p);
+            List<Comments> comments=commentsRepository.findByBusinessBusinessid(id);
+            int rating=0;
+            for(Comments c:comments)
+            	rating+=c.getRating();
+            businessDetails.put("ratings",rating);
             allBusinesses.add(businessDetails);
 
         }

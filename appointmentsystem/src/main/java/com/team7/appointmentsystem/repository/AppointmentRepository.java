@@ -35,7 +35,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     int countUpcomingAppointments(Long userid, LocalDateTime now);
 
 
-
+    @Query(value = "select * from appointments a where a.businessid= :userId",nativeQuery = true)
+    List<Appointment> TotalAppointmentByBusinessIdid(Long userId);
     //admin dashboard
 
 

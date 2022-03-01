@@ -9,9 +9,11 @@ import com.team7.appointmentsystem.repository.ServicesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +29,10 @@ public class BusinessDetailsController {
     @Autowired
     CommentsRepository commentsRepository;
 
+  
     @GetMapping("{businessid}/business_overview")
-    public List<Map<String,Object>> businessOverview(@Param("businessid") Long businessid){
-        List<Map<String,Object>> business= new ArrayList<>();
+    public Map<String,Object> businessOverview(@PathVariable("businessid") Long businessid){
+        Map<String,Object> business= new HashMap<>();
         business=businessRepository.getBusiness(businessid);
         return business;
 

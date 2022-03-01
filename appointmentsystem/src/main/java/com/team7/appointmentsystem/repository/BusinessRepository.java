@@ -5,6 +5,7 @@ import com.team7.appointmentsystem.entity.Services;
 import com.team7.appointmentsystem.miscellinious.BusinessDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -48,10 +49,12 @@ public interface BusinessRepository extends JpaRepository<Business, Long> {
     //admin dashboard
 
 
-    @Query(value = "select businessname,businessdescription,businesstitle,businessnumber,businessemail,businessimages,businesscategory",nativeQuery = true)
-    List<Map<String, Object>> getBusiness(Long businessid);
+    @Query(value = "select businessname,businessdescription,businesstitle,businessnumber"
+    		+ ",businessemail,businessimages,businesscategory "
+    		+ "from business where businessid=:businessid",nativeQuery = true)
+    Map<String, Object> getBusiness(@Param("businessid") Long businessid);
 
-    @Query(value = "select businessimages from businessa",nativeQuery = true)
+    @Query(value = "select businessimages from business",nativeQuery = true)
     String getImages(Long businessid);
 
 
