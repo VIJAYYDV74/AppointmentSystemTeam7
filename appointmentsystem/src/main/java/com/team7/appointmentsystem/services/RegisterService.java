@@ -37,7 +37,7 @@ public class RegisterService {
 
     public String registerUser(Users user) throws UserAlreadyExistsException {
         System.out.println("Register Request arrived");
-
+        System.out.println(user.toString());
             Users tempUser = userRepository.findByEmail(user.getEmail());
             try{
                 if(tempUser != null) {

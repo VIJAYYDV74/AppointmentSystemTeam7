@@ -3,6 +3,7 @@ package com.team7.appointmentsystem.controllers;
 import com.team7.appointmentsystem.entity.Users;
 import com.team7.appointmentsystem.exceptions.UserNotFoundException;
 import com.team7.appointmentsystem.models.PasswordObject;
+import com.team7.appointmentsystem.models.ProfileModel;
 import com.team7.appointmentsystem.repository.UserRepository;
 import com.team7.appointmentsystem.services.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +26,17 @@ public class ProfileController {
     @Autowired
     private UserRepository userRepo;
 
+
     @Autowired
     private ProfileService profileService;
 
-    @RequestMapping("/profile/changePassword")
-    public ResponseEntity<String> changePassword(@RequestBody PasswordObject object) {
-        String result = profileService.changePassword(object.getOldPassword(), object.getNewPassword(), object.getEmailID());
+    @PostMapping("/profile/{userId}/changePassword")
+    public ResponseEntity<PasswordObject> changePassword(@RequestBody PasswordObject object, @PathVariable Long userId) {
+        PasswordObject result = profileService.changePassword(object.getOldPassword(), object.getNewPassword(), userId);
         return ResponseEntity.ok(result);
     }
 
-    @RequestMapping("/profile/save/{userId}")
+    @RequestMapping("/profile/uploadPhoto/{userId}")
     public ResponseEntity<String> saveProfile(@RequestParam("profileImg") MultipartFile multipartFile,
                                              @PathVariable long userId) throws IOException
     {
@@ -63,6 +65,22 @@ public class ProfileController {
             throw new UserNotFoundException("User does not Exists");
         }else{
             return ResponseEntity.ok(user);
+        }
+    }
+
+    @PostMapping("/profile/save/{userId}")
+    public ResponseEntity<String> saveProfile(@RequestBody ProfileModel profile, @PathVariable Long userId )
+            throws UserNotFoundException{
+        Users user = profileService.getUser(userId);
+        if(user == null) {
+            throw new UserNotFoundException("User does not Exist");
+        }else{
+            user.setFirstName(profile.getFirstName());
+            user.setEmail(profile.getEmail());
+            user.setMobileNumber(profile.getContact());
+            user.setLastName(profile.getLastName());
+            userRepo.save(user);
+            return ResponseEntity.ok("Saved Changes");
         }
     }
 }
