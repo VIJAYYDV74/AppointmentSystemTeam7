@@ -4,14 +4,17 @@ import com.team7.appointmentsystem.entity.*;
 import com.team7.appointmentsystem.exceptions.AppointmentNotFoundException;
 import com.team7.appointmentsystem.exceptions.InternalServerException;
 import com.team7.appointmentsystem.exceptions.ServiceNotFoundException;
+import com.team7.appointmentsystem.models.StrObject;
 import com.team7.appointmentsystem.repository.*;
 import com.team7.appointmentsystem.resultapis.AppointmentSlots;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.format.DateTimeFormatters;
 import org.springframework.stereotype.Service;
 
 
+import java.sql.Date;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -68,6 +71,7 @@ public class AppointmentService {
             Payments payments = appointment.getPayments();
             Services services = servicesRepository.findById(appointment.getServices().
                     getServiceid()).orElse(null);
+            System.out.println(services);
 
             if (services==null){
                 throw new ServiceNotFoundException("ServiceNotFoundException");
@@ -117,7 +121,8 @@ public class AppointmentService {
 
             return appointment1;
         }catch (Exception e){
-            logger.error(e.getMessage());
+            e.printStackTrace();
+//            logger.error(e.getMessage());
             return null;
         }
     }
@@ -141,7 +146,8 @@ public class AppointmentService {
 //        return "Completed";
 //    }
 
-    public Appointment cancelAppointment(long appointmentId, String cancellationReason){
+
+    public StrObject cancelAppointment(long appointmentId, String cancellationReason){
         try{
             Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
             if(appointment==null){
@@ -164,10 +170,10 @@ public class AppointmentService {
                     logger.error("Unable to send notification to business");
                 }
             }
-            return appointment1;
+            return new StrObject("Appointment Cancelled!");
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return null;
+            return new StrObject(e.getMessage().toString());
         }
     }
 
@@ -203,6 +209,4 @@ public class AppointmentService {
             }
         }
         return appointmentSlots;
-        //return null;
     }
-}
