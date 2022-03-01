@@ -4,6 +4,7 @@ package com.team7.appointmentsystem.services;
 import com.team7.appointmentsystem.entity.Users;
 import com.team7.appointmentsystem.exceptions.InternalServerException;
 import com.team7.appointmentsystem.exceptions.UserAlreadyExistsException;
+import com.team7.appointmentsystem.miscellinious.UserDetails;
 import com.team7.appointmentsystem.repository.BusinessRepository;
 import com.team7.appointmentsystem.repository.CategoriesRepository;
 import com.team7.appointmentsystem.repository.UserRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -59,9 +61,9 @@ public class RegisterService {
         }
     }
 
-    public List<Users> showUsers() {
-        List<Users> users = new ArrayList<>();
-        userRepository.findAll().forEach(users::add);
+    public List<Map<String, Object>> showUsers() {
+        List<Map<String, Object>> users = new ArrayList<>();
+        userRepository.findAllUsers().forEach(users::add);
         return users;
     }
 

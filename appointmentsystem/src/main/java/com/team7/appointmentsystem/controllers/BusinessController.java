@@ -102,5 +102,4 @@ public class BusinessController {
     public ResponseEntity<BusinessDetails> getBusinessById(@PathVariable long businessId){
         return ResponseEntity.ok(businessService.getBusinessByBusinessId(businessId));
     }
-
 }
