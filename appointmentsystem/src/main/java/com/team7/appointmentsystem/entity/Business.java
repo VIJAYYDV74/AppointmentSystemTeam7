@@ -14,7 +14,6 @@ public class Business {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private long businessid;
 
     @Column(columnDefinition = "varchar(255)", nullable = false, name = "businessname")
@@ -57,7 +56,7 @@ public class Business {
     @JoinColumn(name = "genderid")
     private GenderCategories genderCategory;
 
-    @OneToMany(mappedBy = "businessHours", targetEntity = BusinessWorkingHours.class)
+    @OneToMany(mappedBy = "business", targetEntity = BusinessWorkingHours.class)
     private List<BusinessWorkingHours> workingHours;
 
     @OneToOne
