@@ -1,5 +1,6 @@
 package com.team7.appointmentsystem.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,12 @@ public class Admin {
     public int totalRevenue;
     public int revenueThisWeek;
 
-    public Admin() {
+    public Admin(){
+
+        this.topBusinesses=new ArrayList<>();
+    }
+
+    public Admin(List<Map<String, Object>> topBusinesses, int totalUsers, int newUsersThisWeek, int totalBusinesses, int newBusinessesToday, int totalRevenue, int revenueThisWeek) {
         this.topBusinesses = topBusinesses;
         this.totalUsers = totalUsers;
         this.newUsersThisWeek = newUsersThisWeek;

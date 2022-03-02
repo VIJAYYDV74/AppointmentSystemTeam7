@@ -21,6 +21,7 @@ public interface BusinessRepository extends JpaRepository<Business, Long> {
 
     Business findByBusinessEmail(String businessEmail);
 
+
     List<BusinessDetails> findTop3ByCategoriesCategoryNameOrderByCreatedTimeDesc(String categoryName);
 
     @Query(value = "select * from business b left join services s on b.businessid = s.businessid;",
@@ -48,13 +49,15 @@ public interface BusinessRepository extends JpaRepository<Business, Long> {
     //admin dashboard
 
 
-    @Query(value = "select businessname,businessdescription,businesstitle,businessnumber,businessemail,businessimages,businesscategory",nativeQuery = true)
+    @Query(value = "select businessname,businessdescription,businesstitle,businessnumber,businessemail,businessimages from business b where b.businessid= ?1",nativeQuery = true)
     List<Map<String, Object>> getBusiness(Long businessid);
 
-    @Query(value = "select businessimages from businessa",nativeQuery = true)
+    @Query(value = "select businessimages from business b where b.businessid= ?1",nativeQuery = true)
     String getImages(Long businessid);
 
 
+    @Query(value = "select * from business b where b.businessid= ?1",nativeQuery = true)
+    Business findByBusinessId(Long businessId);
     //  businessdetails
 
 }

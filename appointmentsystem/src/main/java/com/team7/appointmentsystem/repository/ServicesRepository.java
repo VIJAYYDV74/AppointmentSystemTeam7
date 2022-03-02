@@ -1,5 +1,6 @@
 package com.team7.appointmentsystem.repository;
 
+import com.team7.appointmentsystem.entity.Business;
 import com.team7.appointmentsystem.entity.Services;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +14,8 @@ public interface ServicesRepository extends JpaRepository<Services, Long> {
 
     List<Services> findByBusinessBusinessid(long businessId);
 
+
+
     //user_dashboard
 
     @Query(value = "select * from services s ORDER BY servicename " ,nativeQuery = true)
@@ -23,7 +26,7 @@ public interface ServicesRepository extends JpaRepository<Services, Long> {
 
 
     //business details
-    @Query(value = "select servicename,serviceprice,servicedesc from services",nativeQuery = true)
+    @Query(value = "select servicename,serviceprice,servicedesc from services s where s.businessid= ?1",nativeQuery = true)
     List<Map<String,Object>> getPricing(Long businessid);
 
     //admin business

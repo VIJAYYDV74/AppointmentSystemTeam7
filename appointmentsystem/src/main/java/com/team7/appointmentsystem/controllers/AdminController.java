@@ -36,50 +36,63 @@ public class AdminController {
     @GetMapping("/admin_dashboard")
     public Admin adminDashboard(){
 
-        LocalDateTime now = LocalDateTime.now();
-        System.out.println(now);
-        //LocalDateTime before=now.minusDays(8);
-        //System.out.println("Before Formatting: " + now);
-        // DateTimeFormatter form = DateTimeFormatter.ofPattern("yyyy-mm-dd");
-        //String formatDateTime = now.format(format);
-        //now = LocalDateTime.parse(now.format(form));
-        //Date date= Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
+        try {
+            LocalDateTime now = LocalDateTime.now();
+            System.out.println(now);
+            //LocalDateTime before=now.minusDays(8);
+            //System.out.println("Before Formatting: " + now);
+            // DateTimeFormatter form = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+            //String formatDateTime = now.format(format);
+            //now = LocalDateTime.parse(now.format(form));
+            //Date date= Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
 
 
+            //Instant instant = now.toInstant(ZoneOffset.UTC);
+            // Date dates = Date.from(instant);
+            // System.out.println(dates);
+            Admin admin = new Admin();
+            // admin.users= userRepository.getAllUser();
+            List<Comments> comments = commentsRepository.findAll();
+            //System.out.println(comments);
+            for (Comments b : comments) {
+                Map<String, Object> business = new HashMap<>();
+                business.put("businessname", b.getBusiness().getBusinessName());
+                List<Services> services = b.getBusiness().getServices();
+                Services service = new Services();
+                int price = 0;
+                if(services!=null || services.size()!=0) {
+                    for (Services s : services) {
+                        if (s.getServicePrice() > price) {
+                            service = s;
+                        }
+                    }
 
-        //Instant instant = now.toInstant(ZoneOffset.UTC);
-        // Date dates = Date.from(instant);
-        // System.out.println(dates);
-        Admin admin= new Admin();
-       // admin.users= userRepository.getAllUser();
-        List<Comments> comments= commentsRepository.topBusiness();
-        for(Comments b:comments){
-            Map<String,Object> business=new HashMap<>();
-            business.put("businessname",b.getBusiness().getBusinessName());
-            List<Services> services=b.getBusiness().getServices();
-            Services service=new Services();
-            int price=0;
-            for(Services s:services){
-                if(s.getServicePrice()>price){
-                    service=s;
+                    business.put("servicename", service.getServiceName());
+                    business.put("serviceprice", service.getServicePrice());
+                    business.put("category", b.getBusiness().getCategories().getCategoryName());
+
+
+                    admin.topBusinesses.add(business);
                 }
-            }
-            business.put("servicename",service.getServiceName());
-            business.put("serviceprice",service.getServicePrice());
-            business.put("category",b.getBusiness().getCategories().getCategoryName());
-            admin.topBusinesses.add(business);
 
+            }
+            //admin.appointments= appointmentRepository.getAllAppointments();
+            //admin.payments= paymentsRepository.getAllPayments();
+            admin.totalUsers = userRepository.countTotalUser();
+            admin.newUsersThisWeek = userRepository.countTotalUserByThisWeek(now.minusDays(8), now);
+            admin.totalBusinesses = businessRepository.countTotalBusiness();
+            //admin.comments= commentsRepository.findAllratings();
+            admin.newBusinessesToday = businessRepository.countBusinessesToday(now);
+            admin.totalRevenue = paymentsRepository.countTotalRevenue();
+            admin.revenueThisWeek = paymentsRepository.countRevenueThisWeek(now.minusDays(8), now);
+            return admin;
         }
-        //admin.appointments= appointmentRepository.getAllAppointments();
-        //admin.payments= paymentsRepository.getAllPayments();
-        admin.totalUsers=userRepository.countTotalUser();
-        admin.newUsersThisWeek= userRepository.countTotalUserByThisWeek(now.minusDays(8),now);
-        admin.totalBusinesses= businessRepository.countTotalBusiness();
-        //admin.comments= commentsRepository.findAllratings();
-        admin.newBusinessesToday = businessRepository.countBusinessesToday(now);
-        admin.totalRevenue = paymentsRepository.countTotalRevenue();
-        admin.revenueThisWeek = paymentsRepository.countRevenueThisWeek(now.minusDays(8),now);
-        return admin;
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("error");
+            return null;
+        }
+
     }
     @GetMapping("/admin_dashboard/users")
     public List<Map<String,Object>> adminDashboard_users(){
@@ -111,8 +124,17 @@ public class AdminController {
             }
             businessDetails.put("servicesname",service.getServiceName());
             businessDetails.put("servicesprice",service.getServicePrice());
-            Comments comments=commentsRepository.findByBusinessBusinessid(id);
-            businessDetails.put("ratings",comments.getRating());
+            List<Comments> comments=commentsRepository.findByBusinessBusinessid(id);
+
+            int Ratings=0;
+            int count=0;
+            for(Comments c : comments){
+                Ratings+=c.getRating();
+                count++;
+            }
+            if(count!=0)
+            Ratings/=count;
+            businessDetails.put("ratings",Ratings);
             allBusinesses.add(businessDetails);
 
         }

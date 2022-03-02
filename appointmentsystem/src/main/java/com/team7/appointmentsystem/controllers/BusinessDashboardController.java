@@ -5,10 +5,14 @@ import com.team7.appointmentsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,7 +40,7 @@ public class BusinessDashboardController {
 
 
     @PostMapping("{userid}/registerBusiness")
-    public String registerBusiness(@PathVariable Long userid, @RequestBody Business business, @RequestParam("businessimage")MultipartFile file){
+    public String registerBusiness(@PathVariable Long userid, @RequestBody Business business, @RequestParam("file")MultipartFile file){
 
         try {
             Users users = userRepository.findById(userid).get();
@@ -125,6 +129,35 @@ public class BusinessDashboardController {
         }
         return "Service deleted";
     }
+    @GetMapping("getB")
+    public List<Business> getB(){
+        return businessRepository.findAll();
+    }
+
+
+    @RequestMapping("/profile/uploadPhoto/{userId}")
+    public ResponseEntity<String> saveProfile(@RequestParam("profileImg") MultipartFile multipartFile,
+                                              @PathVariable long userId) throws IOException
+    {
+        String profileImg = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        Users user = userRepository.findByUserid(userId);
+        user.setProfileImage(profileImg);
+        Users savedUser = userRepository.save(user);
+        String uploadDir = "./profile-image/" + savedUser.getUserid();
+        Path uploadPath = Paths.get(uploadDir);
+        if(!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+            Path filePath = uploadPath.resolve(profileImg);
+            System.out.println(filePath.toFile().getAbsolutePath().toString()) ;
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        }catch (IOException e) {
+            throw  new IOException("Could not save uploaded file:" + profileImg);
+        }
+        return ResponseEntity.ok("File uploaded Successfully");
+    }
+
 
 
 }
