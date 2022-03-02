@@ -53,6 +53,7 @@ public class PaymentsService {
             paymentDetails.setBusinessAddress(appointment.getBusiness().getBusinessAddress());
             paymentDetails.setUserName(appointment.getUsers().getFirstName());
             paymentDetails.setAppointmentDate(appointment.getAppointmentDate());
+            paymentDetails.setBusinessName(appointment.getBusiness().getBusinessName());
             return paymentDetails;
         } catch (Exception e) {
             logger.error(e.getMessage());

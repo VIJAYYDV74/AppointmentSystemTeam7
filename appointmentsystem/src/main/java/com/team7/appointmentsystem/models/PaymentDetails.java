@@ -17,13 +17,15 @@ public class PaymentDetails {
     private Services services;
     private Time beginTime;
     private Time endTime;
+    private String businessName;
 
     public PaymentDetails(){
 
     }
 
     public PaymentDetails(Payments payments, String userName, LocalDateTime bookedDate, Date appointmentDate,
-                          BusinessAddress businessAddress, Services services, Time beginTime, Time endTime) {
+                          BusinessAddress businessAddress, Services services, Time beginTime, Time endTime,
+                          String businessName) {
         this.payments = payments;
         this.userName = userName;
         this.bookedDate = bookedDate;
@@ -32,6 +34,7 @@ public class PaymentDetails {
         this.services = services;
         this.beginTime = beginTime;
         this.endTime = endTime;
+        this.businessName = businessName;
     }
 
     public Payments getPayments() {
@@ -96,5 +99,13 @@ public class PaymentDetails {
 
     public void setEndTime(Time endTime) {
         this.endTime = endTime;
+    }
+
+    public String getBusinessName() {
+        return businessName;
+    }
+
+    public void setBusinessName(String businessName) {
+        this.businessName = businessName;
     }
 }
