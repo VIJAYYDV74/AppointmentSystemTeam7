@@ -21,7 +21,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     List<Map<String,Object>> TotalAppointmentByUserid(Long userId);
 
     @Query(value = "select * from appointments a where a.userid= ?1 and cast(bookeddate as Date) > cast( ?2 as Date)",nativeQuery = true)
-    List<Map<String,Object>> getUpcomingAppointments(Long userId , LocalDateTime now);
+    List<Appointment> getUpcomingAppointments(Long userId , LocalDateTime now);
 
     // admin dashboard
 

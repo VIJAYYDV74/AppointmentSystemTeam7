@@ -1,13 +1,11 @@
-package com.team7.appointmentsystem.entity;
+package com.team7.appointmentsystem.models.AdminDashboardModels;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Admin {
 
     //public List<Users> users;
-    public List<Map<String,Object>> topBusinesses;
+    public List<TopBusinesses> topBusinesses;
     //public List<Appointment> appointments;
     //public List<Payments> payments;
     //public List<Comments> comments;
@@ -18,12 +16,11 @@ public class Admin {
     public int totalRevenue;
     public int revenueThisWeek;
 
+
     public Admin(){
 
-        this.topBusinesses=new ArrayList<>();
     }
-
-    public Admin(List<Map<String, Object>> topBusinesses, int totalUsers, int newUsersThisWeek, int totalBusinesses, int newBusinessesToday, int totalRevenue, int revenueThisWeek) {
+    public Admin(List<TopBusinesses> topBusinesses, int totalUsers, int newUsersThisWeek, int totalBusinesses, int newBusinessesToday, int totalRevenue, int revenueThisWeek) {
         this.topBusinesses = topBusinesses;
         this.totalUsers = totalUsers;
         this.newUsersThisWeek = newUsersThisWeek;
@@ -33,11 +30,11 @@ public class Admin {
         this.revenueThisWeek = revenueThisWeek;
     }
 
-    public List<Map<String,Object>> getTopBusinesses() {
+    public List<TopBusinesses> getTopBusinesses() {
         return topBusinesses;
     }
 
-    public void setTopBusinesses(List<Map<String,Object>> topBusinesses) {
+    public void setTopBusinesses(List<TopBusinesses> topBusinesses) {
         this.topBusinesses = topBusinesses;
     }
 

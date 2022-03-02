@@ -29,6 +29,9 @@ public interface ServicesRepository extends JpaRepository<Services, Long> {
     @Query(value = "select servicename,serviceprice,servicedesc from services s where s.businessid= ?1",nativeQuery = true)
     List<Map<String,Object>> getPricing(Long businessid);
 
+    @Query(value = "select * from services s where s.servicename= ?1",nativeQuery = true)
+    List<Services> findbyservicenname(String doctor);
+
     //admin business
    // @Query(value = "select servicename,serviceprice from services s where s.businessid= ?1",nativeQuery = true)
     //Map<String, Object> getbusinessDetails(Long id);

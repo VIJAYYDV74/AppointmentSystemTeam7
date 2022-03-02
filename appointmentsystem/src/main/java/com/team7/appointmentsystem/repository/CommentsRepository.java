@@ -36,7 +36,7 @@ public interface CommentsRepository extends JpaRepository<Comments, Long> {
 
 
     @Query(value = "select * from comments c where c.commentedby= ?1 and rating>3",nativeQuery = true)
-    List<Map<String, Object>> getFavourites(Long userid);
+    List<Comments> getFavourites(Long userid);
 
     @Query(value = "select * from comments c where c.rating>3",nativeQuery = true)
     List<Comments> topBusiness();
@@ -47,4 +47,6 @@ public interface CommentsRepository extends JpaRepository<Comments, Long> {
 
 
     List<Comments> findByBusinessBusinessid(Long id);
+
+    List<Comments> findByUsersUserid(Long userid);
 }

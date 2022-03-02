@@ -49,6 +49,7 @@ public class Appointment {
     private Business business;
 
     @ManyToOne
+
     @JoinColumn(name = "typeofservice")
     private Services services;
 

@@ -1,9 +1,11 @@
-package com.team7.appointmentsystem.entity;
+package com.team7.appointmentsystem.models.UserDashboard;
+
+import com.team7.appointmentsystem.entity.Services;
 
 import java.util.List;
 import java.util.Map;
 
-public class UserDashboard {
+public class UserDashboardOverview {
 
 
     public String firstName;
@@ -12,16 +14,21 @@ public class UserDashboard {
     public int upcomingAppointments;
     public int totalReviews;
     public int favourites;
-    public List<Map<String,Object>> services;
+    public List<Services> saloonServices,restaurantServices,doctorService;
 
-    public UserDashboard() {
+    public UserDashboardOverview() {
+    }
+
+    public UserDashboardOverview(String firstName, String lastname, int totalAppointments, int upcomingAppointments, int totalReviews, int favourites, List<Services> saloonServices, List<Services> restaurantServices, List<Services> doctorService) {
         this.firstName = firstName;
         this.lastname = lastname;
         this.totalAppointments = totalAppointments;
         this.upcomingAppointments = upcomingAppointments;
         this.totalReviews = totalReviews;
         this.favourites = favourites;
-        this.services = services;
+        this.saloonServices = saloonServices;
+        this.restaurantServices = restaurantServices;
+        this.doctorService = doctorService;
     }
 
     public String getFirstName() {
@@ -72,24 +79,27 @@ public class UserDashboard {
         this.favourites = favourites;
     }
 
-    public List<Map<String, Object>> getServices() {
-        return services;
+    public List<Services> getSaloonServices() {
+        return saloonServices;
     }
 
-    public void setServices(List<Map<String, Object>> services) {
-        this.services = services;
+    public void setSaloonServices(List<Services> saloonServices) {
+        this.saloonServices = saloonServices;
     }
 
-    @Override
-    public String toString() {
-        return "UserDashboard{" +
-                "firstName='" + firstName + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", totalAppointments=" + totalAppointments +
-                ", upcomingAppointments=" + upcomingAppointments +
-                ", totalReviews=" + totalReviews +
-                ", favourites=" + favourites +
-                ", services=" + services +
-                '}';
+    public List<Services> getRestaurantServices() {
+        return restaurantServices;
+    }
+
+    public void setRestaurantServices(List<Services> restaurantServices) {
+        this.restaurantServices = restaurantServices;
+    }
+
+    public List<Services> getDoctorService() {
+        return doctorService;
+    }
+
+    public void setDoctorService(List<Services> doctorService) {
+        this.doctorService = doctorService;
     }
 }
