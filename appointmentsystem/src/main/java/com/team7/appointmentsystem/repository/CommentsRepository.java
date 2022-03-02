@@ -38,11 +38,11 @@ public interface CommentsRepository extends JpaRepository<Comments, Long> {
     @Query(value = "select * from comments c where c.commentedby= ?1 and rating>3",nativeQuery = true)
     List<Map<String, Object>> getFavourites(Long userid);
 
-    @Query(value = "select * from comments c where rating>3 ORDER BY rating",nativeQuery = true)
+    @Query(value = "select * from comments c where c.rating>3",nativeQuery = true)
     List<Comments> topBusiness();
 
     //business details
-    @Query(value = "select commentedby,feedback,rating from comments",nativeQuery = true)
+    @Query(value = "select commentedby,feedback,rating from comments c where c.commentedto= ?1",nativeQuery = true)
     List<Map<String,Object>> getReviews(Long businessid);
 
     @Query(value = "select * from comments c where c.commentedto=:id",nativeQuery = true)

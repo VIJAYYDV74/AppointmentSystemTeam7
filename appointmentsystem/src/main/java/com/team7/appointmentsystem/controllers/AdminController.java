@@ -70,6 +70,17 @@ public class AdminController {
             business.put("category",b.getBusiness().getCategories().getCategoryName());
             topBusiness.add(business);
 
+            }
+            //admin.appointments= appointmentRepository.getAllAppointments();
+            //admin.payments= paymentsRepository.getAllPayments();
+            admin.totalUsers = userRepository.countTotalUser();
+            admin.newUsersThisWeek = userRepository.countTotalUserByThisWeek(now.minusDays(8), now);
+            admin.totalBusinesses = businessRepository.countTotalBusiness();
+            //admin.comments= commentsRepository.findAllratings();
+            admin.newBusinessesToday = businessRepository.countBusinessesToday(now);
+            admin.totalRevenue = paymentsRepository.countTotalRevenue();
+            admin.revenueThisWeek = paymentsRepository.countRevenueThisWeek(now.minusDays(8), now);
+            return admin;
         }
         admin.setTopBusinesses(topBusiness);
         //admin.appointments= appointmentRepository.getAllAppointments();
