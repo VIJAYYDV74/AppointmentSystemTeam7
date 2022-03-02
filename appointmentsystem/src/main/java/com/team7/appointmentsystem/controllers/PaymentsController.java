@@ -40,9 +40,6 @@ public class PaymentsController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<String> makePayment(@PathVariable long appointmentId, @RequestBody Payments payments){
         String paymentDone =  paymentsService.makePayment(appointmentId, payments);
-        if (paymentDone!=null){
-
-        }
         return ResponseEntity.ok(paymentDone);
     }
 
