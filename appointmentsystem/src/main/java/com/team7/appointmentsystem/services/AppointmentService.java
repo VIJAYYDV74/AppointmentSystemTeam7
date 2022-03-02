@@ -10,11 +10,9 @@ import com.team7.appointmentsystem.resultapis.AppointmentSlots;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.format.DateTimeFormatters;
 import org.springframework.stereotype.Service;
 
 
-import java.sql.Date;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -71,7 +69,6 @@ public class AppointmentService {
             Payments payments = appointment.getPayments();
             Services services = servicesRepository.findById(appointment.getServices().
                     getServiceid()).orElse(null);
-            System.out.println(services);
 
             if (services==null){
                 throw new ServiceNotFoundException("ServiceNotFoundException");
@@ -173,7 +170,7 @@ public class AppointmentService {
             return new StrObject("Appointment Cancelled!");
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return new StrObject(e.getMessage().toString());
+            return new StrObject(e.getMessage());
         }
     }
 
@@ -210,3 +207,4 @@ public class AppointmentService {
         }
         return appointmentSlots;
     }
+}
