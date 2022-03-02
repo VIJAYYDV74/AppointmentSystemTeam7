@@ -6,11 +6,13 @@ import com.team7.appointmentsystem.entity.Services;
 
 import java.sql.Time;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class PaymentDetails {
     private Payments payments;
     private String userName;
     private LocalDateTime bookedDate;
+    private Date appointmentDate;
     private BusinessAddress businessAddress;
     private Services services;
     private Time beginTime;
@@ -20,11 +22,12 @@ public class PaymentDetails {
 
     }
 
-    public PaymentDetails(Payments payments, String userName, LocalDateTime bookedDate,
+    public PaymentDetails(Payments payments, String userName, LocalDateTime bookedDate, Date appointmentDate,
                           BusinessAddress businessAddress, Services services, Time beginTime, Time endTime) {
         this.payments = payments;
         this.userName = userName;
         this.bookedDate = bookedDate;
+        this.appointmentDate = appointmentDate;
         this.businessAddress = businessAddress;
         this.services = services;
         this.beginTime = beginTime;
@@ -53,6 +56,14 @@ public class PaymentDetails {
 
     public void setBookedDate(LocalDateTime bookedDate) {
         this.bookedDate = bookedDate;
+    }
+
+    public Date getAppointmentDate() {
+        return appointmentDate;
+    }
+
+    public void setAppointmentDate(Date appointmentDate) {
+        this.appointmentDate = appointmentDate;
     }
 
     public BusinessAddress getBusinessAddress() {
