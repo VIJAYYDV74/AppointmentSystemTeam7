@@ -8,6 +8,7 @@ import com.team7.appointmentsystem.exceptions.AppointmentNotFoundException;
 import com.team7.appointmentsystem.exceptions.InternalServerException;
 import com.team7.appointmentsystem.exceptions.PaymentNotFoundException;
 import com.team7.appointmentsystem.exceptions.ServiceNotFoundException;
+import com.team7.appointmentsystem.models.PaymentDetails;
 import com.team7.appointmentsystem.repository.AppointmentRepository;
 import com.team7.appointmentsystem.repository.BillingDetailsRepository;
 import com.team7.appointmentsystem.repository.PaymentsRepository;
@@ -40,18 +41,18 @@ public class PaymentsService {
 
     private static final Logger logger = LoggerFactory.getLogger(PaymentsService.class);
 
-    public Payments paymentDetails(long appointmentId) {
+    public PaymentDetails paymentDetails(long appointmentId) {
         try {
             Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
-            if (appointment==null){
-                throw new AppointmentNotFoundException("AppointmentNotFound");
-            }
-            Payments payments = paymentsRepository.
-                    findById(appointment.getPayments().getPaymentid()).orElse(null);
-            if (payments==null){
-                throw new PaymentNotFoundException("PaymentNotFoundException");
-            }
-            return payments;
+            PaymentDetails paymentDetails = new PaymentDetails();
+            paymentDetails.setPayments(appointment.getPayments());
+            paymentDetails.setBeginTime(appointment.getBeginTime());
+            paymentDetails.setEndTime(appointment.getEndTime());
+            paymentDetails.setServices(appointment.getServices());
+            paymentDetails.setBookedDate(appointment.getBookedDate());
+            paymentDetails.setBusinessAddress(appointment.getBusiness().getBusinessAddress());
+            paymentDetails.setUserName(appointment.getUsers().getFirstName());
+            return paymentDetails;
         } catch (Exception e) {
             logger.error(e.getMessage());
             return null;

@@ -1,6 +1,7 @@
 package com.team7.appointmentsystem.controllers;
 
 import com.team7.appointmentsystem.entity.Payments;
+import com.team7.appointmentsystem.models.PaymentDetails;
 import com.team7.appointmentsystem.services.BusinessNotificationsService;
 import com.team7.appointmentsystem.services.PaymentsService;
 import com.team7.appointmentsystem.services.UserNotificationService;
@@ -24,13 +25,13 @@ public class PaymentsController {
 
     @GetMapping("user/getPaymentDetails/{appointmentId}/")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public ResponseEntity<Payments> getPaymentDetailsForUser(@PathVariable long appointmentId){
+    public ResponseEntity<PaymentDetails> getPaymentDetailsForUser(@PathVariable long appointmentId){
         return ResponseEntity.ok(paymentsService.paymentDetails(appointmentId));
     }
 
     @GetMapping("business/getPaymentDetails/{appointmentId}/")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public ResponseEntity<Payments> getPaymentDetailsForBusiness(@PathVariable long appointmentId){
+    public ResponseEntity<PaymentDetails> getPaymentDetailsForBusiness(@PathVariable long appointmentId){
         return ResponseEntity.ok(paymentsService.paymentDetails(appointmentId));
     }
 
