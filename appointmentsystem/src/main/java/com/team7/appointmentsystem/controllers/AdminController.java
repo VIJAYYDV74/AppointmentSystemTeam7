@@ -96,11 +96,8 @@ public class AdminController {
         List<Map<String,Object>> allBusinesses=new ArrayList<>();
         List<Business> businesses=businessRepository.getAllbusinesses();
         for(Business business:businesses){
-            //Object id=  business.get("businessid");
             Map<String,Object> businessDetails=new HashMap<>();
             Long id = business.getBusinessid();
-            //Map<String,Object> services=servicesRepository.getbusinessDetails(id);
-            //Map<String,Object> comments=commentsRepository.getbusinessDetails(id);
             businessDetails.put("businessname",business.getBusinessName());
             businessDetails.put("email",business.getBusinessEmail());
             businessDetails.put("businessId",business.getBusinessid());
