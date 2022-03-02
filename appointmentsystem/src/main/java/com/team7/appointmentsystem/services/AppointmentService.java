@@ -5,6 +5,7 @@ import com.team7.appointmentsystem.exceptions.AppointmentNotFoundException;
 import com.team7.appointmentsystem.exceptions.InternalServerException;
 import com.team7.appointmentsystem.exceptions.ServiceNotFoundException;
 import com.team7.appointmentsystem.models.StrObject;
+import com.team7.appointmentsystem.models.TimeSlot;
 import com.team7.appointmentsystem.repository.*;
 import com.team7.appointmentsystem.resultapis.AppointmentSlots;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AppointmentService {
@@ -58,12 +60,8 @@ public class AppointmentService {
     private static final Logger logger = LoggerFactory.getLogger(AppointmentService.class);
 
     String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-
-
-
     //get the userid from the session object and use it.
 //    public String bookAppointment(Appointment appointment, Long businessId, Long userId) {
-
     public Appointment bookAppointment(Appointment appointment, Long businessId, Long userId) {
         try{
             Payments payments = appointment.getPayments();
@@ -73,12 +71,10 @@ public class AppointmentService {
             if (services==null){
                 throw new ServiceNotFoundException("ServiceNotFoundException");
             }
-
             appointment.setBookedDate(LocalDateTime.now());
             //get the user id value from session object.
             //example case taken userid as 1
             Users users = userRepository.findByUserid(userId);
-
             Business business = businessRepository.getById(businessId);
 
             appointment.setTotalPrice(services.getServicePrice());
@@ -206,5 +202,27 @@ public class AppointmentService {
             }
         }
         return appointmentSlots;
+    }
+    public StrObject reschedule(TimeSlot slot, Long aptId) throws ParseException{
+        try{
+            Optional<Appointment> optional = appointmentRepository.findById(aptId);
+            if(optional.isPresent()) {
+                Appointment appointment = optional.get();
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = dateFormat.parse(slot.getRescheduleDate());
+                appointment.setBookedDate(LocalDateTime.now());
+                appointment.setAppointmentDate(new java.sql.Date(date.getTime()));
+                appointment.setBeginTime(slot.getBeginTime());
+                appointment.setEndTime(slot.getEndTime());
+//                appointment.setStatus("Rescheduled to date: " + slot.getRescheduleDate());
+                appointmentRepository.save(appointment);
+                return new StrObject("Appointment successfully rescheduled to date:"+slot.getRescheduleDate());
+            }else{
+                throw new AppointmentNotFoundException("The Appointment does not exist");
+            }
+        }catch (AppointmentNotFoundException | ParseException e){
+            e.printStackTrace();
+        return new StrObject("Appointment can't be rescheduled");
+        }
     }
 }

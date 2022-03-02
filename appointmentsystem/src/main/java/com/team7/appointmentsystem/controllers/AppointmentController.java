@@ -4,18 +4,16 @@ package com.team7.appointmentsystem.controllers;
 import com.team7.appointmentsystem.entity.Appointment;
 import com.team7.appointmentsystem.exceptions.AppointmentNotFoundException;
 import com.team7.appointmentsystem.models.StrObject;
+import com.team7.appointmentsystem.models.TimeSlot;
 import com.team7.appointmentsystem.resultapis.AppointmentSlots;
 import com.team7.appointmentsystem.services.AppointmentService;
 import com.team7.appointmentsystem.services.UserNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @RestController
@@ -35,7 +33,6 @@ public class AppointmentController {
                                                        @RequestParam Long userId){
         Appointment appointment1 =  appointmentService.bookAppointment(appointment, businessId, userId);
         return ResponseEntity.ok(appointment1);
-
     }
 
     @Transactional
@@ -65,6 +62,15 @@ public class AppointmentController {
     public List<AppointmentSlots> appointmentPage(@PathVariable long businessId,
                                                   @RequestParam String date) throws ParseException {
         return appointmentService.AppointmentsPage(businessId, date);
+    }
+
+    @Transactional
+    @PostMapping(value = "/user/reschedule/{appointmentId}")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<StrObject> reschedule(@RequestBody TimeSlot slot,
+                                                @PathVariable Long appointmentId) throws ParseException {
+        StrObject msg = appointmentService.reschedule(slot, appointmentId);
+        return ResponseEntity.ok(msg);
     }
 
 }
