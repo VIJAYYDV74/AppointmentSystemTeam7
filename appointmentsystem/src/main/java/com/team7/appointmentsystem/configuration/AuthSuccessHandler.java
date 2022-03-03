@@ -23,6 +23,8 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        response.getWriter().append("Authentication Success");
+        response.setStatus(200);
         authorities.forEach(authority -> {
             if(authority.getAuthority().equals("ROLE_USER")) {
                 try {
