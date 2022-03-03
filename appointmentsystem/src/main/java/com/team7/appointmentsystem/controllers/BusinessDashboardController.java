@@ -7,9 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.repository.query.Param;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.List;
 
 
 @RestController
@@ -33,9 +36,9 @@ public class BusinessDashboardController {
     @Autowired
     BusinessDashboardServices businessDashboardServices;
     @PostMapping("{userid}/registerBusiness")
-    public String registerBusiness(@PathVariable Long userid, @RequestBody Business business, @RequestParam("file")MultipartFile file){
+    public String registerBusiness(@PathVariable Long userid, @RequestBody Business business){
 
-        return businessDashboardServices.registerBusiness(userid,business,file);
+        return businessDashboardServices.registerBusiness(userid,business);
 
     }
 
@@ -56,34 +59,16 @@ public class BusinessDashboardController {
 
         return businessDashboardServices.deleteServices(businessid,serviceid);
     }
-   /* @GetMapping("getB")
+    @GetMapping("getB")
     public List<Business> getB(){
         return businessRepository.findAll();
     }
 
 
-    @RequestMapping("/profile/uploadPhoto/{userId}")
-    public ResponseEntity<String> saveProfile(@RequestParam("profileImg") MultipartFile multipartFile,
-                                              @PathVariable long userId) throws IOException
-    {
-        String profileImg = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        Users user = userRepository.findByUserid(userId);
-        user.setProfileImage(profileImg);
-        Users savedUser = userRepository.save(user);
-        String uploadDir = "./profile-image/" + savedUser.getUserid();
-        Path uploadPath = Paths.get(uploadDir);
-        if(!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-        try (InputStream inputStream = multipartFile.getInputStream()) {
-            Path filePath = uploadPath.resolve(profileImg);
-            System.out.println(filePath.toFile().getAbsolutePath().toString()) ;
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-        }catch (IOException e) {
-            throw  new IOException("Could not save uploaded file:" + profileImg);
-        }
-        return ResponseEntity.ok("File uploaded Successfully");
-    }*/
+    @PostMapping("/profile/uploadPhoto/{businessid}")
+    public ResponseEntity<String> saveProfile(@RequestParam("profileImg") MultipartFile multipartFile, @PathVariable Long businessid) throws IOException{
+        return businessDashboardServices.saveProfile(multipartFile,businessid);
+    }
 
 
 

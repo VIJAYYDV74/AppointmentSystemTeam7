@@ -6,11 +6,15 @@ import com.team7.appointmentsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,22 +39,13 @@ public class BusinessDashboardServices {
     @Autowired
     ServicesRepository servicesRepository;
 
-    public String registerBusiness(Long userid,  Business business, MultipartFile file){
+    public String registerBusiness(Long userid, Business business){
 
         try {
             Users users = userRepository.findById(userid).get();
             int id = business.getCategories().getCategoryId();
             Categories categories = categoriesRepository.findById(id).get();
-            if(file.isEmpty()){
-                System.out.println("File is empty ");
-            }
-            else {
-                business.setBusinessImages(file.getOriginalFilename());
-                File saveFile=new ClassPathResource("static/image").getFile();
-                Path path= Paths.get(saveFile.getAbsolutePath()+File.separator+file.getOriginalFilename());
-                Files.copy(file.getInputStream(),path, StandardCopyOption.REPLACE_EXISTING);
-                System.out.println("File is uploaded");
-            }
+
 
             business.setUsers(users);
             business.setCreatedTime(LocalDateTime.now());
@@ -63,11 +58,32 @@ public class BusinessDashboardServices {
                 businessWorkingHours.setBusinessHours(business);
                 businessWorkingHoursRepository.save(businessWorkingHours);
             }
+            return "business registered";
         }
         catch (Exception e){
             return "Business Not registered";
         }
-        return "business registered";
+
+    }
+    public ResponseEntity<String> saveProfile( MultipartFile multipartFile, Long businessId) throws IOException
+    {
+        String profileImg = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        Business business = businessRepository.findByBusinessId(businessId);
+        business.setBusinessImages(profileImg);
+        Business savedBusiness = businessRepository.save(business);
+        String uploadDir = "./profile-image/" + savedBusiness.getBusinessid();
+        Path uploadPath = Paths.get(uploadDir);
+        if(!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+            Path filePath = uploadPath.resolve(profileImg);
+            System.out.println(filePath.toFile().getAbsolutePath().toString()) ;
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        }catch (IOException e) {
+            throw  new IOException("Could not save uploaded file:" + profileImg);
+        }
+        return ResponseEntity.ok("File uploaded Successfully");
     }
 
 
