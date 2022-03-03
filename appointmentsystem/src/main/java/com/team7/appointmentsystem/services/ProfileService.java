@@ -32,7 +32,6 @@ public class ProfileService {
                     dummy.setNewPassword(user.getUserPassword());
                     System.out.println(newPassword + ": Password Changed Successfully");
                     userRepo.save(user);
-
                 } else {
                     throw new PasswordsDoNotMatchException("Password do not match");
                 }

@@ -42,16 +42,17 @@ public class ProfileController {
     {
         String profileImg = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         Users user = userRepo.findByUserid(userId);
-        user.setProfileImage(profileImg);
-        Users savedUser = userRepo.save(user);
-        String uploadDir = "./profile-image/" + savedUser.getUserid();
+        String uploadDir = "./profile-image/" + user.getUserid();
         Path uploadPath = Paths.get(uploadDir);
         if(!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
         try (InputStream inputStream = multipartFile.getInputStream()) {
             Path filePath = uploadPath.resolve(profileImg);
-            System.out.println(filePath.toFile().getAbsolutePath().toString()) ;
+            user.setProfileImage(filePath.toFile().getAbsolutePath().toString());
+            Users savedUser = userRepo.save(user);
+//            System.out.println(filePath.toString());
+//            System.out.println(filePath.toFile().getAbsolutePath().toString());
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         }catch (IOException e) {
             throw  new IOException("Could not save uploaded file:" + profileImg);

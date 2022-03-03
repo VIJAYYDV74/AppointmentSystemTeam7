@@ -1,11 +1,14 @@
 package com.team7.appointmentsystem.entity;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDateTime;
 
 @Entity
+@DynamicUpdate
 @Table(name = "appointments")
 public class Appointment {
 

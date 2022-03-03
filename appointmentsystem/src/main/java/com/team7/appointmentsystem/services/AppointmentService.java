@@ -203,24 +203,34 @@ public class AppointmentService {
         }
         return appointmentSlots;
     }
-    public StrObject reschedule(TimeSlot slot, Long aptId) throws ParseException{
+    public StrObject reschedule(Appointment newAppointment, Long aptId){
         try{
             Optional<Appointment> optional = appointmentRepository.findById(aptId);
             if(optional.isPresent()) {
                 Appointment appointment = optional.get();
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = dateFormat.parse(slot.getRescheduleDate());
                 appointment.setBookedDate(LocalDateTime.now());
-                appointment.setAppointmentDate(new java.sql.Date(date.getTime()));
-                appointment.setBeginTime(slot.getBeginTime());
-                appointment.setEndTime(slot.getEndTime());
+                appointment.setAppointmentDate(newAppointment.getAppointmentDate());
+                appointment.setBeginTime(newAppointment.getBeginTime());
+                appointment.setEndTime(newAppointment.getEndTime());
 //                appointment.setStatus("Rescheduled to date: " + slot.getRescheduleDate());
-                appointmentRepository.save(appointment);
-                return new StrObject("Appointment successfully rescheduled to date:"+slot.getRescheduleDate());
+                Appointment rescheduledAppointment = appointmentRepository.save(appointment);
+                if(rescheduledAppointment == null) {
+                    throw new InternalServerException("Couldn't Reschedule Appointment");
+                }else{
+                    boolean b1 = userNotificationService.sendUserNotificationOnAppointmentRescheduling(rescheduledAppointment);
+                    boolean b2 = businessNotificationsService.sendBusinessNotificationOnAppointmentRescheduling(rescheduledAppointment);
+                    if (!b1){
+                        logger.error("Unable to send notification to user");
+                    }
+                    if (!b2){
+                        logger.error("Unable to send notification to business");
+                    }
+                }
+                return new StrObject("Appointment successfully rescheduled to date:"+newAppointment.getAppointmentDate());
             }else{
                 throw new AppointmentNotFoundException("The Appointment does not exist");
             }
-        }catch (AppointmentNotFoundException | ParseException e){
+        }catch (AppointmentNotFoundException | InternalServerException e){
             e.printStackTrace();
         return new StrObject("Appointment can't be rescheduled");
         }

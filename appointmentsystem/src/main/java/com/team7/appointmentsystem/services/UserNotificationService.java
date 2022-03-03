@@ -89,7 +89,7 @@ public class UserNotificationService {
         return sendNotification(userNotifications);
     }
 
-    public void sendUserNotificationOnAppointmentRescheduling(Appointment appointment){
+    public boolean sendUserNotificationOnAppointmentRescheduling(Appointment appointment){
         NotificationTypes notificationTypes = notificationTypeRepository.getById(1);
         UserNotifications userNotifications = new UserNotifications(
                 appointment.getUsers(),
@@ -102,7 +102,7 @@ public class UserNotificationService {
                 false,
                 notificationTypes
         );
-        sendNotification(userNotifications);
+        return sendNotification(userNotifications);
     }
 
     public void sendUserNotificationOnAppointmentCompleted(Appointment appointment){

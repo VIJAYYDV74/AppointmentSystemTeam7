@@ -67,9 +67,9 @@ public class AppointmentController {
     @Transactional
     @PostMapping(value = "/user/reschedule/{appointmentId}")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public ResponseEntity<StrObject> reschedule(@RequestBody TimeSlot slot,
-                                                @PathVariable Long appointmentId) throws ParseException {
-        StrObject msg = appointmentService.reschedule(slot, appointmentId);
+    public ResponseEntity<StrObject> reschedule(@RequestBody Appointment newAppointment,
+                                                @PathVariable Long appointmentId) {
+        StrObject msg = appointmentService.reschedule(newAppointment, appointmentId);
         return ResponseEntity.ok(msg);
     }
 
