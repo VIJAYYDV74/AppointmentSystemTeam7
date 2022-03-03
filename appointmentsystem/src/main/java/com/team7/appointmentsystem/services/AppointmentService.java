@@ -4,6 +4,7 @@ import com.team7.appointmentsystem.entity.*;
 import com.team7.appointmentsystem.exceptions.AppointmentNotFoundException;
 import com.team7.appointmentsystem.exceptions.InternalServerException;
 import com.team7.appointmentsystem.exceptions.ServiceNotFoundException;
+import com.team7.appointmentsystem.miscellinious.AppointmentDetails;
 import com.team7.appointmentsystem.models.StrObject;
 import com.team7.appointmentsystem.repository.*;
 import com.team7.appointmentsystem.resultapis.AppointmentSlots;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AppointmentService {
@@ -130,9 +132,8 @@ public class AppointmentService {
         return appointments;
     }
 
-    public List<Appointment> getUserAppointments(long userId) {
-        List<Appointment> appointments = new ArrayList<>();
-        appointmentRepository.findByUsersUserid(userId).forEach(appointments::add);
+    public Optional<List<AppointmentDetails>> getUserAppointments(long userId) {
+        Optional<List<AppointmentDetails>> appointments =  appointmentRepository.findByUsersUserid(userId);
         return appointments;
     }
 //
