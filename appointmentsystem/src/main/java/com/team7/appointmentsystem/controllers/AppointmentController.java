@@ -2,21 +2,16 @@ package com.team7.appointmentsystem.controllers;
 
 
 import com.team7.appointmentsystem.entity.Appointment;
-import com.team7.appointmentsystem.exceptions.AppointmentNotFoundException;
-import com.team7.appointmentsystem.miscellinious.AppointmentDetails;
 import com.team7.appointmentsystem.models.StrObject;
 import com.team7.appointmentsystem.resultapis.AppointmentSlots;
 import com.team7.appointmentsystem.services.AppointmentService;
 import com.team7.appointmentsystem.services.UserNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +45,7 @@ public class AppointmentController {
     @Transactional
     @GetMapping("/user/getAppointments/{userId}")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public Optional<List<AppointmentDetails>> getUserAppointments(@PathVariable long userId){
+    public List<Appointment> getUserAppointments(@PathVariable long userId){
         return appointmentService.getUserAppointments(userId);
     }
 

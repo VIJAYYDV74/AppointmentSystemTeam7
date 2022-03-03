@@ -4,7 +4,6 @@ import com.team7.appointmentsystem.entity.*;
 import com.team7.appointmentsystem.exceptions.AppointmentNotFoundException;
 import com.team7.appointmentsystem.exceptions.InternalServerException;
 import com.team7.appointmentsystem.exceptions.ServiceNotFoundException;
-import com.team7.appointmentsystem.miscellinious.AppointmentDetails;
 import com.team7.appointmentsystem.models.StrObject;
 import com.team7.appointmentsystem.repository.*;
 import com.team7.appointmentsystem.resultapis.AppointmentSlots;
@@ -132,8 +131,8 @@ public class AppointmentService {
         return appointments;
     }
 
-    public Optional<List<AppointmentDetails>> getUserAppointments(long userId) {
-        Optional<List<AppointmentDetails>> appointments =  appointmentRepository.findByUsersUserid(userId);
+    public List<Appointment> getUserAppointments(long userId) {
+        List<Appointment> appointments =  appointmentRepository.findByUsersUserid(userId);
         return appointments;
     }
 //
