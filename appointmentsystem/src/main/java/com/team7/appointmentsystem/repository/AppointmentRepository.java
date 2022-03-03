@@ -20,7 +20,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "select * from appointments a where a.userid= ?1",nativeQuery = true)
     List<Map<String,Object>> TotalAppointmentByUserid(Long userId);
 
-    @Query(value = "select * from appointments a where a.userid= ?1 and cast(bookeddate as Date) > cast( ?2 as Date)",nativeQuery = true)
+    @Query(value = "select * from appointments a where a.userid= ?1 and cast(a.bookeddate as Date) > cast( ?2 as Date)",nativeQuery = true)
     List<Appointment> getUpcomingAppointments(Long userId , LocalDateTime now);
 
     // admin dashboard
@@ -31,9 +31,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "select count(*) from appointments a where a.userid= ?1 ",nativeQuery = true)
     int countTotalAppointmentByUserid(Long userid);
 
-    @Query(value = "select count(*) from appointments a where a.userid= ?1 and cast(bookeddate as Date) > cast( ?2 as Date)",nativeQuery = true)
+    @Query(value = "select count(*) from appointments a where a.userid= ?1 and cast(a.bookeddate as Date) > cast( ?2 as Date)",nativeQuery = true)
     int countUpcomingAppointments(Long userid, LocalDateTime now);
 
+    @Query(value = "select count(*) from appointments a where cast(a.dateofappointment as Date) = cast( ?1 as Date)",nativeQuery = true)
+    int countBookingsToday(LocalDateTime now);
 
 
     //admin dashboard

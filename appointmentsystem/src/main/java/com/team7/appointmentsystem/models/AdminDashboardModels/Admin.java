@@ -5,7 +5,7 @@ import java.util.List;
 public class Admin {
 
     //public List<Users> users;
-    public List<TopBusinesses> topBusinesses;
+    public List<AllBusineesses> topBusinesses;
     //public List<Appointment> appointments;
     //public List<Payments> payments;
     //public List<Comments> comments;
@@ -15,12 +15,15 @@ public class Admin {
     public int newBusinessesToday;
     public int totalRevenue;
     public int revenueThisWeek;
+    public int totalBookings;
+    public int bookingsToday;
 
 
     public Admin(){
 
     }
-    public Admin(List<TopBusinesses> topBusinesses, int totalUsers, int newUsersThisWeek, int totalBusinesses, int newBusinessesToday, int totalRevenue, int revenueThisWeek) {
+
+    public Admin(List<AllBusineesses> topBusinesses, int totalUsers, int newUsersThisWeek, int totalBusinesses, int newBusinessesToday, int totalRevenue, int revenueThisWeek, int totalBookings, int bookingsToday) {
         this.topBusinesses = topBusinesses;
         this.totalUsers = totalUsers;
         this.newUsersThisWeek = newUsersThisWeek;
@@ -28,13 +31,15 @@ public class Admin {
         this.newBusinessesToday = newBusinessesToday;
         this.totalRevenue = totalRevenue;
         this.revenueThisWeek = revenueThisWeek;
+        this.totalBookings = totalBookings;
+        this.bookingsToday = bookingsToday;
     }
 
-    public List<TopBusinesses> getTopBusinesses() {
+    public List<AllBusineesses> getTopBusinesses() {
         return topBusinesses;
     }
 
-    public void setTopBusinesses(List<TopBusinesses> topBusinesses) {
+    public void setTopBusinesses(List<AllBusineesses> topBusinesses) {
         this.topBusinesses = topBusinesses;
     }
 
@@ -86,16 +91,19 @@ public class Admin {
         this.revenueThisWeek = revenueThisWeek;
     }
 
-    @Override
-    public String toString() {
-        return "Admin{" +
-                "topBusinesses=" + topBusinesses +
-                ", totalUsers=" + totalUsers +
-                ", newUsersThisWeek=" + newUsersThisWeek +
-                ", totalBusinesses=" + totalBusinesses +
-                ", newBusinessesToday=" + newBusinessesToday +
-                ", totalRevenue=" + totalRevenue +
-                ", revenueThisWeek=" + revenueThisWeek +
-                '}';
+    public int getTotalBookings() {
+        return totalBookings;
+    }
+
+    public void setTotalBookings(int totalBookings) {
+        this.totalBookings = totalBookings;
+    }
+
+    public int getBookingsToday() {
+        return bookingsToday;
+    }
+
+    public void setBookingsToday(int bookingsToday) {
+        this.bookingsToday = bookingsToday;
     }
 }

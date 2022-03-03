@@ -28,6 +28,7 @@ public class AdminDashboardServices {
 
     @Autowired
     PaymentsRepository paymentsRepository;
+
     @Autowired
     ServicesRepository servicesRepository;
 
@@ -38,27 +39,11 @@ public class AdminDashboardServices {
 
             Admin admin = new Admin();
 
-            List<TopBusinesses> topBusinesse=new ArrayList<>();
-            List<Business> businesses=businessRepository.findAll();
-            for(Business b:businesses){
-                TopBusinesses temp=new TopBusinesses();
-                int SaleValue=0;
-                temp.businessName=b.getBusinessName();
+            List<AllBusineesses> topBusinesse= adminDashboard_businesses();
 
-                temp.category=b.getCategories().getCategoryName();
-                Long id=b.getBusinessid();
-                List<Appointment> appointments = appointmentRepository.findByBusinessBusinessid(id);
-                for(Appointment a:appointments){
-                    SaleValue+=a.getServices().getServicePrice();
-
-                }
-                temp.saleValue=SaleValue;
-                topBusinesse.add(temp);
-
-            }
-            class SortById implements Comparator<TopBusinesses> {
+            class SortById implements Comparator<AllBusineesses> {
                 // Used for sorting in ascending order of ID
-                public int compare(TopBusinesses a, TopBusinesses b)
+                public int compare(AllBusineesses a, AllBusineesses b)
                 {
                     return b.saleValue - a.saleValue;
                 }
@@ -73,6 +58,8 @@ public class AdminDashboardServices {
             admin.newBusinessesToday = businessRepository.countBusinessesToday(now);
             admin.totalRevenue = paymentsRepository.countTotalRevenue();
             admin.revenueThisWeek = paymentsRepository.countRevenueThisWeek(now.minusDays(8), now);
+            admin.totalBookings=appointmentRepository.getAllAppointments().size();
+            admin.bookingsToday=appointmentRepository.countBookingsToday(now);
             return admin;
         }
         catch (Exception e){
@@ -106,11 +93,7 @@ public class AdminDashboardServices {
         for(Business b:businesses){
             AllBusineesses a=new AllBusineesses();
             a.businessName=b.getBusinessName();
-            List<Services> services=servicesRepository.findByBusinessBusinessid(b.getBusinessid());
-            String PoppularServicename="";
-            for(Services s:services){
-                PoppularServicename+=s.getServiceName()+"  ";
-            }
+            a.businessEmail=b.getBusinessEmail();
             List<Appointment> appointments=appointmentRepository.findByBusinessBusinessid(b.getBusinessid());
             int SaleValue=0;
             int ratings=0;
@@ -120,7 +103,7 @@ public class AdminDashboardServices {
 
             }
 
-            a.popularService=PoppularServicename;
+
             a.categoryName=b.getCategories().getCategoryName();
             a.saleValue=SaleValue;
             List<Comments> comments=commentsRepository.findByBusinessBusinessid(b.getBusinessid());

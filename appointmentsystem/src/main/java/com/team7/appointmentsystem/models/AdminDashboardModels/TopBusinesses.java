@@ -1,8 +1,9 @@
-package com.team7.appointmentsystem.models.AdminDashboardModels;
+/*package com.team7.appointmentsystem.models.AdminDashboardModels;
 
 public class TopBusinesses {
     public String businessName;
-    public String service;
+    public String businessEmail;
+    public int ratings;
     public int saleValue;
     public String category;
 
@@ -10,9 +11,11 @@ public class TopBusinesses {
     public TopBusinesses(){
 
     }
-    public TopBusinesses(String businessName, String service, int saleValue, String category) {
+
+    public TopBusinesses(String businessName, String businessEmail, int ratings, int saleValue, String category) {
         this.businessName = businessName;
-        this.service = service;
+        this.businessEmail = businessEmail;
+        this.ratings = ratings;
         this.saleValue = saleValue;
         this.category = category;
     }
@@ -25,12 +28,20 @@ public class TopBusinesses {
         this.businessName = businessName;
     }
 
-    public String getService() {
-        return service;
+    public String getBusinessEmail() {
+        return businessEmail;
     }
 
-    public void setService(String service) {
-        this.service = service;
+    public void setBusinessEmail(String businessEmail) {
+        this.businessEmail = businessEmail;
+    }
+
+    public int getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(int ratings) {
+        this.ratings = ratings;
     }
 
     public int getSaleValue() {
@@ -48,4 +59,4 @@ public class TopBusinesses {
     public void setCategory(String category) {
         this.category = category;
     }
-}
+}*/
