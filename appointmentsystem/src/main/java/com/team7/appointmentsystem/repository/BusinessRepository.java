@@ -53,9 +53,9 @@ public interface BusinessRepository extends JpaRepository<Business, Long> {
     @Query(value = "select businessname,businessdescription,businesstitle,businessnumber"
     		+ ",businessemail,businessimages,businesscategory "
     		+ "from business where businessid=:businessid",nativeQuery = true)
-    Map<String, Object> getBusiness(@Param("businessid") Long businessid);
+    Map<String, Object> getBusiness1(@Param("businessid") Long businessid);
 
-    @Query(value = "select businessimages from business",nativeQuery = true)
+    //@Query(value = "select businessimages from business",nativeQuery = true)
     @Query(value = "select businessname,businessdescription,businesstitle,businessnumber,businessemail,businessimages from business b where b.businessid= ?1",nativeQuery = true)
     List<Map<String, Object>> getBusiness(Long businessid);
 

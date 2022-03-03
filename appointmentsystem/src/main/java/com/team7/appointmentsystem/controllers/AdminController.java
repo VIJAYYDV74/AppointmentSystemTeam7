@@ -57,20 +57,23 @@ public class AdminController {
         for(Comments b:comments){
             Map<String,Object> business=new HashMap<>();
             business.put("businessname",b.getBusiness().getBusinessName());
-            List<Services> services=b.getBusiness().getServices();
-            Services service=new Services();
-            int price=0;
-            for(Services s:services){
-                if(s.getServicePrice()>price){
-                    service=s;
-                }
+            business.put("businessId", b.getBusiness().getBusinessid());
+            int p=0;
+            List<Appointment> appointments=appointmentRepository.findByBusinessBusinessid(b.getBusiness().getBusinessid());
+            for (Appointment a:appointments){
+                p+=a.getTotalPrice();
             }
-            business.put("servicename",service.getServiceName());
-            business.put("serviceprice",service.getServicePrice());
+            business.put("saleValue",p);
+            List<Comments> businessComments=commentsRepository.findByBusinessBusinessid(b.getBusiness().getBusinessid());
+            int rating=0;
+            for(Comments c:businessComments)
+            	rating+=c.getRating();
+            business.put("ratings",rating);
             business.put("category",b.getBusiness().getCategories().getCategoryName());
             topBusiness.add(business);
 
             }
+        admin.setTopBusinesses(topBusiness);
             //admin.appointments= appointmentRepository.getAllAppointments();
             //admin.payments= paymentsRepository.getAllPayments();
             admin.totalUsers = userRepository.countTotalUser();
@@ -82,18 +85,8 @@ public class AdminController {
             admin.revenueThisWeek = paymentsRepository.countRevenueThisWeek(now.minusDays(8), now);
             return admin;
         }
-        admin.setTopBusinesses(topBusiness);
-        //admin.appointments= appointmentRepository.getAllAppointments();
-        //admin.payments= paymentsRepository.getAllPayments();
-        admin.totalUsers=userRepository.countTotalUser();
-        admin.newUsersThisWeek= userRepository.countTotalUserByThisWeek(now.minusDays(8),now);
-        admin.totalBusinesses= businessRepository.countTotalBusiness();
-        //admin.comments= commentsRepository.findAllratings();
-        admin.newBusinessesToday = businessRepository.countBusinessesToday(now);
-        admin.totalRevenue = paymentsRepository.countTotalRevenue();
-        admin.revenueThisWeek = paymentsRepository.countRevenueThisWeek(now.minusDays(8),now);
-        return admin;
-    }
+
+    
     @GetMapping("/admin_dashboard/users")
     public List<Map<String,Object>> adminDashboard_users(){
         List<Map<String,Object>> users=new ArrayList<>();
@@ -121,7 +114,6 @@ public class AdminController {
             for (Appointment a:appointments){
                 p+=a.getTotalPrice();
             }
-            //businessDetails.put("servicesname",service.getServiceName());
             businessDetails.put("saleValue",p);
             List<Comments> comments=commentsRepository.findByBusinessBusinessid(id);
             int rating=0;
