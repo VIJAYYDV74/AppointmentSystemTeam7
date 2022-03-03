@@ -1,6 +1,7 @@
 package com.team7.appointmentsystem.models.AdminDashboardModels;
 
 public class AllBusineesses {
+    public Long businessId;
     public String businessName;
     public String businessEmail;
 
@@ -12,12 +13,21 @@ public class AllBusineesses {
     public AllBusineesses() {
     }
 
-    public AllBusineesses(String businessName, String businessEmail, int saleValue, String categoryName, int rating) {
+    public AllBusineesses(Long businessId, String businessName, String businessEmail, int saleValue, String categoryName, int rating) {
+        this.businessId = businessId;
         this.businessName = businessName;
         this.businessEmail = businessEmail;
         this.saleValue = saleValue;
         this.categoryName = categoryName;
         this.rating = rating;
+    }
+
+    public Long getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(Long businessId) {
+        this.businessId = businessId;
     }
 
     public String getBusinessName() {
@@ -58,16 +68,5 @@ public class AllBusineesses {
 
     public void setRating(int rating) {
         this.rating = rating;
-    }
-
-    @Override
-    public String toString() {
-        return "AllBusineesses{" +
-                "businessName='" + businessName + '\'' +
-                ", businessEmail='" + businessEmail + '\'' +
-                ", saleValue=" + saleValue +
-                ", categoryName='" + categoryName + '\'' +
-                ", rating=" + rating +
-                '}';
     }
 }

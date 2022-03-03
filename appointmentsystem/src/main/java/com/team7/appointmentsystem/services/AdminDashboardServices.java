@@ -92,6 +92,7 @@ public class AdminDashboardServices {
         List<Business> businesses=businessRepository.findAll();
         for(Business b:businesses){
             AllBusineesses a=new AllBusineesses();
+            a.businessId=b.getBusinessid();
             a.businessName=b.getBusinessName();
             a.businessEmail=b.getBusinessEmail();
             List<Appointment> appointments=appointmentRepository.findByBusinessBusinessid(b.getBusinessid());
