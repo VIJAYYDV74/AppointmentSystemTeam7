@@ -39,7 +39,7 @@ public class BusinessDashboardServices {
     @Autowired
     ServicesRepository servicesRepository;
 
-    public String registerBusiness(Long userid, Business business){
+    public String registerBusiness(long userid, Business business){
 
         try {
             Users users = userRepository.findById(userid).get();
@@ -65,7 +65,7 @@ public class BusinessDashboardServices {
         }
 
     }
-    public ResponseEntity<String> saveProfile( MultipartFile multipartFile, Long businessId) throws IOException
+    public ResponseEntity<String> saveProfile( MultipartFile multipartFile, long businessId) throws IOException
     {
         String profileImg = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         Business business = businessRepository.findByBusinessId(businessId);
@@ -87,7 +87,9 @@ public class BusinessDashboardServices {
     }
 
 
-    public String addServices(Long businessid, Services service){
+
+
+    public String addServices(long businessid, Services service){
 
         try {
             Business business= businessRepository.findById(businessid).get();
@@ -105,12 +107,16 @@ public class BusinessDashboardServices {
     }
 
 
-    public String updateServices(Long businessid,Services updateService){
+    public String updateServices(long businessid,long serviceid,Services updateService){
 
         try {
-            Business business = businessRepository.findById(businessid).get();
-            updateService.setBusiness(business);
-            Services services = servicesRepository.save(updateService);
+            Services services = servicesRepository.findById(serviceid).get();
+            //System.out.println(services);
+            services.setServiceName(updateService.getServiceName());
+            services.setServiceDesc(updateService.getServiceDesc());
+            services.setServicePrice(updateService.getServicePrice());
+            servicesRepository.save(services);
+            //System.out.println(services);
             return "Service updated";
         }
         catch (Exception e){
@@ -122,7 +128,7 @@ public class BusinessDashboardServices {
     }
 
 
-    public String deleteServices( Long businessid, Long serviceid){
+    public String deleteServices( long businessid, long serviceid){
 
         try {
             Services services=servicesRepository.findByServiceidAndBusinessBusinessid(serviceid,businessid);

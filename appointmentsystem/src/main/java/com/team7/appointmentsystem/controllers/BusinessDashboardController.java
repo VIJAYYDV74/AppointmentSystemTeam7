@@ -36,26 +36,26 @@ public class BusinessDashboardController {
     @Autowired
     BusinessDashboardServices businessDashboardServices;
     @PostMapping("{userid}/registerBusiness")
-    public String registerBusiness(@PathVariable Long userid, @RequestBody Business business){
+    public String registerBusiness(@PathVariable long userid, @RequestBody Business business){
 
         return businessDashboardServices.registerBusiness(userid,business);
 
     }
 
     @PostMapping("{businessid}/services")
-    public String addServices(@Param("businessid") Long businessid, @RequestBody Services service){
+    public String addServices(@PathVariable long businessid, @RequestBody Services service){
 
         return businessDashboardServices.addServices(businessid,service);
     }
 
-    @PutMapping("{businessid}/services")
-    public String updateServices(@Param("businessid") Long businessid,@RequestBody Services updateService){
+    @PutMapping("{businessid}/services/{serviceid}")
+    public String updateServices(@PathVariable long businessid,@PathVariable long serviceid,@RequestBody Services updateService){
 
-        return  businessDashboardServices.updateServices(businessid,updateService);
+        return  businessDashboardServices.updateServices(businessid,serviceid,updateService);
     }
 
     @DeleteMapping ("{businessid}/services/{serviceid}")
-    public String deleteServices(@Param("businessid") Long businessid,@Param("serviceid") Long serviceid){
+    public String deleteServices(@PathVariable long businessid,@PathVariable long serviceid){
 
         return businessDashboardServices.deleteServices(businessid,serviceid);
     }
@@ -66,10 +66,14 @@ public class BusinessDashboardController {
 
 
     @PostMapping("/profile/uploadPhoto/{businessid}")
-    public ResponseEntity<String> saveProfile(@RequestParam("profileImg") MultipartFile multipartFile, @PathVariable Long businessid) throws IOException{
+    public ResponseEntity<String> saveProfile(@RequestParam("profileImg") MultipartFile multipartFile, @PathVariable long businessid) throws IOException{
         return businessDashboardServices.saveProfile(multipartFile,businessid);
     }
 
 
+    @GetMapping("getS/{businessid}")
+    public List<Services> getS(@PathVariable long businessid){
+        return servicesRepository.findByBusinessBusinessid(businessid);
+    }
 
 }
