@@ -86,7 +86,6 @@ public class AppointmentService {
                 payments.setAmount(services.getServicePrice());
                 Payments payments1 = paymentsRepository.save(payments);
                 appointment.setPayments(payments1);
-                notificationService.sendNotificationOnPaymentDone(appointment);
                 if (payments1 == null) {
                     throw new InternalServerException("InternalServerException");
                 }
