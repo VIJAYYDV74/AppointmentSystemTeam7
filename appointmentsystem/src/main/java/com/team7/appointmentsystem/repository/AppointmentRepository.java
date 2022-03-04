@@ -37,6 +37,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "select count(*) from appointments a where cast(a.dateofappointment as Date) = cast( ?1 as Date)",nativeQuery = true)
     int countBookingsToday(LocalDateTime now);
 
+    @Query(value = "select * from appointments a where a.businessid= ?1 and cast(a.bookeddate as Date) > cast( ?2 as Date)",nativeQuery = true)
+    List<Appointment> getUpcomingBusinessAppointments(long businessid, LocalDateTime now);
+
 
     //admin dashboard
 

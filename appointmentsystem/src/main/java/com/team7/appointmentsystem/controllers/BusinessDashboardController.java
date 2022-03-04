@@ -1,6 +1,7 @@
 package com.team7.appointmentsystem.controllers;
 
 import com.team7.appointmentsystem.entity.*;
+import com.team7.appointmentsystem.models.BusinessDashboard;
 import com.team7.appointmentsystem.repository.*;
 import com.team7.appointmentsystem.services.BusinessDashboardServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,12 @@ public class BusinessDashboardController {
 
     @Autowired
     BusinessDashboardServices businessDashboardServices;
+
+    @GetMapping("{businessid}/businessDashboard")
+    public BusinessDashboard business_Dashboard(@PathVariable long businessid){
+        return businessDashboardServices.business_Dashboard(businessid);
+    }
+
     @PostMapping("{userid}/registerBusiness")
     public String registerBusiness(@PathVariable long userid, @RequestBody Business business){
 

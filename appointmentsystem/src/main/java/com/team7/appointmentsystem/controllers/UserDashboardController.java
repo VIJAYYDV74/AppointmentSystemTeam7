@@ -33,26 +33,26 @@ public class UserDashboardController {
 
 
     @GetMapping("/login/{userid}/userDashboard/appointments")
-    public List<TotalAppointments> appointments(){
+    public List<TotalAppointments> appointments(@PathVariable long userid){
 
-        return userDashboardServices.getAllappointments();
+        return userDashboardServices.getAllappointments(userid);
     }
 
 
     @GetMapping("/login/{userid}/userDashboard/upcoming_appointments")
-    public List<TotalAppointments> upcoming_appointments(){
-        return userDashboardServices.getUpcomingAppointments();
+    public List<TotalAppointments> upcoming_appointments(@PathVariable long userid){
+        return userDashboardServices.getUpcomingAppointments(userid);
     }
 
 
     @GetMapping("/login/{userid}/userDashboard/comments")
-    public List<Reviews> comments(){
-        return userDashboardServices.getAllreviews();
+    public List<Reviews> comments(@PathVariable long userid){
+        return userDashboardServices.getAllreviews(userid);
     }
 
 
     @GetMapping("/login/{userid}/userDashboard/favourites")
-    public List<Reviews> favourites(){
-        return userDashboardServices.getFavourites();
+    public List<Reviews> favourites(@PathVariable long userid){
+        return userDashboardServices.getFavourites(userid);
     }
 }

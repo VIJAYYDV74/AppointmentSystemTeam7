@@ -2,6 +2,7 @@ package com.team7.appointmentsystem.services;
 
 
 import com.team7.appointmentsystem.entity.*;
+import com.team7.appointmentsystem.models.BusinessDashboard;
 import com.team7.appointmentsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -19,7 +21,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -38,6 +44,104 @@ public class BusinessDashboardServices {
     BusinessWorkingHoursRepository businessWorkingHoursRepository;
     @Autowired
     ServicesRepository servicesRepository;
+    @Autowired
+    AppointmentRepository appointmentRepository;
+    @Autowired
+    CommentsRepository commentsRepository;
+
+
+    List<Appointment> TotalAppointments;
+    List<Appointment> UpcomingAppointments;
+    List<Comments> TotalReviews;
+
+    public BusinessDashboard business_Dashboard(long businessid){
+
+         TotalAppointments= appointmentRepository.findByBusinessBusinessid(businessid);
+        LocalDateTime now= LocalDateTime.now();
+         UpcomingAppointments= appointmentRepository.getUpcomingBusinessAppointments(businessid,now);
+        TotalReviews= commentsRepository.findByBusinessBusinessid(businessid);
+
+        BusinessDashboard businessDashboard=new BusinessDashboard();
+
+        businessDashboard.totalAppointments=TotalAppointments.size();
+        businessDashboard.upcomingAppointments=UpcomingAppointments.size();
+        businessDashboard.totalReviews=TotalReviews.size();
+
+        int temp=0;
+        for(Appointment a:TotalAppointments){
+            temp+=a.getPayments().getAmount();
+        }
+        businessDashboard.totalEarnings=temp;
+        temp=0;
+        for(Appointment a:TotalAppointments){
+            Instant instant1 = a.getPayments().getPaymentDate().toInstant(ZoneOffset.UTC);
+            Date date1 = Date.from(instant1);
+
+            Instant instant2 = now.toInstant(ZoneOffset.UTC);
+            Date date2 = Date.from(instant2);
+
+            if(date1.equals(date2)){
+                temp+=a.getPayments().getAmount();
+            }
+        }
+        businessDashboard.todaysEarning=temp;
+
+        temp=0;
+        for(Appointment a:TotalAppointments){
+            Instant instant1 = a.getPayments().getPaymentDate().toInstant(ZoneOffset.UTC);
+            Date date1 = Date.from(instant1);
+
+            Instant instant2 = now.minusDays(1).toInstant(ZoneOffset.UTC);
+            Date date2 = Date.from(instant2);
+
+            if(date1.equals(date2)){
+                temp+=a.getPayments().getAmount();
+            }
+        }
+        businessDashboard.yesterdaysEarning=temp;
+
+        temp=0;
+        LocalDateTime now1=now.minusDays(7);
+        for(Appointment a:TotalAppointments){
+            Instant instant1 = a.getPayments().getPaymentDate().toInstant(ZoneOffset.UTC);
+            Date date1 = Date.from(instant1);
+
+            Instant instant2 = now1.toInstant(ZoneOffset.UTC);
+            Date date2 = Date.from(instant2);
+
+
+            Instant instant3 = now.toInstant(ZoneOffset.UTC);
+            Date date3 = Date.from(instant3);
+
+            if(date1.after(date2) && date1.before(date3)){
+                temp+=a.getPayments().getAmount();
+            }
+        }
+        businessDashboard.last7daysEarning= temp;
+
+
+        temp=0;
+        now1=now.minusDays(30);
+        for(Appointment a:TotalAppointments){
+            Instant instant1 = a.getPayments().getPaymentDate().toInstant(ZoneOffset.UTC);
+            Date date1 = Date.from(instant1);
+
+            Instant instant2 = now1.toInstant(ZoneOffset.UTC);
+            Date date2 = Date.from(instant2);
+
+
+            Instant instant3 = now.toInstant(ZoneOffset.UTC);
+            Date date3 = Date.from(instant3);
+
+            if(date1.after(date2) && date1.before(date3)){
+                temp+=a.getPayments().getAmount();
+            }
+        }
+        businessDashboard.last30daysEarning= temp;
+
+        return businessDashboard;
+
+    }
 
     public String registerBusiness(long userid, Business business){
 

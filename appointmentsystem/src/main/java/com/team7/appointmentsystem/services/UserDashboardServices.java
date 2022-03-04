@@ -73,11 +73,11 @@ public class UserDashboardServices {
         return userDashboard;
     }
 
-    public List<TotalAppointments> getAllappointments() {
+    public List<TotalAppointments> getAllappointments(long userid) {
         List<TotalAppointments> totalAppointments=new ArrayList<>();
         try {
 
-
+            appointments=appointmentRepository.findByUsersUserid(userid);
             for (Appointment a : appointments) {
                 TotalAppointments t = new TotalAppointments();
                 t.appointedDate = String.valueOf(a.getAppointmentDate());
@@ -86,7 +86,7 @@ public class UserDashboardServices {
                 t.endTime = String.valueOf(a.getEndTime());
                 t.businessName = a.getBusiness().getBusinessName();
                 t.serviceName = a.getServices().getServiceName();
-                t.paymentDate = a.getPayments().getPaymentDate().toString();
+                t.paymentDate = String.valueOf(a.getPayments().getPaymentDate());
                 t.paymentMethod = a.getPayments().getPaymentmethod();
                 t.price = a.getTotalPrice();
                 totalAppointments.add(t);
@@ -99,11 +99,12 @@ public class UserDashboardServices {
         }
     }
 
-    public List<TotalAppointments> getUpcomingAppointments() {
+    public List<TotalAppointments> getUpcomingAppointments(long userid) {
         List<TotalAppointments> totalAppointments=new ArrayList<>();
         try {
 
-
+            LocalDateTime now=LocalDateTime.now();
+            upcomingAppointments=appointmentRepository.getUpcomingAppointments(userid,now);
             for (Appointment a : upcomingAppointments) {
                 TotalAppointments t = new TotalAppointments();
                 t.appointedDate = String.valueOf(a.getAppointmentDate());
@@ -112,8 +113,8 @@ public class UserDashboardServices {
                 t.endTime = String.valueOf(a.getEndTime());
                 t.businessName = a.getBusiness().getBusinessName();
                 t.serviceName = a.getServices().getServiceName();
-                t.paymentDate = "";
-                t.paymentMethod = "";
+                //t.paymentDate = "";
+                //t.paymentMethod = "";
                 t.price = a.getTotalPrice();
                 totalAppointments.add(t);
             }
@@ -125,9 +126,10 @@ public class UserDashboardServices {
         }
     }
 
-    public List<Reviews> getAllreviews() {
+    public List<Reviews> getAllreviews(long userid) {
         List<Reviews> reviews=new ArrayList<>();
         try {
+            totalReviews=commentsRepository.findByUsersUserid(userid);
             for (Comments c: totalReviews){
                 Reviews r=new Reviews();
                 r.businessName=c.getBusiness().getBusinessName();
@@ -143,9 +145,10 @@ public class UserDashboardServices {
         }
     }
 
-    public List<Reviews> getFavourites() {
+    public List<Reviews> getFavourites(long userid) {
         List<Reviews> reviews=new ArrayList<>();
         try {
+            favourites=commentsRepository.getFavourites(userid);
             for (Comments c: favourites){
                 Reviews r=new Reviews();
                 r.businessName=c.getBusiness().getBusinessName();
