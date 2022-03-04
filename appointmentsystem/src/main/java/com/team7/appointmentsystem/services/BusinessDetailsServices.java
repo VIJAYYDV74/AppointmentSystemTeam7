@@ -2,6 +2,8 @@ package com.team7.appointmentsystem.services;
 
 import com.team7.appointmentsystem.entity.Business;
 import com.team7.appointmentsystem.entity.Comments;
+import com.team7.appointmentsystem.models.BusinessDetails.BusinessDetailsReview;
+import com.team7.appointmentsystem.models.BusinessDetails.Reviewer;
 import com.team7.appointmentsystem.repository.BusinessRepository;
 import com.team7.appointmentsystem.repository.CommentsRepository;
 import com.team7.appointmentsystem.repository.ServicesRepository;
@@ -42,29 +44,33 @@ public class BusinessDetailsServices {
         return images;
     }
 
-    public List<Map<String,Object>> reviews(Long businessid){
+    public BusinessDetailsReview reviews(long businessid){
         try {
 
 
-        List<Map<String,Object>> reviews = new ArrayList<>();
+        BusinessDetailsReview reviews = new BusinessDetailsReview();
 
         int totalRating = 0;
         int count=0;
         List<Comments> comments=commentsRepository.findByBusinessBusinessid(businessid);
+        reviews.commentedBy=new ArrayList<>();
         for(Comments c:comments){
-            Map<String,Object> m=new HashMap<>();
-            m.put("commentedby",c.getUsers().getFirstName()+c.getUsers().getLastName());
-            m.put("ratings",c.getRating());
-            m.put("feedback",c.getFeedback());
+            Reviewer r=new Reviewer();
+
+            r.userName=c.getUsers().getFirstName()+c.getUsers().getLastName();
+            r.userImage=c.getUsers().getProfileImage();
+            r.rating=c.getRating();
+            r.feedback=c.getFeedback();
             totalRating+=c.getRating();
             count++;
-            reviews.add(m);
+            reviews.commentedBy.add(r);
+
         }
-        if (count!=0)
-            totalRating=totalRating/count;
-        Map<String,Object> m=new HashMap<>();
-        m.put("avgRatings",totalRating);
-        reviews.add(m);
+        if (count!=0) {
+            totalRating = totalRating / count;
+        }
+
+        reviews.overallRating=totalRating;
 
         return reviews;}
         catch (Exception e){

@@ -42,29 +42,34 @@ public class BusinessDashboardServices {
     public String registerBusiness(long userid, Business business){
 
         try {
-            Users users = userRepository.findById(userid).get();
-            int id = business.getCategories().getCategoryId();
-            Categories categories = categoriesRepository.findById(id).get();
+                Users users = userRepository.findById(userid).get();
+                int id = business.getCategories().getCategoryId();
+                Categories categories = categoriesRepository.findById(id).get();
 
 
-            business.setUsers(users);
-            business.setCreatedTime(LocalDateTime.now());
-            business.setBusinessAddress(business.getBusinessAddress());
-            business.setCategories(categories);
-            businessAddressRepository.save(business.getBusinessAddress());
-            businessRepository.save(business);
-            List<BusinessWorkingHours> l1 = business.getWorkingHours();
-            for (BusinessWorkingHours businessWorkingHours: l1) {
-                businessWorkingHours.setBusinessHours(business);
-                businessWorkingHoursRepository.save(businessWorkingHours);
-            }
-            return "business registered";
+                business.setBusinessEmail(users.getEmail());
+                business.setBusinessMobileNumber(users.getMobileNumber());
+                business.setBusinessTitle(business.getBusinessName());
+                business.setUsers(users);
+                business.setCreatedTime(LocalDateTime.now());
+                business.setBusinessAddress(business.getBusinessAddress());
+                business.setCategories(categories);
+                businessAddressRepository.save(business.getBusinessAddress());
+                businessRepository.save(business);
+                List<BusinessWorkingHours> l1 = business.getWorkingHours();
+                for (BusinessWorkingHours businessWorkingHours : l1) {
+                    businessWorkingHours.setBusinessHours(business);
+                    businessWorkingHoursRepository.save(businessWorkingHours);
+                }
+                return "business registered";
+
         }
         catch (Exception e){
             return "Business Not registered";
         }
 
     }
+
     public ResponseEntity<String> saveProfile( MultipartFile multipartFile, long businessId) throws IOException
     {
         String profileImg = StringUtils.cleanPath(multipartFile.getOriginalFilename());

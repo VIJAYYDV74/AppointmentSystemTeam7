@@ -14,8 +14,8 @@ public interface PaymentsRepository extends JpaRepository<Payments, Long> {
 
 
     // admin dashboard
-    @Query(value = "select * from payments ",nativeQuery = true)
-    List<Payments> getAllPayments();
+    //@Query(value = "select * from payments ",nativeQuery = true)
+    //List<Payments> getAllPayments();
 
     @Query(value = "select sum(amount) as totalRevenue from payments",nativeQuery = true)
     int countTotalRevenue();

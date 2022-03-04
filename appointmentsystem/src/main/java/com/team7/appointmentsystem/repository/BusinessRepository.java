@@ -44,8 +44,8 @@ public interface BusinessRepository extends JpaRepository<Business, Long> {
    // @Query(value = "select businessname,servicename,serviceprice,categoryname from business where rating>3 ORDER BY rating",nativeQuery = true)
    // List<Map<String,Object>> topBusiness();
 
-    @Query(value = "select * from business",nativeQuery = true)
-    List<Business> getAllbusinesses();
+   // @Query(value = "select * from business",nativeQuery = true)
+    //List<Business> getAllbusinesses();
     //admin dashboard
 
 
