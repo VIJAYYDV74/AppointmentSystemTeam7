@@ -62,7 +62,6 @@ public class NotificationService {
                         appointment.getAppointmentDate(),
                 appointment.getBusiness().getUsers(),
                 appointment.getUsers(),
-                LocalDateTime.now(),
                 false,
                 notificationTypes
         );
@@ -73,7 +72,6 @@ public class NotificationService {
                         appointment.getServices().getServiceName(),
                 appointment.getUsers(),
                 appointment.getBusiness().getUsers(),
-                LocalDateTime.now(),
                 false,
                 notificationTypes
         );
@@ -89,7 +87,6 @@ public class NotificationService {
                        appointment.getAppointmentDate() + " has been cancelled.",
                 appointment.getBusiness().getUsers(),
                 appointment.getUsers(),
-                LocalDateTime.now(),
                 false,
                 notificationTypes
         );
@@ -99,7 +96,6 @@ public class NotificationService {
                         appointment.getAppointmentDate() + " has been cancelled.",
                 appointment.getUsers(),
                 appointment.getBusiness().getUsers(),
-                LocalDateTime.now(),
                 false,
                 notificationTypes
         );
@@ -115,7 +111,6 @@ public class NotificationService {
                         " has been rescheduled to " + appointment.getAppointmentDate() + ".",
                 appointment.getBusiness().getUsers(),
                 appointment.getUsers(),
-                LocalDateTime.now(),
                 false,
                 notificationTypes
         );
@@ -125,7 +120,6 @@ public class NotificationService {
                         " has been rescheduled to " + appointment.getAppointmentDate() + ".",
                 appointment.getUsers(),
                 appointment.getBusiness().getUsers(),
-                LocalDateTime.now(),
                 false,
                 notificationTypes
         );
@@ -141,7 +135,6 @@ public class NotificationService {
                         " has been completed. Please leave a review and comment about our service.",
                 appointment.getBusiness().getUsers(),
                 appointment.getUsers(),
-                LocalDateTime.now(),
                 false,
                 notificationTypes
         );
@@ -151,7 +144,6 @@ public class NotificationService {
                         " for service "+ appointment.getServices().getServiceName() +" has been completed.",
                 appointment.getUsers(),
                 appointment.getBusiness().getUsers(),
-                LocalDateTime.now(),
                 false,
                 notificationTypes
         );
@@ -167,7 +159,6 @@ public class NotificationService {
                         " to " + appointment.getBusiness().getBusinessName()+ " has been successfully completed.",
                 appointment.getBusiness().getUsers(),
                 appointment.getUsers(),
-                LocalDateTime.now(),
                 false,
                 notificationTypes
         );
@@ -178,7 +169,6 @@ public class NotificationService {
                         appointment.getServices().getServiceName() + ".",
                 appointment.getUsers(),
                 appointment.getBusiness().getUsers(),
-                LocalDateTime.now(),
                 false,
                 notificationTypes
         );
@@ -209,7 +199,6 @@ public class NotificationService {
                 "Your business page has been recently visited.",
                 null,
                 business.getUsers(),
-                LocalDateTime.now(),
                 false,
                 notificationTypes
         );

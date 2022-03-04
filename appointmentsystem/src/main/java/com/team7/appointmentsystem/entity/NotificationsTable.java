@@ -39,12 +39,12 @@ public class NotificationsTable {
     }
 
     public NotificationsTable(String header, String message, Users sender, Users receiver,
-                              LocalDateTime localDateTime, boolean state, NotificationTypes notificationTypes) {
+                              boolean state, NotificationTypes notificationTypes) {
         this.header = header;
         this.message = message;
         this.sender = sender;
         this.receiver = receiver;
-        this.localDateTime = localDateTime;
+        this.localDateTime = LocalDateTime.now();
         this.state = state;
         this.notificationTypes = notificationTypes;
     }

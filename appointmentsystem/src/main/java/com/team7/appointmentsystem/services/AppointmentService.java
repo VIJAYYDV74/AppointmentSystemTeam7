@@ -58,7 +58,8 @@ public class AppointmentService {
     //get the userid from the session object and use it.
 //    public String bookAppointment(Appointment appointment, Long businessId, Long userId) {
 
-    public Appointment bookAppointment(Appointment appointment, Long businessId, Long userId) {
+    public String bookAppointment(Appointment appointment, Long businessId, Long userId) {
+        System.out.println(appointment.toString());
         try{
             Payments payments = appointment.getPayments();
             Services services = servicesRepository.findById(appointment.getServices().
@@ -103,7 +104,7 @@ public class AppointmentService {
 
             notificationService.sendNotificationOnAppointmentBooking(appointment);
 
-            return appointment1;
+            return "Appointment booked!!!";
         }catch (Exception e){
 //            e.printStackTrace();
             logger.error(e.getMessage());

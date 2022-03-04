@@ -26,10 +26,10 @@ public class AppointmentController {
     @Transactional
     @PostMapping("/user/bookAppointment/{businessId}")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public ResponseEntity<Appointment> bookAppointment(@RequestBody Appointment appointment,
+    public ResponseEntity<StrObject> bookAppointment(@RequestBody Appointment appointment,
                                                        @PathVariable Long businessId,
                                                        @RequestParam Long userId){
-        Appointment appointment1 =  appointmentService.bookAppointment(appointment, businessId, userId);
+        StrObject appointment1 =  new StrObject(appointmentService.bookAppointment(appointment, businessId, userId));
         return ResponseEntity.ok(appointment1);
 
     }
