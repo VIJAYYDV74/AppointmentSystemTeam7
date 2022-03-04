@@ -6,7 +6,6 @@ import com.team7.appointmentsystem.entity.Payments;
 import com.team7.appointmentsystem.entity.Services;
 import com.team7.appointmentsystem.exceptions.AppointmentNotFoundException;
 import com.team7.appointmentsystem.exceptions.InternalServerException;
-import com.team7.appointmentsystem.exceptions.PaymentNotFoundException;
 import com.team7.appointmentsystem.exceptions.ServiceNotFoundException;
 import com.team7.appointmentsystem.models.PaymentDetails;
 import com.team7.appointmentsystem.repository.AppointmentRepository;
@@ -31,10 +30,7 @@ public class PaymentsService {
     private ServicesRepository servicesRepository;
 
     @Autowired
-    private UserNotificationService userNotificationService;
-
-    @Autowired
-    private BusinessNotificationsService businessNotificationsService;
+    private NotificationService notificationService;
 
     @Autowired
     private BillingDetailsRepository billingDetailsRepository;
@@ -100,8 +96,7 @@ public class PaymentsService {
                 throw new InternalServerException("InternalServerException");
             }
 
-            userNotificationService.sendUserNotificationOnPaymentDone(appointment);
-            businessNotificationsService.sendBusinessNotificationOnPaymentDone(appointment);
+            notificationService.sendNotificationOnPaymentDone(appointment);
 
             appointment.setPayments(payments);
             Appointment appointment1 = appointmentRepository.save(appointment);

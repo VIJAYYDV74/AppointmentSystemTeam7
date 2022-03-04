@@ -2,9 +2,8 @@ package com.team7.appointmentsystem.controllers;
 
 import com.team7.appointmentsystem.entity.Payments;
 import com.team7.appointmentsystem.models.PaymentDetails;
-import com.team7.appointmentsystem.services.BusinessNotificationsService;
 import com.team7.appointmentsystem.services.PaymentsService;
-import com.team7.appointmentsystem.services.UserNotificationService;
+import com.team7.appointmentsystem.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +17,7 @@ public class PaymentsController {
     private PaymentsService paymentsService;
 
     @Autowired
-    private UserNotificationService userNotificationService;
-
-    @Autowired
-    private BusinessNotificationsService businessNotificationsService;
+    private NotificationService notificationService;
 
     @GetMapping("user/getPaymentDetails/{appointmentId}/")
     @CrossOrigin(origins = "*", allowedHeaders = "*")

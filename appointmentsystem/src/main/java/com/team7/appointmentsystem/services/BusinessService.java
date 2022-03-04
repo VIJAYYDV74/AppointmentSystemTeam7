@@ -50,7 +50,7 @@ public class BusinessService {
     private BusinessImagesRepository businessImagesRepository;
 
     @Autowired
-    private BusinessNotificationsService businessNotificationsService;
+    private NotificationService notificationService;
 
     public static final Logger logger = LoggerFactory.getLogger(BusinessService.class);
 
@@ -211,8 +211,8 @@ public class BusinessService {
     public BusinessDetails getBusinessByBusinessId(long businessid){
         BusinessDetails businessDetails = businessRepository.findByBusinessid(businessid);
         if (businessDetails!=null){
-            businessNotificationsService.
-                    sendBusinessNotificationOnBusinessSearched(businessDetails.getBusinessid(), 1);
+            notificationService.
+                    sendNotificationOnBusinessSearched(businessDetails.getBusinessid(), 1);
         }
         return businessDetails;
     }

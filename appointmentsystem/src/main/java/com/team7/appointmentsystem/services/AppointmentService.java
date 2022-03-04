@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AppointmentService {
@@ -42,13 +41,7 @@ public class AppointmentService {
     private ServicesRepository servicesRepository;
 
     @Autowired
-    private UserNotificationService userNotificationService;
-
-    @Autowired
-    private UserNotificationService notificationService;
-
-    @Autowired
-    private BusinessNotificationsService businessNotificationsService;
+    private NotificationService notificationService;
 
     @Autowired
     private BillingDetailsRepository billingDetailsRepository;
@@ -92,7 +85,7 @@ public class AppointmentService {
                 payments.setAmount(services.getServicePrice());
                 Payments payments1 = paymentsRepository.save(payments);
                 appointment.setPayments(payments1);
-                userNotificationService.sendUserNotificationOnPaymentDone(appointment);
+                notificationService.sendNotificationOnPaymentDone(appointment);
                 if (payments1 == null) {
                     throw new InternalServerException("InternalServerException");
                 }
@@ -102,25 +95,18 @@ public class AppointmentService {
                     throw new InternalServerException("InternalServerException");
                 }
             }
-            businessNotificationsService.sendBusinessNotificationOnPaymentDone(appointment);
+            notificationService.sendNotificationOnPaymentDone(appointment);
             Appointment appointment1 = appointmentRepository.save(appointment);
             if (appointment1==null){
                 throw new InternalServerException("InternalServerException");
             }
 
-            boolean b1 = userNotificationService.sendUserNotificationOnAppointmentBooking(appointment);
-            boolean b2 = businessNotificationsService.sendBusinessNotificationOnAppointmentBooking(appointment);
-            if (!b1){
-                logger.error("Unable to send notification to user");
-            }
-            if (!b2){
-                logger.error("Unable to send notification to business");
-            }
+            notificationService.sendNotificationOnAppointmentBooking(appointment);
 
             return appointment1;
         }catch (Exception e){
-            e.printStackTrace();
-//            logger.error(e.getMessage());
+//            e.printStackTrace();
+            logger.error(e.getMessage());
             return null;
         }
     }
@@ -157,15 +143,7 @@ public class AppointmentService {
                 throw new InternalServerException("InternalServerException");
             }
             else {
-                boolean b1 = userNotificationService.sendUserNotificationOnAppointmentCancelling(appointment1);
-                boolean b2 = businessNotificationsService.
-                        sendBusinessNotificationOnAppointmentCancelling(appointment1);
-                if (!b1){
-                    logger.error("Unable to send notification to user");
-                }
-                if (!b2){
-                    logger.error("Unable to send notification to business");
-                }
+                notificationService.sendNotificationOnAppointmentCancelling(appointment1);
             }
             return new StrObject("Appointment Cancelled!");
         } catch (Exception e) {

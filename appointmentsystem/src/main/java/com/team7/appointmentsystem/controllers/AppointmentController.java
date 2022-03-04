@@ -5,7 +5,7 @@ import com.team7.appointmentsystem.entity.Appointment;
 import com.team7.appointmentsystem.models.StrObject;
 import com.team7.appointmentsystem.resultapis.AppointmentSlots;
 import com.team7.appointmentsystem.services.AppointmentService;
-import com.team7.appointmentsystem.services.UserNotificationService;
+import com.team7.appointmentsystem.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class AppointmentController {
@@ -22,7 +21,7 @@ public class AppointmentController {
     private AppointmentService appointmentService;
 
     @Autowired
-    private UserNotificationService notificationService;
+    private NotificationService notificationService;
 
     @Transactional
     @PostMapping("/user/bookAppointment/{businessId}")
