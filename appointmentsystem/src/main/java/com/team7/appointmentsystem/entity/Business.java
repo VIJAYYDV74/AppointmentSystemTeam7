@@ -1,6 +1,7 @@
 package com.team7.appointmentsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.text.DecimalFormat;
@@ -9,6 +10,7 @@ import java.util.List;
 
 
 @Entity
+@DynamicUpdate
 @Table(name = "business")
 public class Business {
 
@@ -59,7 +61,7 @@ public class Business {
     @OneToMany(mappedBy = "business", targetEntity = BusinessWorkingHours.class)
     private List<BusinessWorkingHours> workingHours;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "businessaddress")
     private BusinessAddress businessAddress;
 

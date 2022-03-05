@@ -6,6 +6,7 @@ import com.team7.appointmentsystem.entity.Users;
 import com.team7.appointmentsystem.entity.Visiting;
 import com.team7.appointmentsystem.exceptions.UserNotFoundException;
 import com.team7.appointmentsystem.miscellinious.BusinessDetails;
+import com.team7.appointmentsystem.models.StrObject;
 import com.team7.appointmentsystem.resultapis.HomepageAPI1;
 import com.team7.appointmentsystem.services.BusinessService;
 import com.team7.appointmentsystem.services.CommentsService;
@@ -97,9 +98,22 @@ public class BusinessController {
         return ResponseEntity.ok(business);
     }
 
-    @GetMapping("/user/getBusinessByBusinessName/{businessId}")
+
+
+    @GetMapping("/user/getBusinessDetails/{businessId}")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<BusinessDetails> getBusinessById(@PathVariable long businessId){
         return ResponseEntity.ok(businessService.getBusinessByBusinessId(businessId));
     }
+
+    @PostMapping("/user/business/{businessId}/update")
+    public ResponseEntity<StrObject> updateBusinessDetails(@PathVariable long businessId, @RequestBody Business business) {
+        return ResponseEntity.ok(businessService.updateBusinessDetails(businessId, business));
+    }
+
+//    @GetMapping("/user/business/{businessId}/getReviews")
+//    public ResponseEntity<List<Comments>> getReviews(@PathVariable long businessId) {
+//        return ResponseEntity.ok(businessService.getReviews(businessId));
+//    }
+
 }

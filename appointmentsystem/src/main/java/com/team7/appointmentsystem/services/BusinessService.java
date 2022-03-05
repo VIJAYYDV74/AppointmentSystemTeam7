@@ -3,6 +3,7 @@ package com.team7.appointmentsystem.services;
 import com.team7.appointmentsystem.entity.*;
 import com.team7.appointmentsystem.exceptions.*;
 import com.team7.appointmentsystem.miscellinious.BusinessDetails;
+import com.team7.appointmentsystem.models.StrObject;
 import com.team7.appointmentsystem.repository.*;
 import com.team7.appointmentsystem.resultapis.HomepageAPI1;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,6 +41,9 @@ public class BusinessService {
 
     @Autowired
     private ServicesRepository servicesRepository;
+
+//    @Autowired
+//    private CommentsRepository commentsRepository;
 
     @Autowired
     private LikesRepository likesRepository;
@@ -217,4 +222,71 @@ public class BusinessService {
         return businessDetails;
     }
 
+    public StrObject updateBusinessDetails(Long businessId, Business business) {
+        try{
+            Business fetchBusiness = businessRepository.getById(businessId);
+            if(fetchBusiness == null) {
+                throw new BusinessNotFoundException("Business does not exist");
+            }else {
+                fetchBusiness.setBusinessName( business.getBusinessName() );
+                fetchBusiness.setBusinessAddress(business.getBusinessAddress());
+                fetchBusiness.setBusinessEmail(business.getBusinessEmail());
+                fetchBusiness.setSlotDuration(business.getSlotDuration());
+                fetchBusiness.setBusinessDescription(business.getBusinessDescription());
+                fetchBusiness.setCancellationAvailable(business.isCancellationAvailable());
+                fetchBusiness.setBusinessMobileNumber(business.getBusinessMobileNumber());
+                businessRepository.save(fetchBusiness);
+                return new StrObject("Updated SuccessFully:\n" + fetchBusiness);
+            }
+        }catch (BusinessNotFoundException e) {
+            return new StrObject(e.getMessage());
+        }
+    }
+
+    public StrObject deleteService(Long businessId, Long serviceId) {
+        try {
+            Services service = servicesRepository.findByServiceidAndBusinessBusinessid(serviceId, businessId);
+            if(service == null) {
+                throw new ServiceNotFoundException("Could not found the Service");
+            }else{
+                servicesRepository.delete(service);
+                return new StrObject("Service removed: " + service.getServiceName());
+            }
+        }catch (ServiceNotFoundException e) {
+            return new StrObject(e.getMessage());
+        }
+    }
+    public StrObject updateService(Long businessId, Long serviceId, Services updateService) {
+        try {
+            Services service = servicesRepository.findByServiceidAndBusinessBusinessid(serviceId, businessId);
+            if(service == null) {
+                throw new ServiceNotFoundException("Could not found the Service");
+            }else{
+                service.setServiceName(updateService.getServiceName());
+                service.setServiceDesc(updateService.getServiceDesc());
+                service.setServicePrice(updateService.getServicePrice());
+                servicesRepository.save(service);
+                return new StrObject("Service updated: "+"{" +
+                            service.getServiceName()+"\n"+service.getServiceDesc()+"\n"+
+                            service.getServicePrice()+
+                        "}");
+            }
+        }catch (ServiceNotFoundException e) {
+            return new StrObject(e.getMessage());
+        }
+    }
+
+//    public List<Comments> getReviews (Long businessId) {
+//        try{
+//            List<Comments> reviews = commentsRepository.findByBusinessId(businessId);
+//            if(reviews == null) {
+//                throw new NoOneReviewedException("No one has given review to this business");
+//            }else{
+//                return reviews;
+//            }
+//        }catch (NoOneReviewedException e) {
+//            System.out.println(e.getMessage());
+//        }
+//        return null;
+//    }
 }

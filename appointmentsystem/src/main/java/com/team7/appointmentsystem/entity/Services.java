@@ -2,10 +2,12 @@ package com.team7.appointmentsystem.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
 @Entity
+@DynamicUpdate
 @Table(name = "services")
 public class Services {
 
