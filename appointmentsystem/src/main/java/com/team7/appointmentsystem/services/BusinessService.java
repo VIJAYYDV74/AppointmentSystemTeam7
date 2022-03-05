@@ -235,8 +235,9 @@ public class BusinessService {
                 fetchBusiness.setBusinessDescription(business.getBusinessDescription());
                 fetchBusiness.setCancellationAvailable(business.isCancellationAvailable());
                 fetchBusiness.setBusinessMobileNumber(business.getBusinessMobileNumber());
+                fetchBusiness.setBusinessTitle(business.getBusinessTitle());
                 businessRepository.save(fetchBusiness);
-                return new StrObject("Updated SuccessFully:\n" + fetchBusiness);
+                return new StrObject("Updated SuccessFully:");
             }
         }catch (BusinessNotFoundException e) {
             return new StrObject(e.getMessage());
