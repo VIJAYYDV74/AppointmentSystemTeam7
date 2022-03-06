@@ -12,7 +12,6 @@ public interface CommentsRepository extends JpaRepository<Comments, Long> {
 
     List<Comments> findTop5ByOrderByLocalDateTimeAsc();
 
-//    @Query("Select * where commentedto = ?")
-//    List<Comments> findByBusinessId(long businessId);
+    List<Comments> findByBusinessBusinessid(long businessId);
 
 }

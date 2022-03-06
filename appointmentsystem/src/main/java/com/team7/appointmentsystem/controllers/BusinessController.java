@@ -111,9 +111,9 @@ public class BusinessController {
         return ResponseEntity.ok(businessService.updateBusinessDetails(businessId, business));
     }
 
-//    @GetMapping("/user/business/{businessId}/getReviews")
-//    public ResponseEntity<List<Comments>> getReviews(@PathVariable long businessId) {
-//        return ResponseEntity.ok(businessService.getReviews(businessId));
-//    }
+    @GetMapping("/user/business/{businessId}/getReviews")
+    public ResponseEntity<List<Comments>> getReviews(@PathVariable long businessId) {
+        return ResponseEntity.ok(businessService.getReviews(businessId));
+    }
 
 }

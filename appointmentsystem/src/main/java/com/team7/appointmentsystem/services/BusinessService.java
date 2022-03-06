@@ -42,8 +42,8 @@ public class BusinessService {
     @Autowired
     private ServicesRepository servicesRepository;
 
-//    @Autowired
-//    private CommentsRepository commentsRepository;
+    @Autowired
+    private CommentsRepository commentsRepository;
 
     @Autowired
     private LikesRepository likesRepository;
@@ -277,17 +277,17 @@ public class BusinessService {
         }
     }
 
-//    public List<Comments> getReviews (Long businessId) {
-//        try{
-//            List<Comments> reviews = commentsRepository.findByBusinessId(businessId);
-//            if(reviews == null) {
-//                throw new NoOneReviewedException("No one has given review to this business");
-//            }else{
-//                return reviews;
-//            }
-//        }catch (NoOneReviewedException e) {
-//            System.out.println(e.getMessage());
-//        }
-//        return null;
-//    }
+    public List<Comments> getReviews (Long businessId) {
+        try{
+            List<Comments> reviews = commentsRepository.findByBusinessBusinessid(businessId);
+            if(reviews == null) {
+                throw new NoOneReviewedException("No one has given review to this business");
+            }else{
+                return reviews;
+            }
+        }catch (NoOneReviewedException e) {
+            logger.error(e.getMessage());
+        }
+        return null;
+    }
 }
