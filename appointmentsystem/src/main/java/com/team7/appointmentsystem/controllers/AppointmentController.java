@@ -3,6 +3,7 @@ package com.team7.appointmentsystem.controllers;
 
 import com.team7.appointmentsystem.entity.Appointment;
 import com.team7.appointmentsystem.models.StrObject;
+import com.team7.appointmentsystem.models.TimeSlot;
 import com.team7.appointmentsystem.resultapis.AppointmentSlots;
 import com.team7.appointmentsystem.services.AppointmentService;
 import com.team7.appointmentsystem.services.NotificationService;
@@ -31,7 +32,6 @@ public class AppointmentController {
                                                        @RequestParam Long userId){
         StrObject appointment1 =  new StrObject(appointmentService.bookAppointment(appointment, businessId, userId));
         return ResponseEntity.ok(appointment1);
-
     }
 
     @Transactional
@@ -61,6 +61,15 @@ public class AppointmentController {
     public List<AppointmentSlots> appointmentPage(@PathVariable long businessId,
                                                   @RequestParam String date) throws ParseException {
         return appointmentService.AppointmentsPage(businessId, date);
+    }
+
+    @Transactional
+    @PostMapping(value = "/user/reschedule/{appointmentId}")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public ResponseEntity<StrObject> reschedule(@RequestBody Appointment newAppointment,
+                                                @PathVariable Long appointmentId) {
+        StrObject msg = appointmentService.reschedule(newAppointment, appointmentId);
+        return ResponseEntity.ok(msg);
     }
 
 }

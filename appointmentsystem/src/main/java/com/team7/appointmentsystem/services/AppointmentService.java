@@ -5,6 +5,7 @@ import com.team7.appointmentsystem.exceptions.AppointmentNotFoundException;
 import com.team7.appointmentsystem.exceptions.InternalServerException;
 import com.team7.appointmentsystem.exceptions.ServiceNotFoundException;
 import com.team7.appointmentsystem.models.StrObject;
+import com.team7.appointmentsystem.models.TimeSlot;
 import com.team7.appointmentsystem.repository.*;
 import com.team7.appointmentsystem.resultapis.AppointmentSlots;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AppointmentService {
@@ -52,14 +54,10 @@ public class AppointmentService {
     private static final Logger logger = LoggerFactory.getLogger(AppointmentService.class);
 
     String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-
-
-
     //get the userid from the session object and use it.
 //    public String bookAppointment(Appointment appointment, Long businessId, Long userId) {
 
     public String bookAppointment(Appointment appointment, Long businessId, Long userId) {
-        System.out.println(appointment.toString());
         try{
             Payments payments = appointment.getPayments();
             Services services = servicesRepository.findById(appointment.getServices().
@@ -68,12 +66,10 @@ public class AppointmentService {
             if (services==null){
                 throw new ServiceNotFoundException("ServiceNotFoundException");
             }
-
             appointment.setBookedDate(LocalDateTime.now());
             //get the user id value from session object.
             //example case taken userid as 1
             Users users = userRepository.findByUserid(userId);
-
             Business business = businessRepository.getById(businessId);
 
             appointment.setTotalPrice(services.getServicePrice());
@@ -136,6 +132,9 @@ public class AppointmentService {
             if(appointment==null){
                 throw new AppointmentNotFoundException("Appointment not found");
             }
+            if(appointment.isCancelled()) {
+                return new StrObject("Appointment already Cancelled! with reason "+ appointment.getCancellationReason());
+            }
             appointment.setCancelled(true);
             appointment.setCancellationReason(cancellationReason);
             Appointment appointment1 = appointmentRepository.save(appointment);
@@ -145,7 +144,7 @@ public class AppointmentService {
             else {
                 notificationService.sendNotificationOnAppointmentCancelling(appointment1);
             }
-            return new StrObject("Appointment Cancelled!");
+            return new StrObject("Appointment Cancelled! with reason "+ appointment.getCancellationReason());
         } catch (Exception e) {
             logger.error(e.getMessage());
             return new StrObject(e.getMessage());
@@ -184,5 +183,30 @@ public class AppointmentService {
             }
         }
         return appointmentSlots;
+    }
+    public StrObject reschedule(Appointment newAppointment, Long aptId){
+        try{
+            Optional<Appointment> optional = appointmentRepository.findById(aptId);
+            if(optional.isPresent()) {
+                Appointment appointment = optional.get();
+                appointment.setBookedDate(LocalDateTime.now());
+                appointment.setAppointmentDate(newAppointment.getAppointmentDate());
+                appointment.setBeginTime(newAppointment.getBeginTime());
+                appointment.setEndTime(newAppointment.getEndTime());
+//                appointment.setStatus("Rescheduled to date: " + slot.getRescheduleDate());
+                Appointment rescheduledAppointment = appointmentRepository.save(appointment);
+                if(rescheduledAppointment == null) {
+                    throw new InternalServerException("Couldn't Reschedule Appointment");
+                }else{
+                    notificationService.sendNotificationOnAppointmentRescheduling(rescheduledAppointment);
+                }
+                return new StrObject("Appointment successfully rescheduled to date:"+newAppointment.getAppointmentDate());
+            }else{
+                throw new AppointmentNotFoundException("The Appointment does not exist");
+            }
+        }catch (AppointmentNotFoundException | InternalServerException e){
+            e.printStackTrace();
+        return new StrObject("Appointment can't be rescheduled");
+        }
     }
 }
