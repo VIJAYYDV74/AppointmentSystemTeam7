@@ -146,6 +146,9 @@ public class AppointmentService {
             if(appointment==null){
                 throw new AppointmentNotFoundException("Appointment not found");
             }
+            if(appointment.isCancelled()) {
+                return new StrObject("Appointment already Cancelled! with reason "+ appointment.getCancellationReason());
+            }
             appointment.setCancelled(true);
             appointment.setCancellationReason(cancellationReason);
             Appointment appointment1 = appointmentRepository.save(appointment);
@@ -163,7 +166,7 @@ public class AppointmentService {
                     logger.error("Unable to send notification to business");
                 }
             }
-            return new StrObject("Appointment Cancelled!");
+            return new StrObject("Appointment Cancelled! with reason "+ appointment.getCancellationReason());
         } catch (Exception e) {
             logger.error(e.getMessage());
             return new StrObject(e.getMessage());
