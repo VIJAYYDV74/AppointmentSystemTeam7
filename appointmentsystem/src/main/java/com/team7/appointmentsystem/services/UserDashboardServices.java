@@ -1,6 +1,7 @@
 package com.team7.appointmentsystem.services;
 
 import com.team7.appointmentsystem.entity.*;
+import com.team7.appointmentsystem.models.BusinessDetails.OtherBusinesses;
 import com.team7.appointmentsystem.models.UserDashboard.Reviews;
 import com.team7.appointmentsystem.models.UserDashboard.TotalAppointments;
 import com.team7.appointmentsystem.models.UserDashboard.UserDashboardOverview;
@@ -9,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.sql.Time;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -62,19 +66,65 @@ public class UserDashboardServices {
         favourites=commentsRepository.getFavourites(userid);
         userDashboard.favourites=favourites.size();
 
-        userDashboard.saloonServices=new ArrayList<>();
-        userDashboard.doctorService=new ArrayList<>();
-        userDashboard.restaurantServices=new ArrayList<>();
+        userDashboard.Salooons=new ArrayList<>();
+        userDashboard.Hotels=new ArrayList<>();
+        userDashboard.Hospitals=new ArrayList<>();
         List<Business> businesses=businessRepository.findAll();
         for(Business b:businesses) {
+            OtherBusinesses o=new OtherBusinesses();
+            o.businessName=b.getBusinessName();
+            o.image=b.getBusinessImages();
+            o.address=b.getBusinessAddress().getAddressLine2()+b.getBusinessAddress().getCountry();
+            List<Services> services=servicesRepository.findByBusinessBusinessid(b.getBusinessid());
+            int Ratings=0;
+            int count=0;
+            int lowest=100000;
+            for(Services s:services){
+                if(s.getServicePrice()<lowest){
+                    lowest=s.getServicePrice();
+                }
+            }
+            o.price=lowest;
+            List<Comments> comments=commentsRepository.findByBusinessBusinessid(b.getBusinessid());
+            for(Comments c:comments){
+                Ratings+=c.getRating();
+                count++;
+            }
+            if(count!=0){
+                Ratings/=count;
+            }
+            o.ratings=Ratings;
+            List<BusinessWorkingHours> bws=b.getWorkingHours();
+
+            Calendar calendar = Calendar.getInstance();
+            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+            if(dayOfWeek==1){
+                o.status="closed";
+            }
+            else{
+                dayOfWeek-=1;
+                for(BusinessWorkingHours bw:bws){
+                    long bwid=bw.getId();
+                    if(dayOfWeek==bwid){
+                        Time nowtime=Time.valueOf(LocalTime.now());
+
+                        if(nowtime.after(bw.getStartHour()) && nowtime.before(bw.getEndHour())){
+                            o.status="open now";
+                        }
+                        else{
+                            o.status="closed";
+                        }
+                    }
+                }
+            }
             if(b.getCategories().getCategoryId() == 3) {
-                userDashboard.saloonServices.addAll(b.getServices());
+                userDashboard.Salooons.add(o);
             }
             else if(b.getCategories().getCategoryId() == 2) {
-                userDashboard.restaurantServices.addAll(b.getServices());
+                userDashboard.Hotels.add(o);
             }
             else {
-                userDashboard.doctorService.addAll(b.getServices());
+                userDashboard.Hotels.add(o);
             }
 
         }

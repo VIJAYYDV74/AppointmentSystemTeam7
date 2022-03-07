@@ -1,6 +1,7 @@
 package com.team7.appointmentsystem.models.UserDashboard;
 
 import com.team7.appointmentsystem.entity.Services;
+import com.team7.appointmentsystem.models.BusinessDetails.OtherBusinesses;
 
 import java.util.List;
 import java.util.Map;
@@ -14,21 +15,21 @@ public class UserDashboardOverview {
     public int upcomingAppointments;
     public int totalReviews;
     public int favourites;
-    public List<Services> saloonServices,restaurantServices,doctorService;
+    public List<OtherBusinesses> Salooons,Hotels,Hospitals;
 
     public UserDashboardOverview() {
     }
 
-    public UserDashboardOverview(String firstName, String lastname, int totalAppointments, int upcomingAppointments, int totalReviews, int favourites, List<Services> saloonServices, List<Services> restaurantServices, List<Services> doctorService) {
+    public UserDashboardOverview(String firstName, String lastname, int totalAppointments, int upcomingAppointments, int totalReviews, int favourites, List<OtherBusinesses> salooons, List<OtherBusinesses> hotels, List<OtherBusinesses> hospitals) {
         this.firstName = firstName;
         this.lastname = lastname;
         this.totalAppointments = totalAppointments;
         this.upcomingAppointments = upcomingAppointments;
         this.totalReviews = totalReviews;
         this.favourites = favourites;
-        this.saloonServices = saloonServices;
-        this.restaurantServices = restaurantServices;
-        this.doctorService = doctorService;
+        Salooons = salooons;
+        Hotels = hotels;
+        Hospitals = hospitals;
     }
 
     public String getFirstName() {
@@ -79,27 +80,27 @@ public class UserDashboardOverview {
         this.favourites = favourites;
     }
 
-    public List<Services> getSaloonServices() {
-        return saloonServices;
+    public List<OtherBusinesses> getSalooons() {
+        return Salooons;
     }
 
-    public void setSaloonServices(List<Services> saloonServices) {
-        this.saloonServices = saloonServices;
+    public void setSalooons(List<OtherBusinesses> salooons) {
+        Salooons = salooons;
     }
 
-    public List<Services> getRestaurantServices() {
-        return restaurantServices;
+    public List<OtherBusinesses> getHotels() {
+        return Hotels;
     }
 
-    public void setRestaurantServices(List<Services> restaurantServices) {
-        this.restaurantServices = restaurantServices;
+    public void setHotels(List<OtherBusinesses> hotels) {
+        Hotels = hotels;
     }
 
-    public List<Services> getDoctorService() {
-        return doctorService;
+    public List<OtherBusinesses> getHospitals() {
+        return Hospitals;
     }
 
-    public void setDoctorService(List<Services> doctorService) {
-        this.doctorService = doctorService;
+    public void setHospitals(List<OtherBusinesses> hospitals) {
+        Hospitals = hospitals;
     }
 }
