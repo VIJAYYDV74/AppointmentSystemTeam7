@@ -17,7 +17,14 @@ public interface BusinessDetails {
     List<Services> getServices();
     BusinessAddress getBusinessAddress();
     interface BusinessAddress{
+        long getAddressid();
+        String getAddressLine1();
+        String getAddressLine2();
         String getPostalCode();
+        String getState();
+        String getCountry();
+        double getLatitude();
+        double getLongitude();
     }
     Users getUsers();
     interface Users{
