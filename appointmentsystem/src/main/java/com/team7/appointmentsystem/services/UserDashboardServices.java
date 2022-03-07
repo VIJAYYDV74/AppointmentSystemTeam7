@@ -2,6 +2,7 @@ package com.team7.appointmentsystem.services;
 
 import com.team7.appointmentsystem.entity.Appointment;
 import com.team7.appointmentsystem.entity.Comments;
+import com.team7.appointmentsystem.entity.Payments;
 import com.team7.appointmentsystem.entity.Users;
 import com.team7.appointmentsystem.models.UserDashboard.Reviews;
 import com.team7.appointmentsystem.models.UserDashboard.TotalAppointments;
@@ -86,8 +87,15 @@ public class UserDashboardServices {
                 t.endTime = String.valueOf(a.getEndTime());
                 t.businessName = a.getBusiness().getBusinessName();
                 t.serviceName = a.getServices().getServiceName();
-                t.paymentDate = String.valueOf(a.getPayments().getPaymentDate());
-                t.paymentMethod = a.getPayments().getPaymentmethod();
+                if(a.getPayments()!=null) {
+                    t.paymentDate = a.getPayments().getPaymentDate().toString();
+                    t.paymentMethod = a.getPayments().getPaymentmethod();
+                }
+                else{
+                    t.paymentDate="not done";
+                    t.paymentMethod = "not done";
+                }
+
                 t.price = a.getTotalPrice();
                 totalAppointments.add(t);
             }
