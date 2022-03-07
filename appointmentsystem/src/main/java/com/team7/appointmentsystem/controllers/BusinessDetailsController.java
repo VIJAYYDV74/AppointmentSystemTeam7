@@ -4,6 +4,7 @@ package com.team7.appointmentsystem.controllers;
 import com.team7.appointmentsystem.entity.Business;
 import com.team7.appointmentsystem.entity.Comments;
 import com.team7.appointmentsystem.models.BusinessDetails.BusinessDetailsReview;
+import com.team7.appointmentsystem.models.BusinessDetails.OtherBusinesses;
 import com.team7.appointmentsystem.repository.BusinessRepository;
 import com.team7.appointmentsystem.repository.CommentsRepository;
 import com.team7.appointmentsystem.repository.ServicesRepository;
@@ -32,5 +33,10 @@ public class BusinessDetailsController {
     @GetMapping("{businessid}/reviews")
     public BusinessDetailsReview reviews(@PathVariable long businessid){
         return businessDetailsServices.reviews(businessid);
+    }
+
+    @GetMapping("{businessid}/similarBusinesses")
+    public List<OtherBusinesses> similarBusinesses(@PathVariable long businessid){
+        return businessDetailsServices.similarBusinesses(businessid);
     }
 }

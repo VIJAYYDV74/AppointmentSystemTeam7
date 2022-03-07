@@ -80,6 +80,7 @@ public class AdminDashboardServices {
             aUser.userId=u.getUserid();
             aUser.userName=u.getFirstName()+u.getLastName();
             aUser.userEmail=u.getEmail();
+            aUser.createdDate= String.valueOf(u.getCreatedTime());
             allUsers.add(aUser);
         }
         return allUsers;

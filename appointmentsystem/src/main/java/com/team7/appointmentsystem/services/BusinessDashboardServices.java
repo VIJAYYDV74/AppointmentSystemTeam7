@@ -56,90 +56,121 @@ public class BusinessDashboardServices {
 
     public BusinessDashboard business_Dashboard(long businessid){
 
-         TotalAppointments= appointmentRepository.findByBusinessBusinessid(businessid);
-        LocalDateTime now= LocalDateTime.now();
-         UpcomingAppointments= appointmentRepository.getUpcomingBusinessAppointments(businessid,now);
-        TotalReviews= commentsRepository.findByBusinessBusinessid(businessid);
+        try {
+            TotalAppointments = appointmentRepository.findByBusinessBusinessid(businessid);
+            LocalDateTime now = LocalDateTime.now();
+            UpcomingAppointments = appointmentRepository.getUpcomingBusinessAppointments(businessid, now);
+            TotalReviews = commentsRepository.findByBusinessBusinessid(businessid);
 
-        BusinessDashboard businessDashboard=new BusinessDashboard();
+            BusinessDashboard businessDashboard = new BusinessDashboard();
 
-        businessDashboard.totalAppointments=TotalAppointments.size();
-        businessDashboard.upcomingAppointments=UpcomingAppointments.size();
-        businessDashboard.totalReviews=TotalReviews.size();
+            businessDashboard.totalAppointments = TotalAppointments.size();
+            businessDashboard.upcomingAppointments = UpcomingAppointments.size();
+            businessDashboard.totalReviews = TotalReviews.size();
 
-        int temp=0;
-        for(Appointment a:TotalAppointments){
-            temp+=a.getPayments().getAmount();
-        }
-        businessDashboard.totalEarnings=temp;
-        temp=0;
-        for(Appointment a:TotalAppointments){
-            Instant instant1 = a.getPayments().getPaymentDate().toInstant(ZoneOffset.UTC);
-            Date date1 = Date.from(instant1);
-
-            Instant instant2 = now.toInstant(ZoneOffset.UTC);
-            Date date2 = Date.from(instant2);
-
-            if(date1.equals(date2)){
-                temp+=a.getPayments().getAmount();
+            int temp = 0;
+            for (Appointment a : TotalAppointments) {
+                if(a.getPayments()!=null) {
+                    temp += a.getPayments().getAmount();
+                }
+                else{
+                    temp=-1;
+                }
             }
-        }
-        businessDashboard.todaysEarning=temp;
+            businessDashboard.totalEarnings = temp;
+            temp = 0;
+            for (Appointment a : TotalAppointments) {
+                if(a.getPayments()!=null) {
+                    Instant instant1 = a.getPayments().getPaymentDate().toInstant(ZoneOffset.UTC);
+                    Date date1 = Date.from(instant1);
 
-        temp=0;
-        for(Appointment a:TotalAppointments){
-            Instant instant1 = a.getPayments().getPaymentDate().toInstant(ZoneOffset.UTC);
-            Date date1 = Date.from(instant1);
 
-            Instant instant2 = now.minusDays(1).toInstant(ZoneOffset.UTC);
-            Date date2 = Date.from(instant2);
+                    Instant instant2 = now.toInstant(ZoneOffset.UTC);
+                    Date date2 = Date.from(instant2);
 
-            if(date1.equals(date2)){
-                temp+=a.getPayments().getAmount();
+                    if (date1.equals(date2)) {
+                        temp += a.getPayments().getAmount();
+                    }
+                }
+                else{
+                    temp=-1;
+                }
             }
-        }
-        businessDashboard.yesterdaysEarning=temp;
+            businessDashboard.todaysEarning = temp;
 
-        temp=0;
-        LocalDateTime now1=now.minusDays(7);
-        for(Appointment a:TotalAppointments){
-            Instant instant1 = a.getPayments().getPaymentDate().toInstant(ZoneOffset.UTC);
-            Date date1 = Date.from(instant1);
+            temp = 0;
+            for (Appointment a : TotalAppointments) {
+                if(a.getPayments()!=null) {
+                    Instant instant1 = a.getPayments().getPaymentDate().toInstant(ZoneOffset.UTC);
+                    Date date1 = Date.from(instant1);
 
-            Instant instant2 = now1.toInstant(ZoneOffset.UTC);
-            Date date2 = Date.from(instant2);
+                    Instant instant2 = now.minusDays(1).toInstant(ZoneOffset.UTC);
+                    Date date2 = Date.from(instant2);
 
-
-            Instant instant3 = now.toInstant(ZoneOffset.UTC);
-            Date date3 = Date.from(instant3);
-
-            if(date1.after(date2) && date1.before(date3)){
-                temp+=a.getPayments().getAmount();
+                    if (date1.equals(date2)) {
+                        temp += a.getPayments().getAmount();
+                    }
+                }
+                else{
+                    temp=-1;
+                }
             }
-        }
-        businessDashboard.last7daysEarning= temp;
+            businessDashboard.yesterdaysEarning = temp;
+
+            temp = 0;
+            LocalDateTime now1 = now.minusDays(7);
+            for (Appointment a : TotalAppointments) {
+                if(a.getPayments()!=null) {
+                    Instant instant1 = a.getPayments().getPaymentDate().toInstant(ZoneOffset.UTC);
+                    Date date1 = Date.from(instant1);
+
+                    Instant instant2 = now1.toInstant(ZoneOffset.UTC);
+                    Date date2 = Date.from(instant2);
 
 
-        temp=0;
-        now1=now.minusDays(30);
-        for(Appointment a:TotalAppointments){
-            Instant instant1 = a.getPayments().getPaymentDate().toInstant(ZoneOffset.UTC);
-            Date date1 = Date.from(instant1);
+                    Instant instant3 = now.toInstant(ZoneOffset.UTC);
+                    Date date3 = Date.from(instant3);
 
-            Instant instant2 = now1.toInstant(ZoneOffset.UTC);
-            Date date2 = Date.from(instant2);
-
-
-            Instant instant3 = now.toInstant(ZoneOffset.UTC);
-            Date date3 = Date.from(instant3);
-
-            if(date1.after(date2) && date1.before(date3)){
-                temp+=a.getPayments().getAmount();
+                    if (date1.after(date2) && date1.before(date3)) {
+                        temp += a.getPayments().getAmount();
+                    }
+                }
+                else{
+                    temp=-1;
+                }
             }
-        }
-        businessDashboard.last30daysEarning= temp;
+            businessDashboard.last7daysEarning = temp;
 
-        return businessDashboard;
+
+            temp = 0;
+            now1 = now.minusDays(30);
+            for (Appointment a : TotalAppointments) {
+                if(a.getPayments()!=null) {
+                    Instant instant1 = a.getPayments().getPaymentDate().toInstant(ZoneOffset.UTC);
+                    Date date1 = Date.from(instant1);
+
+                    Instant instant2 = now1.toInstant(ZoneOffset.UTC);
+                    Date date2 = Date.from(instant2);
+
+
+                    Instant instant3 = now.toInstant(ZoneOffset.UTC);
+                    Date date3 = Date.from(instant3);
+
+                    if (date1.after(date2) && date1.before(date3)) {
+                        temp += a.getPayments().getAmount();
+                    }
+                }
+                else{
+                    temp=-1;
+                }
+            }
+            businessDashboard.last30daysEarning = temp;
+
+            return businessDashboard;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
 
     }
 
