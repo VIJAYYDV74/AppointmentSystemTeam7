@@ -137,6 +137,8 @@ public class AdminDashboardServices {
             Booking.serviceName=a.getServices().getServiceName();
             Booking.price=a.getTotalPrice();
             Booking.bookedDate= String.valueOf(a.getBookedDate());
+            Booking.beginTime= String.valueOf(a.getBeginTime());
+            Booking.endTime= String.valueOf(a.getEndTime());
             allBookings.add(Booking);
         }
         return allBookings;

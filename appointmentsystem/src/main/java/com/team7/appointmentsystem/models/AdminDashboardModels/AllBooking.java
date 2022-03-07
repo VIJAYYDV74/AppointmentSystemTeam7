@@ -6,16 +6,35 @@ public class AllBooking {
     public String serviceName;
     public int price;
     public String bookedDate;
+    public String beginTime,endTime;
 
     public AllBooking() {
     }
 
-    public AllBooking(String userName, String businessName, String serviceName, int price, String bookedDate) {
+    public AllBooking(String userName, String businessName, String serviceName, int price, String bookedDate, String beginTime, String endTime) {
         this.userName = userName;
         this.businessName = businessName;
         this.serviceName = serviceName;
         this.price = price;
         this.bookedDate = bookedDate;
+        this.beginTime = beginTime;
+        this.endTime = endTime;
+    }
+
+    public String getBeginTime() {
+        return beginTime;
+    }
+
+    public void setBeginTime(String beginTime) {
+        this.beginTime = beginTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public String getUserName() {
@@ -58,14 +77,5 @@ public class AllBooking {
         this.bookedDate = bookedDate;
     }
 
-    @Override
-    public String toString() {
-        return "AllBooking{" +
-                "userName='" + userName + '\'' +
-                ", businessName='" + businessName + '\'' +
-                ", serviceName='" + serviceName + '\'' +
-                ", price=" + price +
-                ", bookedDate='" + bookedDate + '\'' +
-                '}';
-    }
+
 }

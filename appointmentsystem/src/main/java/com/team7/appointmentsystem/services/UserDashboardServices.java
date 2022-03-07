@@ -1,16 +1,10 @@
 package com.team7.appointmentsystem.services;
 
-import com.team7.appointmentsystem.entity.Appointment;
-import com.team7.appointmentsystem.entity.Comments;
-import com.team7.appointmentsystem.entity.Payments;
-import com.team7.appointmentsystem.entity.Users;
+import com.team7.appointmentsystem.entity.*;
 import com.team7.appointmentsystem.models.UserDashboard.Reviews;
 import com.team7.appointmentsystem.models.UserDashboard.TotalAppointments;
 import com.team7.appointmentsystem.models.UserDashboard.UserDashboardOverview;
-import com.team7.appointmentsystem.repository.AppointmentRepository;
-import com.team7.appointmentsystem.repository.CommentsRepository;
-import com.team7.appointmentsystem.repository.ServicesRepository;
-import com.team7.appointmentsystem.repository.UserRepository;
+import com.team7.appointmentsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +27,8 @@ public class UserDashboardServices {
 
     @Autowired
     CommentsRepository commentsRepository;
+    @Autowired
+    BusinessRepository businessRepository;
 
     List<Appointment> appointments;
     List<Appointment> upcomingAppointments;
@@ -66,10 +62,22 @@ public class UserDashboardServices {
         favourites=commentsRepository.getFavourites(userid);
         userDashboard.favourites=favourites.size();
 
-        userDashboard.saloonServices=servicesRepository.findbyservicenname("Saloon");
-        userDashboard.restaurantServices=servicesRepository.findbyservicenname("Restaurant");
-        userDashboard.doctorService=servicesRepository.findbyservicenname("Doctor");
+        userDashboard.saloonServices=new ArrayList<>();
+        userDashboard.doctorService=new ArrayList<>();
+        userDashboard.restaurantServices=new ArrayList<>();
+        List<Business> businesses=businessRepository.findAll();
+        for(Business b:businesses) {
+            if(b.getCategories().getCategoryId() == 3) {
+                userDashboard.saloonServices.addAll(b.getServices());
+            }
+            else if(b.getCategories().getCategoryId() == 2) {
+                userDashboard.restaurantServices.addAll(b.getServices());
+            }
+            else {
+                userDashboard.doctorService.addAll(b.getServices());
+            }
 
+        }
 
         return userDashboard;
     }

@@ -43,16 +43,16 @@ public class BusinessDashboardController {
     }
 
     @PostMapping("{userid}/registerBusiness")
-    public String registerBusiness(@PathVariable long userid, @RequestBody Business business){
+    public long registerBusiness(@PathVariable long userid, @RequestBody Business business){
 
         return businessDashboardServices.registerBusiness(userid,business);
 
     }
 
     @PostMapping("{businessid}/services")
-    public String addServices(@PathVariable long businessid, @RequestBody Services service){
+    public String addServices(@PathVariable long businessid, @RequestBody List<Services> services){
 
-        return businessDashboardServices.addServices(businessid,service);
+        return businessDashboardServices.addServices(businessid,services);
     }
 
     @PutMapping("{businessid}/services/{serviceid}")

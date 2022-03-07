@@ -174,7 +174,7 @@ public class BusinessDashboardServices {
 
     }
 
-    public String registerBusiness(long userid, Business business){
+    public long registerBusiness(long userid, Business business){
 
         try {
                 Users users = userRepository.findById(userid).get();
@@ -189,6 +189,7 @@ public class BusinessDashboardServices {
                 business.setCreatedTime(LocalDateTime.now());
                 business.setBusinessAddress(business.getBusinessAddress());
                 business.setCategories(categories);
+
                 businessAddressRepository.save(business.getBusinessAddress());
                 businessRepository.save(business);
                 List<BusinessWorkingHours> l1 = business.getWorkingHours();
@@ -196,11 +197,11 @@ public class BusinessDashboardServices {
                     businessWorkingHours.setBusinessHours(business);
                     businessWorkingHoursRepository.save(businessWorkingHours);
                 }
-                return "business registered";
+                return business.getBusinessid();
 
         }
         catch (Exception e){
-            return "Business Not registered";
+            return -1;
         }
 
     }
@@ -229,14 +230,16 @@ public class BusinessDashboardServices {
 
 
 
-    public String addServices(long businessid, Services service){
+    public String addServices(long businessid, List<Services> services){
 
         try {
             Business business= businessRepository.findById(businessid).get();
-            service.setBusiness(business);
+            for(Services s:services) {
+                s.setBusiness(business);
 
-            Services services=servicesRepository.save(service);
-            // System.out.println(services);
+                servicesRepository.save(s);
+                // System.out.println(services);
+            }
             return "Service Added";
         }
         catch (Exception e){
