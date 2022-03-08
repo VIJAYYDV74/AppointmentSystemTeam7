@@ -25,7 +25,7 @@ public class BusinessWorkingHours {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "businessid")
-    private Business businessHours;
+    private Business business;
 
     public BusinessWorkingHours() {
     }
@@ -36,11 +36,11 @@ public class BusinessWorkingHours {
         this.endHour = endHour;
     }
 
-    public BusinessWorkingHours(String nameOfDay, Time startHour, Time endHour, Business businessHours) {
+    public BusinessWorkingHours(String nameOfDay, Time startHour, Time endHour, Business business) {
         this.nameOfDay = nameOfDay;
         this.startHour = startHour;
         this.endHour = endHour;
-        this.businessHours = businessHours;
+        this.business = business;
     }
 
     public long getId() {
@@ -75,12 +75,12 @@ public class BusinessWorkingHours {
         this.endHour = endHour;
     }
 
-    public Business getBusinessHours() {
-        return businessHours;
+    public Business getBusiness() {
+        return business;
     }
 
-    public void setBusinessHours(Business businessHours) {
-        this.businessHours = businessHours;
+    public void setBusiness(Business business) {
+        this.business = business;
     }
 
     @Override
@@ -90,7 +90,7 @@ public class BusinessWorkingHours {
                 ", nameOfDay='" + nameOfDay + '\'' +
                 ", startHour=" + startHour +
                 ", endHour=" + endHour +
-                ", businessHour" + businessHours +
+                ", business" + business +
                 '}';
     }
 }

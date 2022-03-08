@@ -1,9 +1,6 @@
 package com.team7.appointmentsystem.miscellinious;
 
-import com.team7.appointmentsystem.entity.Categories;
-import com.team7.appointmentsystem.entity.Comments;
-import com.team7.appointmentsystem.entity.GenderCategories;
-import com.team7.appointmentsystem.entity.Services;
+import com.team7.appointmentsystem.entity.*;
 
 import java.util.List;
 
@@ -20,11 +17,21 @@ public interface BusinessDetails {
     List<Services> getServices();
     BusinessAddress getBusinessAddress();
     interface BusinessAddress{
+        long getAddressid();
+        String getAddressLine1();
+        String getAddressLine2();
         String getPostalCode();
+        String getState();
+        String getCountry();
+        double getLatitude();
+        double getLongitude();
     }
     Users getUsers();
     interface Users{
         long getUserid();
     }
     List<Comments> getComments();
+    String getBusinessRating();
+    List<BusinessImages> getBusinessImages();
+    boolean isBlocked();
 }

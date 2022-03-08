@@ -16,6 +16,9 @@ public class Categories {
     @Column(columnDefinition = "varchar(255)", name = "categoryname")
     private String categoryName;
 
+    @Column(name = "isblocked", columnDefinition = "boolean default false")
+    private boolean isBlocked;
+
     public Categories() {
 
     }

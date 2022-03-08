@@ -1,9 +1,7 @@
 package com.team7.appointmentsystem.controllers;
 
-import com.team7.appointmentsystem.entity.BusinessNotifications;
-import com.team7.appointmentsystem.entity.UserNotifications;
-import com.team7.appointmentsystem.services.BusinessNotificationsService;
-import com.team7.appointmentsystem.services.UserNotificationService;
+import com.team7.appointmentsystem.entity.NotificationsTable;
+import com.team7.appointmentsystem.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,34 +15,18 @@ import java.util.List;
 public class NotificationController {
 
     @Autowired
-    private UserNotificationService userNotificationService;
-
-    @Autowired
-    private BusinessNotificationsService businessNotificationsService;
+    private NotificationService notificationService;
 
     @GetMapping("/user/notifications/{userId}")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public ResponseEntity<List<UserNotifications>> getUserNotifications(@PathVariable long userId){
-        return ResponseEntity.ok(userNotificationService.getUserNotifications(userId));
+    public ResponseEntity<List<NotificationsTable>> getUserNotifications(@PathVariable long userId){
+        return ResponseEntity.ok(notificationService.getUserNotifications(userId));
     }
 
-    @GetMapping("/business/notifications/{businessid}")
+    @GetMapping("user/notifications/notification/{notificationId}")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public ResponseEntity<List<BusinessNotifications>> getBusinessNotifications(@PathVariable long businessId) {
-        return ResponseEntity.ok(businessNotificationsService.getBusinessNotifications(businessId));
-    }
-
-    @GetMapping("/user/notifications/notification/{notificationId}")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public ResponseEntity<UserNotifications> getUserNotification(@PathVariable long notificationId){
-        UserNotifications userNotifications = userNotificationService.getNotification(notificationId);
+    public ResponseEntity<NotificationsTable> getUserNotification(@PathVariable long notificationId){
+        NotificationsTable userNotifications = notificationService.getNotification(notificationId);
         return ResponseEntity.ok(userNotifications);
-    }
-
-    @GetMapping("/business/notifications/notification/{notificationId}")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public ResponseEntity<BusinessNotifications> getBusinessNotification(@PathVariable long notificationId){
-        BusinessNotifications businessNotifications  = businessNotificationsService.getNotification(notificationId);
-        return ResponseEntity.ok(businessNotifications);
     }
 }

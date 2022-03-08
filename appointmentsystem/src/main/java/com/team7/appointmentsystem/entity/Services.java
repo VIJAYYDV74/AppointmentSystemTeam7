@@ -2,10 +2,12 @@ package com.team7.appointmentsystem.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
 @Entity
+@DynamicUpdate
 @Table(name = "services")
 public class Services {
 
@@ -27,6 +29,9 @@ public class Services {
     @JoinColumn(name = "businessid")
     private Business business;
 
+    @Column(name = "isblocked", columnDefinition = "boolean default false")
+    private boolean isBlocked;
+
     public Services() {
     }
 
@@ -35,6 +40,7 @@ public class Services {
         this.serviceDesc = serviceDesc;
         this.servicePrice = servicePrice;
         this.business = business;
+        this.isBlocked = false;
     }
 
     public long getServiceid() {
@@ -77,6 +83,14 @@ public class Services {
         this.business = business;
     }
 
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
+    }
+
     @Override
     public String toString() {
         return "Services{" +
@@ -85,6 +99,7 @@ public class Services {
                 ", serviceDesc='" + serviceDesc + '\'' +
                 ", servicePrice=" + servicePrice +
                 ", business=" + business +
+                ", isBlocked=" + isBlocked +
                 '}';
     }
 }

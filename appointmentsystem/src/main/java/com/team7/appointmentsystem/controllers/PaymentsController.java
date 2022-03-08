@@ -1,9 +1,9 @@
 package com.team7.appointmentsystem.controllers;
 
 import com.team7.appointmentsystem.entity.Payments;
-import com.team7.appointmentsystem.services.BusinessNotificationsService;
+import com.team7.appointmentsystem.models.PaymentDetails;
 import com.team7.appointmentsystem.services.PaymentsService;
-import com.team7.appointmentsystem.services.UserNotificationService;
+import com.team7.appointmentsystem.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,20 +17,17 @@ public class PaymentsController {
     private PaymentsService paymentsService;
 
     @Autowired
-    private UserNotificationService userNotificationService;
-
-    @Autowired
-    private BusinessNotificationsService businessNotificationsService;
+    private NotificationService notificationService;
 
     @GetMapping("user/getPaymentDetails/{appointmentId}/")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public ResponseEntity<Payments> getPaymentDetailsForUser(@PathVariable long appointmentId){
+    public ResponseEntity<PaymentDetails> getPaymentDetailsForUser(@PathVariable long appointmentId){
         return ResponseEntity.ok(paymentsService.paymentDetails(appointmentId));
     }
 
     @GetMapping("business/getPaymentDetails/{appointmentId}/")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public ResponseEntity<Payments> getPaymentDetailsForBusiness(@PathVariable long appointmentId){
+    public ResponseEntity<PaymentDetails> getPaymentDetailsForBusiness(@PathVariable long appointmentId){
         return ResponseEntity.ok(paymentsService.paymentDetails(appointmentId));
     }
 
@@ -39,9 +36,6 @@ public class PaymentsController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<String> makePayment(@PathVariable long appointmentId, @RequestBody Payments payments){
         String paymentDone =  paymentsService.makePayment(appointmentId, payments);
-        if (paymentDone!=null){
-
-        }
         return ResponseEntity.ok(paymentDone);
     }
 

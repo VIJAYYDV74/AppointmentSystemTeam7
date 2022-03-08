@@ -3,6 +3,7 @@ package com.team7.appointmentsystem.services;
 import com.team7.appointmentsystem.entity.*;
 import com.team7.appointmentsystem.exceptions.*;
 import com.team7.appointmentsystem.miscellinious.BusinessDetails;
+import com.team7.appointmentsystem.models.StrObject;
 import com.team7.appointmentsystem.repository.*;
 import com.team7.appointmentsystem.resultapis.HomepageAPI1;
 import org.slf4j.Logger;
@@ -11,10 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.team7.appointmentsystem.metamodels.Business_.businessAddress;
 
 
 @Service
@@ -39,13 +43,19 @@ public class BusinessService {
     private ServicesRepository servicesRepository;
 
     @Autowired
+    private CommentsRepository commentsRepository;
+
+    @Autowired
     private LikesRepository likesRepository;
 
     @Autowired
     private GenderCategoryRepository genderCategoryRepository;
 
     @Autowired
-    private BusinessNotificationsService businessNotificationsService;
+    private BusinessImagesRepository businessImagesRepository;
+
+    @Autowired
+    private NotificationService notificationService;
 
     public static final Logger logger = LoggerFactory.getLogger(BusinessService.class);
 
@@ -101,11 +111,8 @@ public class BusinessService {
             business.setCreatedTime(LocalDateTime.now());
             business.setBusinessAddress(business.getBusinessAddress());
             business.setCategories(categories);
-            BusinessAddress businessAddress = businessAddressRepository.
-                    save(business.getBusinessAddress());
-            if (businessAddress==null){
-                throw new InternalServerException("InternalServerException");
-            }
+
+
             Business business2 = businessRepository.save(business);
             if (business2==null){
                 throw new InternalServerException("InternalServerException");
@@ -114,8 +121,13 @@ public class BusinessService {
             if (l1.size()<7 || l1==null){
                 throw new WorkingHoursException("WorkingHoursException");
             }
+            BusinessAddress businessAddress = businessAddressRepository.
+                    save(business.getBusinessAddress());
+            if (businessAddress==null){
+                throw new InternalServerException("InternalServerException");
+            }
             for (BusinessWorkingHours businessWorkingHours: l1) {
-                businessWorkingHours.setBusinessHours(business);
+                businessWorkingHours.setBusiness(business);
                 BusinessWorkingHours businessWorkingHours1 = businessWorkingHoursRepository.
                         save(businessWorkingHours);
                 if (businessWorkingHours1==null){
@@ -130,6 +142,17 @@ public class BusinessService {
                 services1.setBusiness(business);
                 Services services2 = servicesRepository.save(services1);
                 if (services2==null){
+                    throw new InternalServerException("InternalServerException");
+                }
+            }
+            List<BusinessImages> businessImages = business.getBusinessImages();
+            if (businessImages==null){
+                throw new ServiceNotFoundException("ServicesNotFound");
+            }
+            for(BusinessImages businessImages1: businessImages){
+                businessImages1.setBusiness(business);
+                BusinessImages businessImages2 = businessImagesRepository.save(businessImages1);
+                if (businessImages2==null){
                     throw new InternalServerException("InternalServerException");
                 }
             }
@@ -193,10 +216,78 @@ public class BusinessService {
     public BusinessDetails getBusinessByBusinessId(long businessid){
         BusinessDetails businessDetails = businessRepository.findByBusinessid(businessid);
         if (businessDetails!=null){
-            businessNotificationsService.
-                    sendBusinessNotificationOnBusinessSearched(businessDetails.getBusinessid(), 1);
+            notificationService.
+                    sendNotificationOnBusinessSearched(businessDetails.getBusinessid(), 1);
         }
         return businessDetails;
     }
 
+    public StrObject updateBusinessDetails(Long businessId, Business business) {
+        try{
+            Business fetchBusiness = businessRepository.getById(businessId);
+            if(fetchBusiness == null) {
+                throw new BusinessNotFoundException("Business does not exist");
+            }else {
+                fetchBusiness.setBusinessName( business.getBusinessName() );
+                fetchBusiness.setBusinessAddress(business.getBusinessAddress());
+                fetchBusiness.setBusinessEmail(business.getBusinessEmail());
+                fetchBusiness.setSlotDuration(business.getSlotDuration());
+                fetchBusiness.setBusinessDescription(business.getBusinessDescription());
+                fetchBusiness.setCancellationAvailable(business.isCancellationAvailable());
+                fetchBusiness.setBusinessMobileNumber(business.getBusinessMobileNumber());
+                fetchBusiness.setBusinessTitle(business.getBusinessTitle());
+                businessRepository.save(fetchBusiness);
+                return new StrObject("Updated SuccessFully:");
+            }
+        }catch (BusinessNotFoundException e) {
+            return new StrObject(e.getMessage());
+        }
+    }
+
+    public StrObject deleteService(Long businessId, Long serviceId) {
+        try {
+            Services service = servicesRepository.findByServiceidAndBusinessBusinessid(serviceId, businessId);
+            if(service == null) {
+                throw new ServiceNotFoundException("Could not found the Service");
+            }else{
+                servicesRepository.delete(service);
+                return new StrObject("Service removed: " + service.getServiceName());
+            }
+        }catch (ServiceNotFoundException e) {
+            return new StrObject(e.getMessage());
+        }
+    }
+    public StrObject updateService(Long businessId, Long serviceId, Services updateService) {
+        try {
+            Services service = servicesRepository.findByServiceidAndBusinessBusinessid(serviceId, businessId);
+            if(service == null) {
+                throw new ServiceNotFoundException("Could not found the Service");
+            }else{
+                service.setServiceName(updateService.getServiceName());
+                service.setServiceDesc(updateService.getServiceDesc());
+                service.setServicePrice(updateService.getServicePrice());
+                servicesRepository.save(service);
+                return new StrObject("Service updated: "+"{" +
+                            service.getServiceName()+"\n"+service.getServiceDesc()+"\n"+
+                            service.getServicePrice()+
+                        "}");
+            }
+        }catch (ServiceNotFoundException e) {
+            return new StrObject(e.getMessage());
+        }
+    }
+
+    public List<Comments> getReviews (Long businessId) {
+        try{
+            List<Comments> reviews = commentsRepository.findByBusinessBusinessid(businessId);
+            if(reviews == null) {
+                throw new NoOneReviewedException("No one has given review to this business");
+            }else{
+                return reviews;
+            }
+        }catch (NoOneReviewedException e) {
+            logger.error(e.getMessage());
+        }
+        return null;
+    }
 }

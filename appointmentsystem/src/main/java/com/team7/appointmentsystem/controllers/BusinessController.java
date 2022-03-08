@@ -6,6 +6,7 @@ import com.team7.appointmentsystem.entity.Users;
 import com.team7.appointmentsystem.entity.Visiting;
 import com.team7.appointmentsystem.exceptions.UserNotFoundException;
 import com.team7.appointmentsystem.miscellinious.BusinessDetails;
+import com.team7.appointmentsystem.models.StrObject;
 import com.team7.appointmentsystem.resultapis.HomepageAPI1;
 import com.team7.appointmentsystem.services.BusinessService;
 import com.team7.appointmentsystem.services.CommentsService;
@@ -33,20 +34,6 @@ public class BusinessController {
     @Autowired
     private RegisterService registerService;
 
-//    @GetMapping("/homepage")
-//    @CrossOrigin(origins = "*", allowedHeaders = "*")
-//    public ModelAndView viewHomePage(){
-//        ModelAndView modelAndView = new ModelAndView("index.html");
-//        List<HomepageAPI1> api1 = businessService.getBusinessesCount();
-//        List<List<BusinessDetails>> api2 = businessService.getTop3BusinessesInEachCategory();
-//        List<Comments> api3 = commentsService.getLatestComments();
-//        List<Business> api4 = businessService.getJoins();
-//        //System.out.println(api4.get(0));
-//        modelAndView.addObject("api1", api1);
-//        modelAndView.addObject("api2", api2);
-//        modelAndView.addObject("api3", api3);
-//        return modelAndView;
-//    }
 
     @GetMapping("/homepage/api1")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -54,7 +41,6 @@ public class BusinessController {
         List<HomepageAPI1> api1 = businessService.getBusinessesCount();
         return ResponseEntity.ok(api1);
     }
-
 
     @GetMapping("/homepage/api2")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -112,10 +98,22 @@ public class BusinessController {
         return ResponseEntity.ok(business);
     }
 
-    @GetMapping("/user/getBusinessByBusinessName/{businessId}")
+
+
+    @GetMapping("/user/getBusinessDetails/{businessId}")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public ResponseEntity<Business> getBusinessById(@PathVariable long businessId){
-        return ResponseEntity.ok(businessService.getBusiness(businessId));
+    public ResponseEntity<BusinessDetails> getBusinessById(@PathVariable long businessId){
+        return ResponseEntity.ok(businessService.getBusinessByBusinessId(businessId));
+    }
+
+    @PostMapping("/user/business/{businessId}/update")
+    public ResponseEntity<StrObject> updateBusinessDetails(@PathVariable long businessId, @RequestBody Business business) {
+        return ResponseEntity.ok(businessService.updateBusinessDetails(businessId, business));
+    }
+
+    @GetMapping("/user/business/{businessId}/getReviews")
+    public ResponseEntity<List<Comments>> getReviews(@PathVariable long businessId) {
+        return ResponseEntity.ok(businessService.getReviews(businessId));
     }
 
 

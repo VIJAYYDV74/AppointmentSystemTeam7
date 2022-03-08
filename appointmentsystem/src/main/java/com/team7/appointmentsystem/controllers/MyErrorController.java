@@ -16,7 +16,7 @@ public class MyErrorController implements ErrorController {
     public String myError() {
         return "<center>" +
                 "<h1>Something went wrong</h1>" +
-                "<p>Error 404. Page not found. Please check the URL.</p>" +
+                "<p>Error 404. Page not found.</p>" +
                 "</center>";
     }
 

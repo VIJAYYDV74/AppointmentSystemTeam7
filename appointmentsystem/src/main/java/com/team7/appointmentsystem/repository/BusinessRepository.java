@@ -30,25 +30,13 @@ public interface BusinessRepository extends JpaRepository<Business, Long> {
 
     BusinessDetails findByBusinessid(long businessName);
 
-
-    //admin dashboard
-    //@Query(value = "select * from business ",nativeQuery = true)
-    //List<Business> getAllBusiness();
-
     @Query(value = "select count(*) from business",nativeQuery = true)
     int countTotalBusiness();
 
 
     @Query(value = "select count(*) from business b where cast(createdtime as Date) = cast( ?1 as Date)",nativeQuery = true)
     int countBusinessesToday(LocalDateTime now);
-   // @Query(value = "select businessname,servicename,serviceprice,categoryname from business where rating>3 ORDER BY rating",nativeQuery = true)
-   // List<Map<String,Object>> topBusiness();
-
-   // @Query(value = "select * from business",nativeQuery = true)
-    //List<Business> getAllbusinesses();
-    //admin dashboard
-
-
+   
     @Query(value = "select businessname,businessdescription,businesstitle,businessnumber,businessemail,businessimages from business b where b.businessid= ?1",nativeQuery = true)
     List<Map<String, Object>> getBusiness(Long businessid);
 
@@ -59,5 +47,9 @@ public interface BusinessRepository extends JpaRepository<Business, Long> {
     @Query(value = "select * from business b where b.businessid= ?1",nativeQuery = true)
     Business findByBusinessId(Long businessId);
     //  businessdetails
+
+    @Query(value = "select * from business b", nativeQuery = true)
+    List<BusinessDetails> findAllBusinesses();
+
 
 }

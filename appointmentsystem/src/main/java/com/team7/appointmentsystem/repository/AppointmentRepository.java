@@ -2,18 +2,22 @@ package com.team7.appointmentsystem.repository;
 
 import com.team7.appointmentsystem.entity.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import org.springframework.data.jpa.repository.Query;
-
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
+import org.springframework.stereotype.Repository;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
+
+@Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
+
     List<Appointment> findByBusinessBusinessid(long businessId);
 
     List<Appointment> findByUsersUserid(long userId);
-
-
 
     //user_dashboard
 
@@ -40,11 +44,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "select * from appointments a where a.businessid= ?1 and cast(a.bookeddate as Date) > cast( ?2 as Date)",nativeQuery = true)
     List<Appointment> getUpcomingBusinessAppointments(long businessid, LocalDateTime now);
 
-
     //admin dashboard
-
-
     //user_dashboard
 
+    List<Appointment> findByBusinessBusinessidAndAppointmentDate(long businessId, Date date1);
 
 }

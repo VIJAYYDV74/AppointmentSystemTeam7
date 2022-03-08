@@ -6,9 +6,10 @@ import com.team7.appointmentsystem.entity.Payments;
 import com.team7.appointmentsystem.entity.Services;
 import com.team7.appointmentsystem.exceptions.AppointmentNotFoundException;
 import com.team7.appointmentsystem.exceptions.InternalServerException;
-import com.team7.appointmentsystem.exceptions.PaymentNotFoundException;
 import com.team7.appointmentsystem.exceptions.ServiceNotFoundException;
+import com.team7.appointmentsystem.models.PaymentDetails;
 import com.team7.appointmentsystem.repository.AppointmentRepository;
+import com.team7.appointmentsystem.repository.BillingDetailsRepository;
 import com.team7.appointmentsystem.repository.PaymentsRepository;
 import com.team7.appointmentsystem.repository.ServicesRepository;
 import org.slf4j.Logger;
@@ -29,25 +30,27 @@ public class PaymentsService {
     private ServicesRepository servicesRepository;
 
     @Autowired
-    private UserNotificationService userNotificationService;
+    private NotificationService notificationService;
 
     @Autowired
-    private BusinessNotificationsService businessNotificationsService;
+    private BillingDetailsRepository billingDetailsRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(PaymentsService.class);
 
-    public Payments paymentDetails(long appointmentId) {
+    public PaymentDetails paymentDetails(long appointmentId) {
         try {
             Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
-            if (appointment==null){
-                throw new AppointmentNotFoundException("AppointmentNotFound");
-            }
-            Payments payments = paymentsRepository.
-                    findById(appointment.getPayments().getPaymentid()).orElse(null);
-            if (payments==null){
-                throw new PaymentNotFoundException("PaymentNotFoundException");
-            }
-            return payments;
+            PaymentDetails paymentDetails = new PaymentDetails();
+            paymentDetails.setPayments(appointment.getPayments());
+            paymentDetails.setBeginTime(appointment.getBeginTime());
+            paymentDetails.setEndTime(appointment.getEndTime());
+            paymentDetails.setServices(appointment.getServices());
+            paymentDetails.setBookedDate(appointment.getBookedDate());
+            paymentDetails.setBusinessAddress(appointment.getBusiness().getBusinessAddress());
+            paymentDetails.setUserName(appointment.getUsers().getFirstName());
+            paymentDetails.setAppointmentDate(appointment.getAppointmentDate());
+            paymentDetails.setBusinessName(appointment.getBusiness().getBusinessName());
+            return paymentDetails;
         } catch (Exception e) {
             logger.error(e.getMessage());
             return null;
@@ -93,8 +96,7 @@ public class PaymentsService {
                 throw new InternalServerException("InternalServerException");
             }
 
-            userNotificationService.sendUserNotificationOnPaymentDone(appointment);
-            businessNotificationsService.sendBusinessNotificationOnPaymentDone(appointment);
+            notificationService.sendNotificationOnPaymentDone(appointment);
 
             appointment.setPayments(payments);
             Appointment appointment1 = appointmentRepository.save(appointment);
